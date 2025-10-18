@@ -5,7 +5,7 @@ public interface ISystem
 {
     public virtual void Load()
     {
-
+        
     }
 
 }
