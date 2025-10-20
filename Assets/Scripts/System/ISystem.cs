@@ -1,11 +1,29 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
 
-public interface ISystem 
+namespace BS.System
 {
-    public virtual void Load()
+    public interface ISystem
     {
-        
-    }
+        public virtual void Load()
+        {
 
+        }
+
+        public virtual void Unload()
+        {
+
+        }
+
+        protected virtual void Initialize()
+        {
+
+        }
+
+        protected virtual void Release()
+        {
+
+        }
+
+    }
 }
