@@ -4,6 +4,7 @@ using UnityEngine;
 using BS.System;
 using BS.Common;
 
+
 public class SystemGameObject : MonoBehaviour
 {
     private static SystemGameObject _instance;
@@ -13,8 +14,7 @@ public class SystemGameObject : MonoBehaviour
         {
             if (_instance == null)
             {
-                GameObject systemGameObject = new GameObject(Constrants.STR_SYSTEMOBJECT);
-                _instance = systemGameObject.AddComponent<SystemGameObject>();
+                _instance = GameObject.FindFirstObjectByType<SystemGameObject>();
             }
             return _instance;
         }
@@ -34,11 +34,8 @@ public class SystemGameObject : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
-    }
-
-    private void Start()
-    {
         _systems.Add(typeof(ScreenSystem), new ScreenSystem());
+        _systems.Add(typeof(InputControlSystem), new InputControlSystem());
     }
 
     public void LoadAllSystems()
