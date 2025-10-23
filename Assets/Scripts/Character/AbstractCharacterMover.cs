@@ -10,23 +10,53 @@ namespace BS.GameObject
         public Vector2 ViewDirection => _viewDirection;
         public float Velocity => _velocity;
 
-        public UnityAction<Vector2> OnMove => _onMoveEvent;
-
-        private UnityAction<Vector2> _onMoveEvent;
         private Transform _moveTargetTransform;
 
         private Vector2 _viewDirection;
-        private float _velocity;
-        private Vector2 _currentVelocity;
+        private float _velocity; // current horizontal velocity for platformer movement
 
-        [SerializeField] private float _acceleration = 10f;
-        [SerializeField] private float _deceleration = 8f;
-        [SerializeField] private float _velocityPower = 0.9f;
+        [SerializeField] private float _acceleration =10f;
+        [SerializeField] private float _deceleration =8f;
+        [SerializeField] private float _velocityPower =0.9f;
 
+        // Input-driven movement state
+        private float _inputX; // last horizontal input set by Move/Stop (not per-frame)
+        private float _moveSpeed; // last requested move speed
+
+        // Sliding tuning
+        [SerializeField] private float _stopThreshold =0.02f; // snap-to-stop threshold for velocity
 
         private void Awake()
         {
             _moveTargetTransform = this.transform;
+        }
+
+        private void Update()
+        {
+            Tick(Time.deltaTime);
+        }
+
+        private void Tick(float dt)
+        {
+            bool hasInput = Mathf.Abs(_inputX) >0.0001f;
+
+            float targetSpeed = _inputX * Mathf.Max(0f, _moveSpeed);
+
+            float accelRate = hasInput ? _acceleration : _deceleration;
+
+            float speedDiff = targetSpeed - _velocity;
+            float movement = Mathf.Pow(Mathf.Abs(speedDiff) * accelRate, _velocityPower) * Mathf.Sign(speedDiff);
+
+            _velocity += movement * dt;
+
+            if (!hasInput && Mathf.Abs(_velocity) <= _stopThreshold)
+            {
+                _velocity =0f;
+            }
+
+            var pos = _moveTargetTransform.position;
+            pos.x += _velocity * dt;
+            _moveTargetTransform.position = pos;
         }
 
         public virtual void Jump(float force)
@@ -36,18 +66,21 @@ namespace BS.GameObject
 
         public virtual void Move(Vector2 direction, float speed)
         {
-            _viewDirection = direction;
+            // Update view direction (keep last non-zero)
+            if (direction.sqrMagnitude >0.0001f)
+            {
+                _viewDirection = direction.normalized;
+            }
 
+            // Cache input and speed; actual movement happens per-frame in Tick()
+            _inputX = Mathf.Clamp(direction.x, -1f,1f);
+            _moveSpeed = speed;
         }
 
         public virtual void Stop()
         {
-            // Gradually stop with deceleration
-            _currentVelocity = Vector2.MoveTowards(
-                _currentVelocity,
-                Vector2.zero,
-                _deceleration * Time.fixedDeltaTime * 2f
-            );
+            _inputX = 0f;
+
         }
     }
 }

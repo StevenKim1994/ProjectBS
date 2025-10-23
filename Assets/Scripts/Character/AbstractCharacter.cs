@@ -40,9 +40,16 @@ namespace BS.GameObject
         {
             if (_mover != null)
             {
-                Debug.Log($"Move Direction : {direction}");
-                Mover.Move(direction, Ability.MoveSpeed);
-                // TODO :: 애니메이션 처리 Mover.ViewDirection 활용
+                if(direction == Vector2.zero)
+                {
+                    Mover.Stop();
+                }
+                else
+                {
+                    Debug.Log($"Move Direction : {direction}");
+                    Mover.Move(direction, Ability.MoveSpeed);
+                    // TODO :: 애니메이션 처리 Mover.ViewDirection 활용
+                }
             }
             else
             {

@@ -22,16 +22,20 @@ namespace BS.GameObject
         {
             base.Move(direction);
 
-            if(direction == Vector2.left)
+            if(direction != Vector2.zero)
             {
-                _spriteRenderer.flipX = true;
-            }
-            else
-            {
-                _spriteRenderer.flipX = false;
+                if (direction == Vector2.left)
+                {
+                    _spriteRenderer.flipX = true;
+                }
+                else
+                {
+                    _spriteRenderer.flipX = false;
+                }
+
+                Debug.Log("Night Character Move!");
             }
 
-            Debug.Log("Night Character Move!");
         }
 
         public override void TakeDamage(int amount)
