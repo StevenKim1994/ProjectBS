@@ -90,5 +90,16 @@ namespace BS.GameObject
                 _viewDirection = dir.normalized;
             }
         }
+
+        public virtual void Slow(float slowValue)
+        {
+            slowValue = Mathf.Abs(slowValue);
+            if (_moveSpeed > 0)
+            {
+                _moveSpeed *= slowValue;
+            }
+
+            // DESC :: 현재 이동속도에 슬로우 계수로 처리함.
+        }
     }
 }

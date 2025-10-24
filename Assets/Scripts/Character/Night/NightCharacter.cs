@@ -2,7 +2,7 @@
 
 namespace BS.GameObject
 {
-    public class NightCharacter : AbstractCharacter
+    public class NightCharacter : AbstractCharacter, IPlayer
     {
         public override void Attack()
         {
@@ -16,6 +16,11 @@ namespace BS.GameObject
             base.Die();
 
             Debug.Log("Night Character Die!");
+        }
+
+        public AbstractCharacter GetCharacterType()
+        {
+            return this;
         }
 
         public override void Move(Vector2 direction)

@@ -11,7 +11,7 @@ public class InGameScene : MonoBehaviour
 
     private void Start()
     {
-        var player = FindFirstObjectByType<AbstractCharacter>();
+        var player = FindFirstObjectByType<NightCharacter>();
         InputControlSystem.Instance.SetPlayableCharacter(player);
         InputControlSystem.Instance.SetInputActionAsset(player.InputActionAsset);
     }

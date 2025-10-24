@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BS.Common;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,9 +27,23 @@ namespace BS.GameObject
         protected Animator _animator;
         public Animator Animator => _animator;
 
+        [SerializeField]
+        protected Rigidbody2D _rigidbody;
+        public Rigidbody2D Rigidbody => _rigidbody;
+
+        [SerializeField]
+        protected Collider2D _colider;
+        public Collider2D Collider => _colider;
+
         public virtual void Attack()
         {
-            // TODO :: 애니메이션 처리 
+            if(_mover != null)
+            {
+                _mover.Stop();
+            }
+
+            _animator.CrossFade(Constrants.STR_INPUT_ACTION_ATTACK, 0.3f);
+            // TODO :: 콜라이더 처리
         }
 
         public virtual void Die()
@@ -61,13 +76,18 @@ namespace BS.GameObject
         public virtual void TakeDamage(int amount)
         {
             Ability.SetHealth(Ability.Health - amount);
+            
+            if(_mover != null)
+            {
+                _mover.Slow(0.9f);
+            }
 
-            // TODO :: 애니메이션 처리
+            // TODO :: 피격 애니메이션 처리
         }
 
         public virtual void Defense()
         {
-            // TODO :: 애니메이션 처리
+            // TODO :: 방어 애니메이션 처리
         }
 
         public virtual void Jump()

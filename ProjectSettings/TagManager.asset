@@ -47,6 +47,9 @@ TagManager:
   - name: Ground
     uniqueID: 429450129
     locked: 0
+  - name: Enermy
+    uniqueID: 399072169
+    locked: 0
   - name: Character
     uniqueID: 3496651631
     locked: 0
