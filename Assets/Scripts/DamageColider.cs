@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -24,12 +26,27 @@ namespace BS.GameObject
         private CancellationTokenSource _timeCTS;
         private ObjectPool<DamageColider> _parentPool;
 
-        public void SetDamageInfo(AbstractCharacter owner, float damage, float duration = 0f)
+        public void SetDamageInfo(AbstractCharacter owner, float damage, float duration = 0.33f)
         {
             _damageOwner = owner;
             _damage = damage;
             _enable = true;
             _duration = duration;
+
+            if (_timeCTS != null)
+            {
+                _timeCTS.Cancel();
+                _timeCTS.Dispose();
+            }
+
+            _timeCTS = new CancellationTokenSource();
+            DurationTimer().Forget();
+        }
+
+        private async UniTask DurationTimer()
+        {
+            await UniTask.WaitForSeconds(_duration, cancelImmediately: true, cancellationToken: _timeCTS.Token);
+            _parentPool.Release(this);
         }
 
         public void SetPool(ObjectPool<DamageColider> parentPool)
@@ -41,11 +58,25 @@ namespace BS.GameObject
         {
             if(collision.gameObject.TryGetComponent<AbstractCharacter>(out var character))
             {
-                character.TakeDamage(_damage);
-                _enable = false;
+                if (_damageOwner != character)
+                {
+                    Debug.Log("Attacker: " + _damageOwner.name);
+                    character.TakeDamage(_damage);
+                    _enable = false;
 
-                _parentPool.Release(this);
+                    _parentPool.Release(this);
+                }
             }
+        }
+        public void SetDefault()
+        {
+            transform.gameObject.SetActive(false);
+            _timeCTS.Cancel();
+            _timeCTS.Dispose();
+            _timeCTS = null;
+            _duration = 0f;
+            _damageOwner = null;
+            _damage = 0f;
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -57,6 +88,7 @@ namespace BS.GameObject
         {
             
         }
+
     }
 
 }

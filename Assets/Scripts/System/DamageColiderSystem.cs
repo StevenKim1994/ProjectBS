@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Pool;
 using BS.GameObject;
+using BS.Common;
 
 namespace BS.System
 {
@@ -35,17 +36,30 @@ namespace BS.System
 
         private DamageColider OnCreateObject()
         {
-            return new DamageColider(); // TODO :: 어드레서블 로드로 수정 필요
+            var loadObject = ResourceSystem.Instance.GetLoadGameObject(Constrants.STR_DAMAGE_COLIDER);
+            if (loadObject != null)
+            {
+                loadObject = UnityEngine.GameObject.Instantiate(loadObject);
+                if(loadObject.TryGetComponent<DamageColider>(out var result))
+                {
+                    result.SetPool(_dmgColiderPool);
+                    return result;
+                }
+            }
+
+            return null;
         }
 
         private void OnGetObject(DamageColider damageColider)
         {
-
+            damageColider.SetPool(_dmgColiderPool);
+            damageColider.gameObject.SetActive(true);
         }
 
         private void OnReleaseObject(DamageColider damageColider)
         {
-
+            damageColider.gameObject.SetActive(false);
+            damageColider.SetDefault();
         }
 
         private void OnDestoryObject(DamageColider damageColider)

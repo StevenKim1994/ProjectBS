@@ -3,6 +3,10 @@ namespace BS.Common
 {
     public static class Constrants
     {
+        public const string STR_DEFAULT_ADDRESSABLE_PATH = "Assets/AddressResource/";
+
+        public const string STR_DAMAGE_COLIDER = "DamageColider";
+        public const string STR_POSTFIX_PREFAB = ".prefab";
         public const string STR_SYSTEMOBJECT = "SystemGameObject";
         public const string STR_CHARACTER_NIGHT = "Night";
         public const string STR_INPUT_ACTION_ATTACK = "Attack";

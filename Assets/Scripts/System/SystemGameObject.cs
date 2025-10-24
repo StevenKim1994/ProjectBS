@@ -34,6 +34,7 @@ public class SystemGameObject : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        _systems.Add(typeof(ResourceSystem), new ResourceSystem());
         _systems.Add(typeof(ScreenSystem), new ScreenSystem());
         _systems.Add(typeof(InputControlSystem), new InputControlSystem());
         _systems.Add(typeof(DamageColiderSystem), new DamageColiderSystem());
