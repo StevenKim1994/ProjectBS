@@ -33,7 +33,7 @@ namespace BS.System
             Release();
         }
 
-        private DamageColider CreateObject()
+        private DamageColider OnCreateObject()
         {
             return new DamageColider(); // TODO :: 어드레서블 로드로 수정 필요
         }
@@ -59,7 +59,7 @@ namespace BS.System
             {
                 _dmgColiderPool = new ObjectPool<DamageColider>
                 (
-                    CreateObject,
+                    OnCreateObject,
                     OnGetObject,
                     OnReleaseObject,
                     OnDestoryObject
