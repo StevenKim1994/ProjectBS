@@ -1,14 +1,28 @@
-﻿using UnityEngine;
+﻿using BS.System;
+using UnityEngine;
 
 namespace BS.GameObject
 {
     public class NightCharacter : AbstractCharacter, IPlayer
     {
+        private NightAbility _castingAbility;
+
+        private void Awake()
+        {
+            _castingAbility = _ability as NightAbility;
+        }
+
         public override void Attack()
         {
             base.Attack();
-
             Debug.Log("Night Character Attack!");
+            var damageColider = DamageColiderSystem.Instance.GetDamageCollider();
+            if (damageColider != null)
+            {
+                damageColider.SetDamageInfo(this, _castingAbility.AttackDamage);
+                damageColider.transform.position = _spriteRenderer.transform.position;
+                // TODO :: 현재 캐릭터 앞쪽에 생성
+            }
         }
 
         public override void Die()
@@ -43,7 +57,7 @@ namespace BS.GameObject
 
         }
 
-        public override void TakeDamage(int amount)
+        public override void TakeDamage(float amount)
         {
             base.TakeDamage(amount);
 

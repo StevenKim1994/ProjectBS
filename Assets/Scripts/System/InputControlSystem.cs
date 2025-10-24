@@ -2,8 +2,6 @@
 using UnityEngine.InputSystem;
 using BS.GameObject;
 using BS.Common;
-using System.Net.Mime;
-using Unity.AppUI.Core;
 
 namespace BS.System
 {
@@ -41,12 +39,12 @@ namespace BS.System
             Release();
         }
 
-        protected void Initialize()
+        private void Initialize()
         {
 
         }
 
-        protected void Release()
+        private void Release()
         {
 
         }

@@ -6,7 +6,7 @@ namespace BS.GameObject
     {
         void Move(Vector2 direction);
         void Attack();
-        void TakeDamage(int amount);
+        void TakeDamage(float amount);
         void Die();
     }
 }

@@ -73,7 +73,7 @@ namespace BS.GameObject
             }
         }
 
-        public virtual void TakeDamage(int amount)
+        public virtual void TakeDamage(float amount)
         {
             Ability.SetHealth(Ability.Health - amount);
             
@@ -106,5 +106,6 @@ namespace BS.GameObject
         {
             Mover.Turn(dir);
         }
+
     }
 }

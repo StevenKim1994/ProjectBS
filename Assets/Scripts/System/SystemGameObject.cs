@@ -36,6 +36,7 @@ public class SystemGameObject : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         _systems.Add(typeof(ScreenSystem), new ScreenSystem());
         _systems.Add(typeof(InputControlSystem), new InputControlSystem());
+        _systems.Add(typeof(DamageColiderSystem), new DamageColiderSystem());
     }
 
     public void LoadAllSystems()

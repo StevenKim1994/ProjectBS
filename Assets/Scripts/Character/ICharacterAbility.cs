@@ -5,15 +5,15 @@ namespace BS.GameObject
     public interface ICharacterAbility 
     {
         public float MoveSpeed { get; }
-        public int Health { get; }
-        public int Mana { get; }
-        public int MaxHealth { get; }
-        public int MaxMana { get; }
+        public float Health { get; }
+        public float Mana { get; }
+        public float MaxHealth { get; }
+        public float MaxMana { get; }
 
-        public void SetHealth(int health);
-        public void SetMana(int mana);
-        public void SetMaxHealth(int maxHealth);
-        public void SetMaxMana(int maxMana);
+        public void SetHealth(float health);
+        public void SetMana(float mana);
+        public void SetMaxHealth(float maxHealth);
+        public void SetMaxMana(float maxMana);
 
         public void SetMoveSpeed(float moveSpeed);
 

@@ -5,40 +5,40 @@ namespace BS.GameObject
     public class AbstractCharacterAbility : ScriptableObject, ICharacterAbility
     {
         [SerializeField]
-        private int _health;
-        public int Health => _health;
+        private float _health;
+        public float Health => _health;
 
         [SerializeField]
-        private int _mana;
-        public int Mana => _mana;
+        private float _mana;
+        public float Mana => _mana;
 
         [SerializeField]
-        private int _maxHealth;
-        public int MaxHealth => _maxHealth;
+        private float _maxHealth;
+        public float MaxHealth => _maxHealth;
 
         [SerializeField]
-        private int _maxMana;
-        public int MaxMana => _maxMana;
+        private float _maxMana;
+        public float MaxMana => _maxMana;
 
         [SerializeField]
         private float _moveSpeed;
         public float MoveSpeed => _moveSpeed;
-        public void SetHealth(int health)
+        public void SetHealth(float health)
         {
             _health = health;
         }
 
-        public void SetMana(int mana)
+        public void SetMana(float mana)
         {
             _mana = mana;
         }
 
-        public void SetMaxHealth(int maxHealth)
+        public void SetMaxHealth(float maxHealth)
         {
             _maxHealth = maxHealth;
         }
 
-        public void SetMaxMana(int maxMana)
+        public void SetMaxMana(float maxMana)
         {
             _maxMana = maxMana;
         }

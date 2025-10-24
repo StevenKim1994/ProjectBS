@@ -18,7 +18,7 @@ namespace BS.GameObject
             base.Die();
         }
 
-        public override void TakeDamage(int amount)
+        public override void TakeDamage(float amount)
         {
             base.TakeDamage(amount);
         }
