@@ -61,7 +61,7 @@ namespace BS.GameObject
 
         public virtual void Jump(float force)
         {
-
+            // TODO :: viewDirection 방향으로 포물선 운동
         }
 
         public virtual void Move(Vector2 direction, float speed)
@@ -80,7 +80,15 @@ namespace BS.GameObject
         public virtual void Stop()
         {
             _inputX = 0f;
+        }
 
+        public virtual void Turn(Vector2 dir)
+        {
+            if(_viewDirection != dir.normalized)
+            {
+                Stop();
+                _viewDirection = dir.normalized;
+            }
         }
     }
 }

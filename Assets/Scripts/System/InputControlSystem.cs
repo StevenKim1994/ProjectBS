@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using BS.GameObject;
 using BS.Common;
 using System.Net.Mime;
+using Unity.AppUI.Core;
 
 namespace BS.System
 {
@@ -25,7 +26,6 @@ namespace BS.System
         private InputActionAsset _currentInputAsset;
         private AbstractCharacter _currentPlayableCharacter;
 
-        // Track pressed states for directional inputs
         private bool _leftPressed;
         private bool _rightPressed;
         private bool _upPressed;
@@ -72,13 +72,17 @@ namespace BS.System
                 var actUp = actionMap.FindAction(Constrants.STR_INPUT_ACTION_UP);
                 var actDown = actionMap.FindAction(Constrants.STR_INPUT_ACTION_DOWN);
 
-                actLeft.performed += MoveInput;
+                actLeft.started += MoveInput;
+                actLeft.performed += TurnInput;
                 actLeft.canceled += MoveInput;
-                actRight.performed += MoveInput;
+                actRight.started+= MoveInput;
+                actRight.performed += TurnInput;
                 actRight.canceled += MoveInput;
-                actUp.performed += MoveInput;
+                actUp.started += MoveInput;
+                actUp.performed += TurnInput;
                 actUp.canceled += MoveInput;
-                actDown.performed += MoveInput;
+                actDown.started += MoveInput;
+                actDown.performed += TurnInput;
                 actDown.canceled += MoveInput;
 
                 _currentInputAsset.Enable();
@@ -143,5 +147,33 @@ namespace BS.System
             _currentPlayableCharacter.Move(dir);
         }
 
+        private void TurnInput(InputAction.CallbackContext context)
+        {
+            _leftPressed = false;
+            _rightPressed = false;
+            _upPressed = false;
+            _downPressed = false;
+            Vector2 dir = Vector2.zero;
+            switch(context.action.name)
+            {
+                case Constrants.STR_INPUT_ACTION_LEFT:
+                    dir = Vector2.left;
+                    break;
+
+                case Constrants.STR_INPUT_ACTION_RIGHT:
+                    dir = Vector2.right;
+                    break;
+
+                case Constrants.STR_INPUT_ACTION_UP:
+                    dir = Vector2.up;
+                    break;
+
+                case Constrants.STR_INPUT_ACTION_DOWN:
+                    dir = Vector2.down;
+                    break;
+            }
+
+            _currentPlayableCharacter.Turn(dir);
+        }
     }
 }

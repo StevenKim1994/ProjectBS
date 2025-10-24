@@ -81,5 +81,10 @@ namespace BS.GameObject
                 Debug.Log("이 캐릭터는 점프할 수 없음.");
             }
         }
+
+        public virtual void Turn(Vector2 dir)
+        {
+            Mover.Turn(dir);
+        }
     }
 }
