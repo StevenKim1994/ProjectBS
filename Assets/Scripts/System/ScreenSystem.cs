@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 
 namespace BS.System
 {
     public class ScreenSystem : ISystem
     {
+        private PixelPerfectCamera _pixelPerfectCamera;
+        private Camera _camera;
+
         public void Load()
         {
-
+            _pixelPerfectCamera = SystemGameObject.Instance.PixelPerfectCamera;
+            _camera = _pixelPerfectCamera.TryGetComponent<Camera>(out var cam) ? cam : null;
         }
 
         public void Unload()
@@ -38,5 +43,6 @@ namespace BS.System
 
             return screenSize;
         }
+
     }
 }

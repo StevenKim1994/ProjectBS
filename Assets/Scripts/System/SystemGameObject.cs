@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using BS.System;
 using BS.Common;
+using UnityEngine.Pool;
+using UnityEngine.Rendering.Universal;
 
 
 public class SystemGameObject : MonoBehaviour
 {
     private static SystemGameObject _instance;
+
     public static SystemGameObject Instance
     {
         get
@@ -19,6 +22,10 @@ public class SystemGameObject : MonoBehaviour
             return _instance;
         }
     }
+
+    [SerializeField]
+    private PixelPerfectCamera _pixelPerfectCamera;
+    public PixelPerfectCamera PixelPerfectCamera =_pixelPerfectCamera;
 
     private Dictionary<Type, ISystem> _systems = new Dictionary<Type, ISystem>();
     public T GetSystem<T>() where T : ISystem
