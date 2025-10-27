@@ -1,8 +1,7 @@
 ﻿using BS.System;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
-namespace BS.GameObject
+namespace BS.GameObjects
 {
     public class ScareCrow : AbstractCharacter
     {
@@ -31,8 +30,10 @@ namespace BS.GameObject
 
             if(collision != _colider)
             {
-                Debug.Log("허수아비는 아무 일도 일어나지 않는다.");
-                ScreenSystem.Instance.ShakeCamera(0.2f, 0.1f, 10);
+                if(collision.gameObject.TryGetComponent<NightCharacter>(out var player))
+                {
+                    player.TakeDamage(10f);
+                }
             }
         }
 

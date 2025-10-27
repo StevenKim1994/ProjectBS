@@ -1,5 +1,5 @@
 ﻿
-using BS.GameObject;
+using BS.GameObjects;
 
 public interface IPlayer 
 {

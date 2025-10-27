@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Pool;
-using BS.GameObject;
+using BS.GameObjects;
 using BS.Common;
 
 namespace BS.System

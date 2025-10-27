@@ -2,7 +2,7 @@
 using BS.System;
 using BS.Common;
 
-namespace BS.GameObject
+namespace BS.GameObjects
 {
     public class NightCharacter : AbstractCharacter, IPlayer
     {
@@ -73,6 +73,7 @@ namespace BS.GameObject
         public override void TakeDamage(float amount)
         {
             base.TakeDamage(amount);
+            ScreenSystem.Instance.ShakeCamera(0.25f, 0.2f, 1);
 
             Debug.Log("Night Character Take Damage!");
         }

@@ -2,9 +2,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 
-namespace BS.GameObject
+namespace BS.GameObjects
 {
     public abstract class AbstractCharacter : MonoBehaviour, ICharacter
     {
@@ -124,19 +123,9 @@ namespace BS.GameObject
             Debug.Log("Exit Trigger : " + collision.name);
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            OnTriggerEnterCallback(collision);
-        }
-
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            OnTriggerStayCallback(collision);
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            OnTriggerExitCallback(collision);
+            Debug.Log("Enter Collision : " + collision.gameObject.name);
         }
 
     }

@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace BS.GameObject
+namespace BS.GameObjects
 {
     public class DamageColider : MonoBehaviour
     {

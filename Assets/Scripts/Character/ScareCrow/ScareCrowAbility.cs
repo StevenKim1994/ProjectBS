@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BS.GameObject
+namespace BS.GameObjects
 {
     [CreateAssetMenu(fileName = "ScareCrowAbilitySO", menuName ="Ability/Enermy/ScareCrow")]
     public class ScareCrowAbility : AbstractCharacterAbility

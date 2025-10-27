@@ -42,6 +42,12 @@ public class SystemGameObject : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+
+        if(_pixelPerfectCamera == null) // DESC :: PixelPerfectCamera가 할당되지 않았을 경우 자동 할당 만약, 특정 카메라를 얻고 싶다면 수동으로 할당
+        {
+            _pixelPerfectCamera = GameObject.FindFirstObjectByType<PixelPerfectCamera>();
+        }
+
         _systems.Add(typeof(ResourceSystem), new ResourceSystem());
         _systems.Add(typeof(ScreenSystem), new ScreenSystem());
         _systems.Add(typeof(InputControlSystem), new InputControlSystem());

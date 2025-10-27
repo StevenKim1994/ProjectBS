@@ -30,9 +30,9 @@ namespace BS.System
 
         }
 
-        public UnityEngine.GameObject GetLoadGameObject(string addressPath) 
+        public GameObject GetLoadGameObject(string addressPath) 
         {
-            var oper = Addressables.LoadAssetAsync<UnityEngine.GameObject>(Constrants.STR_DEFAULT_ADDRESSABLE_PATH + addressPath + Constrants.STR_POSTFIX_PREFAB);
+            var oper = Addressables.LoadAssetAsync<GameObject>(Constrants.STR_DEFAULT_ADDRESSABLE_PATH + addressPath + Constrants.STR_POSTFIX_PREFAB);
             oper.WaitForCompletion();
             return oper.Result;
         }

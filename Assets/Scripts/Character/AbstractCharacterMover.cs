@@ -3,7 +3,7 @@ using BS.Common;
 using System;
 using UnityEngine.Events;
 
-namespace BS.GameObject
+namespace BS.GameObjects
 {
     public class AbstractCharacterMover : MonoBehaviour, ICharacterMover
     {

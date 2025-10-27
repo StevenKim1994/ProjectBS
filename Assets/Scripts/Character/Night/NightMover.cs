@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BS.GameObject
+namespace BS.GameObjects
 {
     public class NightMover : AbstractCharacterMover
     {
