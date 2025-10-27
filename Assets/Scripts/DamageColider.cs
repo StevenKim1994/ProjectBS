@@ -73,10 +73,10 @@ namespace BS.GameObject
                         Debug.Log("Attacker: " + _damageOwner.name);
                         character.TakeDamage(_damage);
                         _currentTargetCount++;
-                        Debug.Log("CurrentTargetCount" + _currentTargetCount.ToString());
 
                         if(_currentTargetCount >= _targetMaxCount)
                         {
+                            Debug.Log("타겟 최대 수 도달, 콜라이더 비활성화");
                             _parentPool.Release(this);
                             _enable = false;
                         }

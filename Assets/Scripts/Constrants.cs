@@ -15,5 +15,7 @@
         public const string STR_INPUT_ACTION_RIGHT = "Right";
         public const string STR_INPUT_ACTION_UP = "Up";
         public const string STR_INPUT_ACTION_DOWN = "Down";
+
+        public const string LAYER_ACTOR = "Actor";
     }
 }

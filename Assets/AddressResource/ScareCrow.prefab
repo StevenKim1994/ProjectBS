@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3796239002512778763}
   - component: {fileID: 783397303091984002}
   - component: {fileID: 1923280627117761818}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: render
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 5163928639275255029}
   - component: {fileID: 8726715099696286703}
   - component: {fileID: 8739341776304845546}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ScareCrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

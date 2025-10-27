@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.Tilemaps;
+using UnityEngine;
 
 namespace BS.GameObject
 {
@@ -21,6 +22,26 @@ namespace BS.GameObject
         public override void TakeDamage(float amount)
         {
             base.TakeDamage(amount);
+        }
+
+        protected override void OnTriggerEnterCallback(Collider2D collision)
+        {
+            base.OnTriggerEnterCallback(collision);
+
+            if(collision != _colider)
+            {
+                Debug.Log("허수아비는 아무 일도 일어나지 않는다.");
+            }
+        }
+
+        protected override void OnTriggerStayCallback(Collider2D collision)
+        {
+            base.OnTriggerStayCallback(collision);
+        }
+
+        protected override void OnTriggerExitCallback(Collider2D collision)
+        {
+            base.OnTriggerExitCallback(collision);
         }
     }
 }

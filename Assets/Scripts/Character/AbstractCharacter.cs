@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 
 namespace BS.GameObject
 {
@@ -34,6 +35,7 @@ namespace BS.GameObject
         [SerializeField]
         protected Collider2D _colider;
         public Collider2D Collider => _colider;
+
 
         public virtual void Attack()
         {
@@ -105,6 +107,36 @@ namespace BS.GameObject
         public virtual void Turn(Vector2 dir)
         {
             Mover.Turn(dir);
+        }
+
+        protected virtual void OnTriggerEnterCallback(Collider2D collision)
+        {
+            Debug.Log("Enter Trigger : " + collision.name);
+        }
+
+        protected virtual void OnTriggerStayCallback(Collider2D collision)
+        {
+            Debug.Log("Stay Trigger : " + collision.name);
+        }
+
+        protected virtual void OnTriggerExitCallback(Collider2D collision)
+        {
+            Debug.Log("Exit Trigger : " + collision.name);
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            OnTriggerEnterCallback(collision);
+        }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            OnTriggerStayCallback(collision);
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            OnTriggerExitCallback(collision);
         }
 
     }
