@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 5163928639275255029}
   - component: {fileID: 8726715099696286703}
   - component: {fileID: 8739341776304845546}
+  - component: {fileID: 1069097633625843313}
   m_Layer: 6
   m_Name: ScareCrow
   m_TagString: Enermy
@@ -240,3 +241,32 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1069097633625843313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541334775206541584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
+  m_Graph: {fileID: 2752593455504595933, guid: 8d7663cba777c1d4bba5461d3fd28939, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 5020809411777266415
+  m_OriginalGraph: {fileID: 0}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 5020809411777266415
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 8541334775206541584}

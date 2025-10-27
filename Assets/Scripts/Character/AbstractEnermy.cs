@@ -1,0 +1,22 @@
+﻿using UnityEngine;
+using Unity.Behavior;
+
+namespace BS.GameObjects
+{
+    public abstract class AbstractEnermy : AbstractCharacter
+    {
+        [SerializeField] 
+        protected BehaviorGraphAgent _behaviorAgent; // DESC :: BehaviorGraphAgent 컴포넌트 참조
+        public BehaviorGraphAgent BehaviorGraphAgent => _behaviorAgent;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            if(_behaviorAgent == null)
+            {
+                _behaviorAgent = TryGetComponent<BehaviorGraphAgent>(out var agent) ? agent : null;
+            }
+        }
+    }
+}

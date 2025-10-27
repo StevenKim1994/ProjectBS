@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BS.GameObjects
 {
-    public class ScareCrow : AbstractCharacter
+    public class ScareCrow : AbstractEnermy
     {
         private Tweener _twinkleTweener;
         public override void Attack() 
