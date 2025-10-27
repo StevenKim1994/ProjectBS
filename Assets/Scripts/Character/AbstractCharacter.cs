@@ -77,13 +77,25 @@ namespace BS.GameObjects
         public virtual void TakeDamage(float amount)
         {
             Ability.SetHealth(Ability.Health - amount);
-            
-            if(_mover != null)
+
+            if (Ability.Health <= 0)
             {
-                _mover.Slow(0.9f);
+                Die();
+            }
+            else
+            {
+                HitAnim();
+                if (_mover != null)
+                {
+                    _mover.Slow(0.9f);
+                }
             }
 
-            // TODO :: 피격 애니메이션 처리
+        }
+
+        public virtual void HitAnim()
+        {
+            _animator.CrossFade(AnimStateConstants.HIT, 0.1f);
         }
 
         public virtual void Defense()
@@ -95,7 +107,7 @@ namespace BS.GameObjects
         {
             if(_mover != null)
             {
-                // TODO :: 애니메이션 처리
+                _mover.Jump(Ability.JumpForce);
             }
             else
             {
@@ -108,24 +120,24 @@ namespace BS.GameObjects
             Mover.Turn(dir);
         }
 
-        protected virtual void OnTriggerEnterCallback(Collider2D collision)
-        {
-            Debug.Log("Enter Trigger : " + collision.name);
-        }
-
-        protected virtual void OnTriggerStayCallback(Collider2D collision)
-        {
-            Debug.Log("Stay Trigger : " + collision.name);
-        }
-
-        protected virtual void OnTriggerExitCallback(Collider2D collision)
-        {
-            Debug.Log("Exit Trigger : " + collision.name);
-        }
-
-        private void OnCollisionEnter2D(Collision2D collision)
+        protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
             Debug.Log("Enter Collision : " + collision.gameObject.name);
+
+            if(this.gameObject.CompareTag(Constrants.TAG_PLAYER))
+            {
+                _mover.ResetJumpCount();
+            }
+        }
+
+        protected virtual void OnCollisionStay2D(Collision2D collision)
+        {
+            Debug.Log("Stay Collision : " + collision.gameObject.name);
+        }
+
+        protected virtual void OnCollisionExit2D(Collision2D collision)
+        {
+            Debug.Log("Exit Collision : " + collision.gameObject.name);
         }
 
     }

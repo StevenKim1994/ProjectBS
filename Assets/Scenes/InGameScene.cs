@@ -2,20 +2,9 @@
 using BS.System;
 using BS.Common;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
-public class InGameScene : MonoBehaviour
+public class InGameScene : AbstractInGameScene
 {
-    private void Awake()
-    {
-        SystemGameObject.Instance.LoadAllSystems();
-    }
 
-    private void Start()
-    {
-        //Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer(Constrants.LAYER_ACTOR), LayerMask.NameToLayer(Constrants.LAYER_ACTOR), true);
-
-        var player = FindFirstObjectByType<NightCharacter>();
-        InputControlSystem.Instance.SetPlayableCharacter(player);
-        InputControlSystem.Instance.SetInputActionAsset(player.InputActionAsset);
-    }
 }

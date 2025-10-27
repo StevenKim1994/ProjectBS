@@ -23,29 +23,51 @@ namespace BS.GameObjects
         [SerializeField]
         private float _moveSpeed;
         public float MoveSpeed => _moveSpeed;
-        public void SetHealth(float health)
+
+        [SerializeField]
+        private float _jumpForce;
+        public float JumpForce => _jumpForce;
+
+        public ICharacterAbility SetHealth(float health)
         {
             _health = health;
+
+            return this;
         }
 
-        public void SetMana(float mana)
+        public ICharacterAbility SetMana(float mana)
         {
             _mana = mana;
+
+            return this;
         }
 
-        public void SetMaxHealth(float maxHealth)
+        public ICharacterAbility SetMaxHealth(float maxHealth)
         {
             _maxHealth = maxHealth;
+
+            return this;
         }
 
-        public void SetMaxMana(float maxMana)
+        public ICharacterAbility SetMaxMana(float maxMana)
         {
             _maxMana = maxMana;
+
+            return this;
         }
 
-        public void SetMoveSpeed(float moveSpeed)
+        public ICharacterAbility SetMoveSpeed(float moveSpeed)
         {
             _moveSpeed = moveSpeed;
+
+            return this;
+        }
+
+        public ICharacterAbility SetJumpForce(float jumpForce)
+        {
+            _jumpForce = jumpForce;
+         
+            return this;
         }
 
     }

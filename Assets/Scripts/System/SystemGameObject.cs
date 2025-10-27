@@ -7,67 +7,70 @@ using UnityEngine.Pool;
 using UnityEngine.Rendering.Universal;
 
 
-public class SystemGameObject : MonoBehaviour
+namespace BS.GameObjects
 {
-    private static SystemGameObject _instance;
-
-    public static SystemGameObject Instance
+    public class SystemGameObject : MonoBehaviour
     {
-        get
+        private static SystemGameObject _instance;
+
+        public static SystemGameObject Instance
         {
-            if (_instance == null)
+            get
             {
-                _instance = GameObject.FindFirstObjectByType<SystemGameObject>();
+                if (_instance == null)
+                {
+                    _instance = GameObject.FindFirstObjectByType<SystemGameObject>();
+                }
+                return _instance;
             }
-            return _instance;
         }
-    }
 
-    [SerializeField]
-    private PixelPerfectCamera _pixelPerfectCamera;
+        [SerializeField]
+        private AbstractInGameScene _currentGameScene;
 
-    public PixelPerfectCamera PixelPerfectCamera => _pixelPerfectCamera;
+        public AbstractInGameScene CurrentGameScene => _currentGameScene;
 
-    private Dictionary<Type, ISystem> _systems = new Dictionary<Type, ISystem>();
-    public T GetSystem<T>() where T : ISystem
-    {
-        Type type = typeof(T);
-        if (_systems.ContainsKey(type))
+        private Dictionary<Type, ISystem> _systems = new Dictionary<Type, ISystem>();
+        public T GetSystem<T>() where T : ISystem
         {
-            return (T)_systems[type];
+            Type type = typeof(T);
+            if (_systems.ContainsKey(type))
+            {
+                return (T)_systems[type];
+            }
+            throw new Exception($"System of type {type} not found.");
         }
-        throw new Exception($"System of type {type} not found.");
-    }
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this.gameObject);
-
-        if(_pixelPerfectCamera == null) // DESC :: PixelPerfectCamera가 할당되지 않았을 경우 자동 할당 만약, 특정 카메라를 얻고 싶다면 수동으로 할당
+        private void Awake()
         {
-            _pixelPerfectCamera = GameObject.FindFirstObjectByType<PixelPerfectCamera>();
+            DontDestroyOnLoad(this.gameObject);
+
+            if (_currentGameScene == null) 
+            {
+                _currentGameScene = GameObject.FindFirstObjectByType<AbstractInGameScene>();
+            }
+
+            _systems.Add(typeof(ResourceSystem), new ResourceSystem());
+            _systems.Add(typeof(ScreenSystem), new ScreenSystem());
+            _systems.Add(typeof(InputControlSystem), new InputControlSystem());
+            _systems.Add(typeof(DamageColiderSystem), new DamageColiderSystem());
         }
 
-        _systems.Add(typeof(ResourceSystem), new ResourceSystem());
-        _systems.Add(typeof(ScreenSystem), new ScreenSystem());
-        _systems.Add(typeof(InputControlSystem), new InputControlSystem());
-        _systems.Add(typeof(DamageColiderSystem), new DamageColiderSystem());
-    }
-
-    public void LoadAllSystems()
-    {
-        foreach (var system in _systems.Values)
+        public void LoadAllSystems()
         {
-            system.Load();
+            foreach (var system in _systems.Values)
+            {
+                system.Load();
+            }
         }
-    }
 
-    public void UnloadAllSystems()
-    {
-        foreach (var system in _systems.Values)
+        public void UnloadAllSystems()
         {
-            system.Unload();
+            foreach (var system in _systems.Values)
+            {
+                system.Unload();
+            }
         }
-    }
 
+    }
 }

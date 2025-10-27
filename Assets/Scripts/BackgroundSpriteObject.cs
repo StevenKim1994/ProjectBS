@@ -3,37 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using BS.System;
 
-public class BackgroundSpriteObject : MonoBehaviour
+namespace BS.GameObjects
 {
-    [SerializeField]
-    private SpriteRenderer _backgroundSprite;
-
-    [SerializeField]
-    private List<SpriteRenderer> _layerSpriteList = new List<SpriteRenderer>();
-
-    public Sprite BackgroundSprite
+    public class BackgroundSpriteObject : MonoBehaviour
     {
-        get => _backgroundSprite.sprite;
-    }
+        [SerializeField]
+        private SpriteRenderer _backgroundSprite;
 
-    public List<SpriteRenderer> LayerSpriteList
-    {
-        get => _layerSpriteList;
-    }
+        [SerializeField]
+        private List<SpriteRenderer> _layerSpriteList = new List<SpriteRenderer>();
 
-    private void Awake()
-    {
-        _backgroundSprite = TryGetComponent<SpriteRenderer>(out var spriteRenderer) ? spriteRenderer : null;
-    }
-
-    private void Start()
-    {
-        if(_backgroundSprite != null)
+        public Sprite BackgroundSprite
         {
-            _backgroundSprite.size = SystemGameObject.Instance.GetSystem<ScreenSystem>().GetScreenSize();
+            get => _backgroundSprite.sprite;
+        }
+
+        public List<SpriteRenderer> LayerSpriteList
+        {
+            get => _layerSpriteList;
+        }
+
+        private void Awake()
+        {
+            _backgroundSprite = TryGetComponent<SpriteRenderer>(out var spriteRenderer) ? spriteRenderer : null;
+        }
+
+        private void Start()
+        {
+
         }
     }
-
-
 }
-

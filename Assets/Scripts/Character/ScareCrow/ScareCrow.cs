@@ -19,32 +19,14 @@ namespace BS.GameObjects
             base.Die();
         }
 
+        public override void HitAnim()
+        {
+            base.HitAnim();
+        }
+
         public override void TakeDamage(float amount)
         {
             base.TakeDamage(amount);
-        }
-
-        protected override void OnTriggerEnterCallback(Collider2D collision)
-        {
-            base.OnTriggerEnterCallback(collision);
-
-            if(collision != _colider)
-            {
-                if(collision.gameObject.TryGetComponent<NightCharacter>(out var player))
-                {
-                    player.TakeDamage(10f);
-                }
-            }
-        }
-
-        protected override void OnTriggerStayCallback(Collider2D collision)
-        {
-            base.OnTriggerStayCallback(collision);
-        }
-
-        protected override void OnTriggerExitCallback(Collider2D collision)
-        {
-            base.OnTriggerExitCallback(collision);
         }
     }
 }

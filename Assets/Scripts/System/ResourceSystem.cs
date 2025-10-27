@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AddressableAssets;
 using BS.Common;
-
+using BS.GameObjects;
 namespace BS.System
 {
     public class ResourceSystem : ISystem

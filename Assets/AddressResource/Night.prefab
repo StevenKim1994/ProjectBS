@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 4471602249020494042}
   m_Layer: 6
   m_Name: Night
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -257,3 +257,4 @@ MonoBehaviour:
   _deceleration: 8
   _velocityPower: 0.9
   _stopThreshold: 0.02
+  _maxJumpCount: 1

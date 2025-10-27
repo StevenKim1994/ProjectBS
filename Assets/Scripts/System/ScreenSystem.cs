@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using DG.Tweening;
+using BS.GameObjects;
 
 
 namespace BS.System
@@ -25,7 +26,7 @@ namespace BS.System
 
         public void Load()
         {
-            _pixelPerfectCamera = SystemGameObject.Instance.PixelPerfectCamera;
+            _pixelPerfectCamera = SystemGameObject.Instance.CurrentGameScene.PixelPerfectCamera;
             _camera = _pixelPerfectCamera.TryGetComponent<Camera>(out var cam) ? cam : null;
         }
 

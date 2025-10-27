@@ -64,6 +64,7 @@ namespace BS.System
                 var actionMap = _currentInputAsset.FindActionMap(Constrants.STR_CHARACTER_NIGHT);
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_ATTACK).performed += AttackInput;
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_DEFENSE).performed += DefenseInput;
+                actionMap.FindAction(Constrants.STR_INPUT_ACTION_JUMP).performed += JumpInput;
 
                 var actLeft = actionMap.FindAction(Constrants.STR_INPUT_ACTION_LEFT);
                 var actRight = actionMap.FindAction(Constrants.STR_INPUT_ACTION_RIGHT);

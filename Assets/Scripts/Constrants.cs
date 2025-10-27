@@ -17,5 +17,8 @@
         public const string STR_INPUT_ACTION_DOWN = "Down";
 
         public const string LAYER_ACTOR = "Actor";
+        public const string TAG_GROUND= "Ground";
+        public const string TAG_PLAYER= "Player";
+        public const string TAG_ENERMY= "Enermy";
     }
 }

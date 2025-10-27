@@ -4,12 +4,25 @@
 namespace BS.Common
 {
     /// <summary>
- /// Animator Parameter Constants
+    /// Animator Parameter Constants
     /// Auto-generated from all AnimatorController assets in the project
     /// </summary>
     public static class AnimParamConstants
     {
-  public const string IS_JUMPING = "IsJumping";
-  public const string MOVE_SPEED = "MoveSpeed";
+        public const string IS_JUMPING = "IsJumping";
+        public const string MOVE_SPEED = "MoveSpeed";
+    }
+
+    /// <summary>
+    /// Animation State Name Constants
+    /// Auto-generated from all AnimatorController assets in the project
+    /// </summary>
+    public static class AnimStateConstants
+    {
+        public const string ATTACK = "Attack";
+        public const string HIT = "Hit";
+        public const string IDLE = "Idle";
+        public const string JUMP = "Jump";
+        public const string MOVE = "Move";
     }
 }

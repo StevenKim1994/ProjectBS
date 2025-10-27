@@ -9,13 +9,14 @@ namespace BS.GameObjects
         public float Mana { get; }
         public float MaxHealth { get; }
         public float MaxMana { get; }
+        public float JumpForce { get; }
 
-        public void SetHealth(float health);
-        public void SetMana(float mana);
-        public void SetMaxHealth(float maxHealth);
-        public void SetMaxMana(float maxMana);
-
-        public void SetMoveSpeed(float moveSpeed);
+        public ICharacterAbility SetHealth(float health);
+        public ICharacterAbility SetMana(float mana);
+        public ICharacterAbility SetMaxHealth(float maxHealth);
+        public ICharacterAbility SetMaxMana(float maxMana);
+        public ICharacterAbility SetMoveSpeed(float moveSpeed);
+        public ICharacterAbility SetJumpForce(float jumpForce);
 
     }
 }

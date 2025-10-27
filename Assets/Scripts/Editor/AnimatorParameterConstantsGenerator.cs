@@ -11,155 +11,221 @@ using UnityEditor;
 namespace BS.Editor
 {
     /// <summary>
-    /// AnimatorController 에셋이 추가/수정될 때 자동으로 AnimParamConstants.cs에 파라미터 상수를 생성하는 에디터 툴
+    /// AnimatorController 에셋이 추가/수정될 때 자동으로 AnimParamConstants.cs에 파라미터 및 상태 이름 상수를 생성하는 에디터 툴
     /// </summary>
     public class AnimatorParameterConstantsGenerator : AssetPostprocessor
     {
-      private const string ANIM_PARAM_CONSTANTS_FILE_PATH = "Assets/Scripts/AnimParamConstants.cs";
+        private const string ANIM_PARAM_CONSTANTS_FILE_PATH = "Assets/Scripts/AnimParamConstants.cs";
 
         /// <summary>
-  /// 에셋이 임포트될 때 호출되는 콜백
-  /// </summary>
+        /// 에셋이 임포트될 때 호출되는 콜백
+        /// </summary>
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
-       bool hasAnimatorChanges = false;
+            bool hasAnimatorChanges = false;
 
-          // 임포트된 에셋 중 AnimatorController 확인
+            // 임포트된 에셋 중 AnimatorController 확인
             foreach (string path in importedAssets)
             {
-   if (path.EndsWith(".controller"))
-      {
-      hasAnimatorChanges = true;
-           break;
-           }
-}
+                if (path.EndsWith(".controller"))
+                {
+                    hasAnimatorChanges = true;
+                    break;
+                }
+            }
 
-   // 삭제된 에셋 중 AnimatorController 확인
-       if (!hasAnimatorChanges)
-    {
-      foreach (string path in deletedAssets)
-         {
-      if (path.EndsWith(".controller"))
-        {
-  hasAnimatorChanges = true;
-       break;
-           }
-   }
-  }
-
-          if (hasAnimatorChanges)
+            // 삭제된 에셋 중 AnimatorController 확인
+            if (!hasAnimatorChanges)
             {
-          GenerateAnimatorParameterConstants();
+                foreach (string path in deletedAssets)
+                {
+                    if (path.EndsWith(".controller"))
+                    {
+                        hasAnimatorChanges = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasAnimatorChanges)
+            {
+                GenerateAnimatorParameterConstants();
             }
         }
 
-    /// <summary>
+        /// <summary>
         /// 메뉴에서 수동으로 실행할 수 있는 옵션
         /// </summary>
         [MenuItem("ProjectBS/Tools/Generate Animator Parameter Constants")]
         public static void GenerateAnimatorParameterConstantsMenu()
         {
             GenerateAnimatorParameterConstants();
-            Debug.Log("Animator Parameter Constants generated successfully!");
+            Debug.Log("Animator Parameter and State Name Constants generated successfully!");
         }
 
         /// <summary>
-        /// 모든 AnimatorController의 파라미터를 수집하고 AnimParamConstants.cs 생성
+        /// 모든 AnimatorController의 파라미터와 상태 이름을 수집하고 AnimParamConstants.cs 생성
         /// </summary>
         private static void GenerateAnimatorParameterConstants()
-     {
-      // 모든 AnimatorController 찾기
-string[] guids = AssetDatabase.FindAssets("t:AnimatorController");
+        {
+            // 모든 AnimatorController 찾기
+            string[] guids = AssetDatabase.FindAssets("t:AnimatorController");
             var allParameters = new HashSet<string>();
+            var allStateNames = new HashSet<string>();
 
             foreach (string guid in guids)
             {
-     string path = AssetDatabase.GUIDToAssetPath(guid);
-  AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                
+                // Assets/Character 경로에 있는 AnimatorController만 처리
+                if (!path.StartsWith("Assets/Character"))
+                    continue;
+                
+                AnimatorController controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
 
-     if (controller != null)
+                if (controller != null)
                 {
-  foreach (var param in controller.parameters)
-             {
-        if (!string.IsNullOrEmpty(param.name))
- {
-            allParameters.Add(param.name);
-   }
-  }
+                    // 파라미터 수집
+                    foreach (var param in controller.parameters)
+                    {
+                        if (!string.IsNullOrEmpty(param.name))
+                        {
+                            allParameters.Add(param.name);
+                        }
+                    }
+
+                    // 상태 이름 수집
+                    CollectStateNames(controller, allStateNames);
                 }
-   }
+            }
 
             // AnimParamConstants.cs 파일 생성/업데이트
-        GenerateAnimParamConstantsFile(allParameters);
+            GenerateAnimParamConstantsFile(allParameters, allStateNames);
+        }
+
+        /// <summary>
+        /// AnimatorController에서 모든 레이어의 상태 이름을 수집
+        /// </summary>
+        private static void CollectStateNames(AnimatorController controller, HashSet<string> stateNames)
+        {
+            foreach (var layer in controller.layers)
+            {
+                CollectStateNamesFromStateMachine(layer.stateMachine, stateNames);
+            }
+        }
+
+        /// <summary>
+        /// StateMachine에서 재귀적으로 상태 이름을 수집
+        /// </summary>
+        private static void CollectStateNamesFromStateMachine(AnimatorStateMachine stateMachine, HashSet<string> stateNames)
+        {
+            if (stateMachine == null)
+                return;
+
+            // 현재 레벨의 상태 수집
+            foreach (var state in stateMachine.states)
+            {
+                if (state.state != null && !string.IsNullOrEmpty(state.state.name))
+                {
+                    stateNames.Add(state.state.name);
+                }
+            }
+
+            // 서브 스테이트 머신 재귀 탐색
+            foreach (var subStateMachine in stateMachine.stateMachines)
+            {
+                CollectStateNamesFromStateMachine(subStateMachine.stateMachine, stateNames);
+            }
         }
 
         /// <summary>
         /// AnimParamConstants.cs 파일 생성
         /// </summary>
-        private static void GenerateAnimParamConstantsFile(HashSet<string> parameters)
+        private static void GenerateAnimParamConstantsFile(HashSet<string> parameters, HashSet<string> stateNames)
         {
-          StringBuilder fileContent = new StringBuilder();
-            
-  // 파일 헤더
-       fileContent.AppendLine("// Auto-generated file. Do not modify manually.");
-fileContent.AppendLine("// This file is automatically generated from AnimatorController assets.");
+            StringBuilder fileContent = new StringBuilder();
+
+            // 파일 헤더
+            fileContent.AppendLine("// Auto-generated file. Do not modify manually.");
+            fileContent.AppendLine("// This file is automatically generated from AnimatorController assets.");
             fileContent.AppendLine();
             fileContent.AppendLine("namespace BS.Common");
-          fileContent.AppendLine("{");
- fileContent.AppendLine("    /// <summary>");
-       fileContent.AppendLine(" /// Animator Parameter Constants");
-     fileContent.AppendLine("    /// Auto-generated from all AnimatorController assets in the project");
-     fileContent.AppendLine("    /// </summary>");
-            fileContent.AppendLine("    public static class AnimParamConstants");
-    fileContent.AppendLine("    {");
+            fileContent.AppendLine("{");
 
-  // 파라미터 상수 생성
-      var sortedParams = parameters.OrderBy(p => p).ToList();
-       foreach (string param in sortedParams)
-     {
-   string constName = ConvertToConstantName(param);
-         fileContent.AppendLine($"  public const string {constName} = \"{param}\";");
-          }
+            // 파라미터 상수 클래스
+            fileContent.AppendLine("    /// <summary>");
+            fileContent.AppendLine("    /// Animator Parameter Constants");
+            fileContent.AppendLine("    /// Auto-generated from all AnimatorController assets in the project");
+            fileContent.AppendLine("    /// </summary>");
+            fileContent.AppendLine("    public static class AnimParamConstants");
+            fileContent.AppendLine("    {");
+
+            // 파라미터 상수 생성
+            var sortedParams = parameters.OrderBy(p => p).ToList();
+            foreach (string param in sortedParams)
+            {
+                string constName = ConvertToConstantName(param);
+                fileContent.AppendLine($"        public const string {constName} = \"{param}\";");
+            }
+
+            fileContent.AppendLine("    }");
+            fileContent.AppendLine();
+
+            // 상태 이름 상수 클래스
+            fileContent.AppendLine("    /// <summary>");
+            fileContent.AppendLine("    /// Animation State Name Constants");
+            fileContent.AppendLine("    /// Auto-generated from all AnimatorController assets in the project");
+            fileContent.AppendLine("    /// </summary>");
+            fileContent.AppendLine("    public static class AnimStateConstants");
+            fileContent.AppendLine("    {");
+
+            // 상태 이름 상수 생성
+            var sortedStates = stateNames.OrderBy(s => s).ToList();
+            foreach (string stateName in sortedStates)
+            {
+                string constName = ConvertToConstantName(stateName);
+                fileContent.AppendLine($"        public const string {constName} = \"{stateName}\";");
+            }
 
             fileContent.AppendLine("    }");
             fileContent.AppendLine("}");
 
-       // 디렉토리 확인 및 생성
-     string directory = Path.GetDirectoryName(ANIM_PARAM_CONSTANTS_FILE_PATH);
-         if (!Directory.Exists(directory))
+            // 디렉토리 확인 및 생성
+            string directory = Path.GetDirectoryName(ANIM_PARAM_CONSTANTS_FILE_PATH);
+            if (!Directory.Exists(directory))
             {
-       Directory.CreateDirectory(directory);
+                Directory.CreateDirectory(directory);
             }
 
             // 파일 쓰기
             File.WriteAllText(ANIM_PARAM_CONSTANTS_FILE_PATH, fileContent.ToString());
-  AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
 
-          Debug.Log($"Generated AnimParamConstants.cs with {parameters.Count} animator parameter constants");
-     }
+            Debug.Log($"Generated AnimParamConstants.cs with {parameters.Count} animator parameter constants and {stateNames.Count} state name constants");
+        }
 
         /// <summary>
         /// 파라미터 이름을 상수 이름 형식으로 변환
-     /// 예: "isRunning" -> "IS_RUNNING", "Speed" -> "SPEED"
+        /// 예: "isRunning" -> "IS_RUNNING", "Speed" -> "SPEED"
         /// </summary>
-      private static string ConvertToConstantName(string paramName)
+        private static string ConvertToConstantName(string paramName)
         {
-    StringBuilder result = new StringBuilder();
+            StringBuilder result = new StringBuilder();
 
-for (int i = 0; i < paramName.Length; i++)
-      {
+            for (int i = 0; i < paramName.Length; i++)
+            {
                 char c = paramName[i];
 
-         // DESC :: 대문자이고 첫 글자가 아니며 이전 문자가 소문자인 경우 언더스코어 추가
-     if (char.IsUpper(c) && i > 0 && char.IsLower(paramName[i - 1]))
-  {
-                  result.Append('_');
-      }
+                // DESC :: 대문자이고 첫 글자가 아니며 이전 문자가 소문자인 경우 언더스코어 추가
+                if (char.IsUpper(c) && i > 0 && char.IsLower(paramName[i - 1]))
+                {
+                    result.Append('_');
+                }
 
-      result.Append(char.ToUpper(c));
-          }
+                result.Append(char.ToUpper(c));
+            }
 
-     return result.ToString();
-      }
+            return result.ToString();
+        }
     }
 }
