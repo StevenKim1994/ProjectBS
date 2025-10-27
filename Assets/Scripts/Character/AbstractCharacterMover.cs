@@ -31,6 +31,12 @@ namespace BS.GameObjects
         [SerializeField] private int _maxJumpCount = 1; // 최대 점프 횟수 (기본값 1 = 단일 점프)
         private int _currentJumpCount = 0; // 현재 사용한 점프 횟수
 
+        // Knockback settings
+        [SerializeField] private float _knockbackUpwardForce = 3f; // 넉백 시 위쪽 힘
+        private bool _isKnockedBack = false; // 넉백 상태
+        private float _knockbackDuration = 0.3f; // 넉백 지속 시간
+        private float _knockbackTimer = 0f; // 넉백 타이머
+
         private void Awake()
         {
             _moveTargetTransform = this.transform;
@@ -44,6 +50,18 @@ namespace BS.GameObjects
 
         private void Tick(float dt)
         {
+            // 넉백 타이머 처리
+            if (_isKnockedBack)
+            {
+                _knockbackTimer -= dt;
+                if (_knockbackTimer <= 0f)
+                {
+                    _isKnockedBack = false;
+                    _inputX = 0f; // 넉백 종료 시 입력 초기화
+                }
+                return; // 넉백 중에는 일반 이동 처리 안 함
+            }
+
             // 기존 이동 로직
             bool hasInput = Mathf.Abs(_inputX) > 0.0001f;
             float targetSpeed = _inputX * Mathf.Max(0f, _moveSpeed);
@@ -101,6 +119,10 @@ namespace BS.GameObjects
 
         public virtual void Move(Vector2 direction, float speed)
         {
+            // 넉백 중에는 이동 불가
+            if (_isKnockedBack)
+                return;
+
             // Update view direction (keep last non-zero)
             if (direction.sqrMagnitude > 0.0001f)
             {
@@ -136,43 +158,97 @@ namespace BS.GameObjects
         }
 
         /// <summary>
+        /// 넉백 효과 적용 - ViewDirection 반대 방향으로 밀려남
+        /// </summary>
+        /// <param name="force">넉백 힘 (수평 방향)</param>
+        public virtual void Knockback(float force)
+        {
+            if (_rigidbody2D == null)
+                return;
+
+            // 현재 바라보는 방향의 반대로 넉백
+            // ViewDirection.x: 1(오른쪽) → 넉백은 왼쪽(-1)
+            // ViewDirection.x: -1(왼쪽) → 넉백은 오른쪽(1)
+            float knockbackDir = -Mathf.Sign(_viewDirection.x);
+   
+            // ViewDirection이 0이면 기본적으로 왼쪽으로 넉백
+            if (Mathf.Abs(_viewDirection.x) < 0.01f)
+            {
+                knockbackDir = -1f;
+            }
+
+            // 넉백 벡터: 수평(반대 방향) + 수직(위쪽)
+            Vector2 knockbackForce = new Vector2(
+                knockbackDir * force,
+                _knockbackUpwardForce
+            );
+
+            // Rigidbody2D에 즉시 적용
+            _rigidbody2D.linearVelocity = knockbackForce;
+
+            // 넉백 상태 활성화
+            _isKnockedBack = true;
+            _knockbackTimer = _knockbackDuration;
+
+            // 일반 이동 입력 차단
+            Stop();
+        }
+
+        /// <summary>
         /// 점프 중단 (긴급 착지)
         /// </summary>
         public void CancelJump()
         {
             _rigidbody2D.linearVelocity = new Vector2(_rigidbody2D.linearVelocity.x, 0);
-        }
+ }
 
         /// <summary>
         /// 점프 횟수 초기화 (바닥 착지 시 호출)
         /// </summary>
         public void ResetJumpCount()
         {
-            _currentJumpCount = 0;
+ _currentJumpCount = 0;
         }
 
         /// <summary>
         /// 현재 점프 가능 여부 확인
         /// </summary>
-        public bool CanJump()
+     public bool CanJump()
         {
-            return _currentJumpCount < _maxJumpCount;
+        return _currentJumpCount < _maxJumpCount;
         }
 
-        /// <summary>
-        /// 최대 점프 횟수 설정
-        /// </summary>
+   /// <summary>
+    /// 최대 점프 횟수 설정
+   /// </summary>
         public void SetMaxJumpCount(int count)
-        {
-            _maxJumpCount = Mathf.Max(1, count);
+      {
+      _maxJumpCount = Mathf.Max(1, count);
         }
 
         /// <summary>
         /// 현재 남은 점프 횟수 반환
         /// </summary>
-        public int GetRemainingJumpCount()
+ public int GetRemainingJumpCount()
+     {
+    return _maxJumpCount - _currentJumpCount;
+  }
+
+        /// <summary>
+        /// 넉백 상태 확인
+     /// </summary>
+        public bool IsKnockedBack()
         {
-            return _maxJumpCount - _currentJumpCount;
+            return _isKnockedBack;
+        }
+
+        /// <summary>
+  /// 넉백 상태 강제 해제
+        /// </summary>
+      public void CancelKnockback()
+        {
+  _isKnockedBack = false;
+       _knockbackTimer = 0f;
         }
     }
 }

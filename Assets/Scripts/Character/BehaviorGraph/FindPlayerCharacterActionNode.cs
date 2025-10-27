@@ -7,15 +7,15 @@ using BS.Common;
     category: "AI/Action")]
 public class FindPlayerCharacterActionNode : Action
 {
-    [Tooltip("탐색 반경")]
+    [SerializeField, Tooltip("탐색 반경")]
     public BlackboardVariable<float> _searchRadius;
 
-    [Tooltip("찾은 Player Tag GameObject를 저장할 Blackboard 변수")]
+    [SerializeField, Tooltip("찾은 Player Tag GameObject를 저장할 Blackboard 변수")]
     public BlackboardVariable<Transform> _target;
 
     protected override Status OnStart()
     {
-        // 시작 시 초기화
+        // 시작 시 초기화 
         if (_target != null)
         {
             _target.Value = null;
@@ -34,6 +34,10 @@ public class FindPlayerCharacterActionNode : Action
             if (_target != null)
             {
                 _target.Value = playerTransform;
+                if(Parent.GameObject.TryGetComponent<BehaviorGraphAgent>(out var agent))
+                {
+                    agent.SetVariableValue<Transform>("Target", _target);
+                }
             }
 
             return Status.Success;

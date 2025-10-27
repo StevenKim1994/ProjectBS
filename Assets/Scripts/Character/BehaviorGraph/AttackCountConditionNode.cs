@@ -3,13 +3,24 @@ using Unity.Behavior;
 
 [NodeDescription("Attack Count Condition",
 story: "공격 횟수를 비교합니다.",
-category: "AI/Decision")]
+category: "AI/Decision",
+id: "attack_count_condition"
+    )]
 public class AttackCountConditionNode : Condition
 {
-    public BlackboardVariable<int> _attackCount;
+    [SerializeField, Tooltip("공격 횟수")]
+    private BlackboardVariable<int> _attackCount;
+
+    [SerializeField, Tooltip("현재 공격횟수")]
+    private BlackboardVariable<int> _currentAttackCount;
+
+    public override void OnStart()
+    {
+        base.OnStart();
+    }
 
     public override bool IsTrue()
     {
-        return _attackCount > 0;
+        return _currentAttackCount > _attackCount;
     }
 }

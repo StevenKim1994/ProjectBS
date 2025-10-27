@@ -7,6 +7,12 @@ namespace BS.GameObjects
     public class ScareCrow : AbstractEnermy
     {
         private Tweener _twinkleTweener;
+
+        protected override void Awake()
+        {
+            base.Awake();
+        }
+
         public override void Attack() 
         {
             // DESC :: 허수아비는 공격기능이 없으므로 base호출 안함.

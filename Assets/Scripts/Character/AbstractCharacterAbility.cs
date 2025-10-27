@@ -25,6 +25,10 @@ namespace BS.GameObjects
         public float MoveSpeed => _moveSpeed;
 
         [SerializeField]
+        private float _attackRange;
+        public float AttackRange => _attackRange;
+
+        [SerializeField]
         private float _jumpForce;
         public float JumpForce => _jumpForce;
 

@@ -13,6 +13,8 @@ namespace BS.GameObjects
         {
             base.Awake();
 
+            _currentHealth = Ability.Health;
+
             if(_behaviorAgent == null)
             {
                 _behaviorAgent = TryGetComponent<BehaviorGraphAgent>(out var agent) ? agent : null;

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f603d680326af3e478381356071232b9, type: 3}
   m_Name: ScareCrowAbilitySO
   m_EditorClassIdentifier: Assembly-CSharp::BS.GameObject.ScareCrowAbility
-  _health: 33
+  _health: 22
   _mana: 0
   _maxHealth: 33
   _maxMana: 0
-  _moveSpeed: 0
+  _moveSpeed: 1
+  _attackRange: 2
   _jumpForce: 0

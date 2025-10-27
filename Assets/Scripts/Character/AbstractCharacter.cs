@@ -113,7 +113,7 @@ namespace BS.GameObjects
             {
                 Ability.SetHealth(_currentHealth - amount);
 
-                if (_currentHealth<= 0)
+                if (_currentHealth <= 0)
                 {
                     Die();
                 }
@@ -122,7 +122,8 @@ namespace BS.GameObjects
                     HitAnim();
                     if (_mover != null)
                     {
-                        _mover.Slow(0.9f);
+                        _mover.Knockback(2);
+                        //_mover.Slow(0.9f);
                     }
                 }
             }
