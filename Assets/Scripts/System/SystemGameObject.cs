@@ -52,6 +52,7 @@ namespace BS.GameObjects
             _systems.Add(typeof(InputControlSystem), new InputControlSystem());
             _systems.Add(typeof(DamageColiderSystem), new DamageColiderSystem());
             _systems.Add(typeof(UISystem), new UISystem());
+            _systems.Add(typeof(EnermySystem), new EnermySystem());
         }
 
         public void LoadAllSystems()
