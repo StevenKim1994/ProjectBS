@@ -27,7 +27,7 @@ namespace BS.GameObjects
 
             if (_twinkleTweener != null && _twinkleTweener.IsActive())
             {
-                _twinkleTweener.Kill();
+                _twinkleTweener.Kill(true);
                 _spriteRenderer.color = Color.white;
             }
             TwinkleColor(Color.red);
