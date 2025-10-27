@@ -101,6 +101,7 @@ namespace BS.GameObjects
         public virtual void Defense()
         {
             // TODO :: 방어 애니메이션 처리
+            _animator.CrossFade(Constrants.STR_INPUT_ACTION_DEFENSE, 0.3f);
         }
 
         public virtual void Jump()
@@ -117,14 +118,14 @@ namespace BS.GameObjects
 
         public virtual void Turn(Vector2 dir)
         {
-            Mover.Turn(dir);
+            _mover.Turn(dir);
         }
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
             Debug.Log("Enter Collision : " + collision.gameObject.name);
 
-            if(this.gameObject.CompareTag(Constrants.TAG_PLAYER))
+            if(gameObject.CompareTag(Constrants.TAG_PLAYER))
             {
                 _mover.ResetJumpCount();
             }
