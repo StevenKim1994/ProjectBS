@@ -1,11 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using DG.Tweening;
 
 
 namespace BS.System
 {
     public class ScreenSystem : ISystem
     {
+        private static ScreenSystem _instance;
+        public static ScreenSystem Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = SystemGameObject.Instance.GetSystem<ScreenSystem>();
+                }
+                return _instance;
+            }
+        }
+
         private PixelPerfectCamera _pixelPerfectCamera;
         private Camera _camera;
 
@@ -44,5 +58,16 @@ namespace BS.System
             return screenSize;
         }
 
+        public void ShakeCamera(float duration, float strength, int vibrato)
+        {
+            if (_camera != null)
+            {
+                var originalPosition = _camera.transform.position;
+                _camera.transform.DOShakePosition(duration, strength, vibrato).OnComplete(() =>
+                {
+                    _camera.transform.position = originalPosition;
+                });
+            }
+        }
     }
 }

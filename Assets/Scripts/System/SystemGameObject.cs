@@ -25,7 +25,8 @@ public class SystemGameObject : MonoBehaviour
 
     [SerializeField]
     private PixelPerfectCamera _pixelPerfectCamera;
-    public PixelPerfectCamera PixelPerfectCamera =_pixelPerfectCamera;
+
+    public PixelPerfectCamera PixelPerfectCamera => _pixelPerfectCamera;
 
     private Dictionary<Type, ISystem> _systems = new Dictionary<Type, ISystem>();
     public T GetSystem<T>() where T : ISystem
