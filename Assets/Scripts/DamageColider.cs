@@ -18,25 +18,33 @@ namespace BS.GameObject
         private float _damage;
         public float Damage => _damage;
 
-        private bool _enable = false;
+        private bool _enable = false; // DESC :: 사용가능 여부 
         public bool Enable => _enable;
 
         private float _duration;
 
+        private int _targetMaxCount; // DESC :: 한번에 공격 가능한 최대 타겟 수
+        public int TargetMaxCount => _targetMaxCount;
+
+        private int _currentTargetCount; // DESC :: 현재 적중한 타겟의 수이 값이 _targetMaxCount를 넘으면 더이상 공격 불가
+        public int CurrentTargetCount => _currentTargetCount;
+
         private CancellationTokenSource _timeCTS;
         private ObjectPool<DamageColider> _parentPool;
 
-        public void SetDamageInfo(AbstractCharacter owner, float damage, float duration = 0.33f)
+        public void SetDamageInfo(AbstractCharacter owner, float damage, float duration = 0.33f, int targetMaxCount = 1)
         {
+            _targetMaxCount = targetMaxCount;
+            _currentTargetCount = 0;
             _damageOwner = owner;
             _damage = damage;
             _enable = true;
             _duration = duration;
-
             if (_timeCTS != null)
             {
                 _timeCTS.Cancel();
                 _timeCTS.Dispose();
+                _timeCTS = null;
             }
 
             _timeCTS = new CancellationTokenSource();
@@ -58,37 +66,38 @@ namespace BS.GameObject
         {
             if(collision.gameObject.TryGetComponent<AbstractCharacter>(out var character))
             {
-                if (_damageOwner != character)
+                if (_enable)
                 {
-                    Debug.Log("Attacker: " + _damageOwner.name);
-                    character.TakeDamage(_damage);
-                    _enable = false;
+                    if (_damageOwner != character)
+                    {
+                        Debug.Log("Attacker: " + _damageOwner.name);
+                        character.TakeDamage(_damage);
+                        _currentTargetCount++;
+                        Debug.Log("CurrentTargetCount" + _currentTargetCount.ToString());
 
-                    _parentPool.Release(this);
+                        if(_currentTargetCount >= _targetMaxCount)
+                        {
+                            _parentPool.Release(this);
+                            _enable = false;
+                        }
+                    }
                 }
             }
         }
+
         public void SetDefault()
         {
             transform.gameObject.SetActive(false);
+            _enable = false;
             _timeCTS.Cancel();
             _timeCTS.Dispose();
             _timeCTS = null;
             _duration = 0f;
             _damageOwner = null;
             _damage = 0f;
+            _currentTargetCount = 0;   
+            _targetMaxCount = 0;
         }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            
-        }
-
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            
-        }
-
     }
 
 }

@@ -1,5 +1,4 @@
-﻿
-namespace BS.Common
+﻿namespace BS.Common
 {
     public static class Constrants
     {

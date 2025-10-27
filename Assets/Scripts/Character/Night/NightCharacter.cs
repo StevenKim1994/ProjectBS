@@ -1,5 +1,6 @@
-﻿using BS.System;
-using UnityEngine;
+﻿using UnityEngine;
+using BS.System;
+using BS.Common;
 
 namespace BS.GameObject
 {
@@ -15,13 +16,24 @@ namespace BS.GameObject
         public override void Attack()
         {
             base.Attack();
-            Debug.Log("Night Character Attack!");
+
             var damageColider = DamageColiderSystem.Instance.GetDamageCollider();
             if (damageColider != null)
             {
                 damageColider.SetDamageInfo(this, _castingAbility.AttackDamage);
-                damageColider.transform.position = _spriteRenderer.transform.position;
-                // TODO :: 현재 캐릭터 앞쪽에 생성
+
+                // DESC :: ViewDirection 방향으로 공격 위치 설정
+                Vector2 viewDirection = _mover.ViewDirection;
+
+                // DESC :: ViewDirection이 0인 경우 기본 방향 설정 (오른쪽)
+                if (viewDirection.sqrMagnitude < 0.001f)
+                {
+                    viewDirection = Vector2.right;
+                }
+
+                // DESC :: 캐릭터 위치 + ViewDirection * 공격 범위
+                Vector3 attackPosition = _spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _castingAbility.AttackRange);
+                damageColider.transform.position = attackPosition;
             }
         }
 
@@ -55,6 +67,7 @@ namespace BS.GameObject
                 Debug.Log("Night Character Move!");
             }
 
+            _animator.SetFloat(AnimParamConstants.MOVE_SPEED, direction.magnitude);
         }
 
         public override void TakeDamage(float amount)

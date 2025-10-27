@@ -122,9 +122,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2588616046516073392}
+  - component: {fileID: 5163928639275255029}
   - component: {fileID: 8726715099696286703}
   - component: {fileID: 8739341776304845546}
-  - component: {fileID: 5163928639275255029}
   m_Layer: 0
   m_Name: ScareCrow
   m_TagString: Untagged
@@ -148,6 +148,25 @@ Transform:
   - {fileID: 3796239002512778763}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5163928639275255029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541334775206541584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cb1f1fa4ab26049a8260de853f3039, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScareCrow
+  _ability: {fileID: 11400000, guid: 35244020f394c5a4e90f6d8d40e5411d, type: 2}
+  _inputActionAsset: {fileID: 0}
+  _mover: {fileID: 0}
+  _spriteRenderer: {fileID: 783397303091984002}
+  _animator: {fileID: 1923280627117761818}
+  _rigidbody: {fileID: 8739341776304845546}
+  _colider: {fileID: 8726715099696286703}
 --- !u!61 &8726715099696286703
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -178,7 +197,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -221,22 +240,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &5163928639275255029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8541334775206541584}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43cb1f1fa4ab26049a8260de853f3039, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScareCrow
-  _ability: {fileID: 11400000, guid: 35244020f394c5a4e90f6d8d40e5411d, type: 2}
-  _inputActionAsset: {fileID: 0}
-  _mover: {fileID: 0}
-  _spriteRenderer: {fileID: 783397303091984002}
-  _animator: {fileID: 1923280627117761818}
-  _rigidbody: {fileID: 8739341776304845546}
-  _colider: {fileID: 8726715099696286703}
