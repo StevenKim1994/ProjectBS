@@ -11,6 +11,18 @@ namespace BS.GameObjects
         protected AbstractCharacterAbility _ability;
         public AbstractCharacterAbility Ability => _ability;
 
+        protected float _currentHealth;
+        public float CurrentHealth => _currentHealth;
+
+        protected float _currentMana;
+        public float CurrentMana => _currentMana;
+
+        protected float _currentSpeed;
+        public float CurrentSpeed => _currentSpeed;
+
+        protected float _currentJumpForce;
+        public float CurrentJumpForce => _currentJumpForce;
+
         [SerializeField]
         protected InputActionAsset _inputActionAsset;
         public InputActionAsset InputActionAsset => _inputActionAsset;
@@ -35,6 +47,21 @@ namespace BS.GameObjects
         protected Collider2D _colider;
         public Collider2D Collider => _colider;
 
+        protected bool _isAlive = true;
+        public bool IsAlive => _isAlive;
+
+        protected virtual void Awake()
+        {
+            Initialize();
+        }
+
+        public void Initialize()
+        {
+            _currentHealth = Ability.Health;
+            _currentMana = Ability.Mana;
+            _currentSpeed = Ability.MoveSpeed;
+            _currentJumpForce = Ability.JumpForce;
+        }
 
         public virtual void Attack()
         {
@@ -49,85 +76,111 @@ namespace BS.GameObjects
 
         public virtual void Die()
         {
-            // TODO :: 애니메이션 처리
+            if (_isAlive)
+            {
+                _isAlive = false;
+                _animator.SetBool(AnimParamConstants.IS_DIE, true);
+            }
         }
 
         public virtual void Move(Vector2 direction)
         {
-            if (_mover != null)
+            if (_isAlive)
             {
-                if(direction == Vector2.zero)
+                if (_mover != null)
                 {
-                    Mover.Stop();
+                    if (direction == Vector2.zero)
+                    {
+                        _mover.Stop();
+                    }
+                    else
+                    {
+                        Debug.Log($"Move Direction : {direction}");
+                        _mover.Move(direction, _currentSpeed);
+                    }
                 }
                 else
                 {
-                    Debug.Log($"Move Direction : {direction}");
-                    Mover.Move(direction, Ability.MoveSpeed);
-                    // TODO :: 애니메이션 처리 Mover.ViewDirection 활용
+                    // DESC :: 이캐릭터는 움직일 수 없음.
+                    Debug.Log("이 캐릭터는 움직일 수 없음.");
                 }
-            }
-            else
-            {
-                // DESC :: 이캐릭터는 움직일 수 없음.
-                Debug.Log("이 캐릭터는 움직일 수 없음.");
             }
         }
 
         public virtual void TakeDamage(float amount)
         {
-            Ability.SetHealth(Ability.Health - amount);
+            if (_isAlive)
+            {
+                Ability.SetHealth(_currentHealth - amount);
 
-            if (Ability.Health <= 0)
-            {
-                Die();
-            }
-            else
-            {
-                HitAnim();
-                if (_mover != null)
+                if (_currentHealth<= 0)
                 {
-                    _mover.Slow(0.9f);
+                    Die();
+                }
+                else
+                {
+                    HitAnim();
+                    if (_mover != null)
+                    {
+                        _mover.Slow(0.9f);
+                    }
                 }
             }
-
         }
 
         public virtual void HitAnim()
         {
-            _animator.CrossFade(AnimStateConstants.HIT, 0.1f);
-        }
+            if (_isAlive)
+            {
+                _animator.CrossFade(AnimStateConstants.HIT, 0.1f);
+            }
+            }
 
         public virtual void Defense()
         {
-            // TODO :: 방어 애니메이션 처리
-            _animator.CrossFade(Constrants.STR_INPUT_ACTION_DEFENSE, 0.3f);
+            if (_isAlive)
+            {
+                // TODO :: 방어 애니메이션 처리
+                _animator.CrossFade(Constrants.STR_INPUT_ACTION_DEFENSE, 0.3f);
+            }
         }
 
         public virtual void Jump()
         {
-            if(_mover != null)
+            if (_isAlive)
             {
-                _mover.Jump(Ability.JumpForce);
-            }
-            else
-            {
-                Debug.Log("이 캐릭터는 점프할 수 없음.");
+                if (_mover != null)
+                {
+                    _mover.Jump(_currentJumpForce);
+                }
+                else
+                {
+                    Debug.Log("이 캐릭터는 점프할 수 없음.");
+                }
             }
         }
 
         public virtual void Turn(Vector2 dir)
         {
-            _mover.Turn(dir);
+            if (_isAlive)
+            {
+                if (_mover != null)
+                {
+                    _mover.Turn(dir);
+                }
+            }
         }
 
         protected virtual void OnCollisionEnter2D(Collision2D collision)
         {
             Debug.Log("Enter Collision : " + collision.gameObject.name);
 
-            if(gameObject.CompareTag(Constrants.TAG_PLAYER))
+            if (_isAlive)
             {
-                _mover.ResetJumpCount();
+                if (gameObject.CompareTag(Constrants.TAG_PLAYER))
+                {
+                    _mover.ResetJumpCount();
+                }
             }
         }
 

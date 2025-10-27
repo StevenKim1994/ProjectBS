@@ -8,9 +8,16 @@ namespace BS.GameObjects
     {
         private NightAbility _castingAbility;
 
-        private void Awake()
+        private float _currentAttackRange;
+        private float _currentAttackDamage;
+
+        protected override void Awake()
         {
+            base.Awake();
             _castingAbility = _ability as NightAbility;
+
+            _currentAttackRange = _castingAbility.AttackRange;
+            _currentAttackDamage = _castingAbility.AttackDamage;
         }
 
         public override void Attack()
@@ -20,7 +27,7 @@ namespace BS.GameObjects
             var damageColider = DamageColiderSystem.Instance.GetDamageCollider();
             if (damageColider != null)
             {
-                damageColider.SetDamageInfo(this, _castingAbility.AttackDamage);
+                damageColider.SetDamageInfo(this, _currentAttackDamage);
 
                 // DESC :: ViewDirection 방향으로 공격 위치 설정
                 Vector2 viewDirection = _mover.ViewDirection;
@@ -32,7 +39,7 @@ namespace BS.GameObjects
                 }
 
                 // DESC :: 캐릭터 위치 + ViewDirection * 공격 범위
-                Vector3 attackPosition = _spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _castingAbility.AttackRange);
+                Vector3 attackPosition = _spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _currentAttackRange);
                 damageColider.transform.position = attackPosition;
             }
         }
@@ -74,7 +81,7 @@ namespace BS.GameObjects
         {
             base.TakeDamage(amount);
             ScreenSystem.Instance.ShakeCamera(0.25f, 0.2f, 1);
-
+            UISystem.Instance.FlashScreen(Color.red, 0.3f);
             Debug.Log("Night Character Take Damage!");
         }
     }

@@ -20,5 +20,7 @@
         public const string TAG_GROUND= "Ground";
         public const string TAG_PLAYER= "Player";
         public const string TAG_ENERMY= "Enermy";
+
+        public const string NAME_FLASHIMAGE = "FlashImage";
     }
 }

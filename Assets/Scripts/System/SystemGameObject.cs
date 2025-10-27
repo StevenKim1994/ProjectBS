@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using BS.System;
 using BS.Common;
-using UnityEngine.Pool;
-using UnityEngine.Rendering.Universal;
-
 
 namespace BS.GameObjects
 {
@@ -54,6 +51,7 @@ namespace BS.GameObjects
             _systems.Add(typeof(ScreenSystem), new ScreenSystem());
             _systems.Add(typeof(InputControlSystem), new InputControlSystem());
             _systems.Add(typeof(DamageColiderSystem), new DamageColiderSystem());
+            _systems.Add(typeof(UISystem), new UISystem());
         }
 
         public void LoadAllSystems()

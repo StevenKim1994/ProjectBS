@@ -10,6 +10,7 @@ namespace BS.Common
     public static class AnimParamConstants
     {
         public const string IS_DEFENSE = "IsDefense";
+        public const string IS_DIE = "IsDie";
         public const string IS_JUMPING = "IsJumping";
         public const string MOVE_SPEED = "MoveSpeed";
     }
@@ -22,6 +23,7 @@ namespace BS.Common
     {
         public const string ATTACK = "Attack";
         public const string DEFENSE = "Defense";
+        public const string DIE = "Die";
         public const string HIT = "Hit";
         public const string IDLE = "Idle";
         public const string JUMP = "Jump";

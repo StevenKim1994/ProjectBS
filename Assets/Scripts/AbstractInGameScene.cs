@@ -21,6 +21,21 @@ namespace BS.GameObjects
             }
         }
 
+        [SerializeField]
+        private Canvas _mainCanvas;
+        public Canvas MainCanvas
+        {
+            get
+            {
+                if(_mainCanvas == null)
+                {
+                    _mainCanvas = FindFirstObjectByType<Canvas>();
+                }
+
+                return _mainCanvas;
+            }
+        }
+
         protected virtual void Awake()
         {
             SystemGameObject.Instance.LoadAllSystems();

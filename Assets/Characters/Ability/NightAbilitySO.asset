@@ -18,5 +18,5 @@ MonoBehaviour:
   _maxMana: 11
   _moveSpeed: 2.3
   _jumpForce: 3.5
-  _attackDamage: 0
+  _attackDamage: 11
   _attackRange: 1
