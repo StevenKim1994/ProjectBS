@@ -25,8 +25,10 @@ namespace BS.System
 
         private bool _isInitialize = false;
         private Dictionary<string, ObjectPool<AbstractCharacter>> _enemyPools = new Dictionary<string, ObjectPool<AbstractCharacter>>();
-
         private HashSet<AbstractCharacter> _activeEnemies = new HashSet<AbstractCharacter>();
+        
+        // ✅ Enemy Collider 추적을 위한 리스트
+        private List<Collider2D> _enemyColliders = new List<Collider2D>();
 
         public void Load()
         {
@@ -65,6 +67,7 @@ namespace BS.System
                 }
 
                 _activeEnemies.Clear();
+                _enemyColliders.Clear();
                 _enemyPools.Clear();
                 _isInitialize = false;
             }
@@ -118,6 +121,13 @@ namespace BS.System
                 enemy.gameObject.SetActive(true);
                 enemy.Initialize();
                 _activeEnemies.Add(enemy);
+                
+                // ✅ 새 Enemy와 기존 모든 Enemy 간 충돌 무시
+                if (enemy.Collider != null)
+                {
+                    IgnoreCollisionWithOtherEnemies(enemy.Collider);
+                    _enemyColliders.Add(enemy.Collider);
+                }
             }
         }
 
@@ -125,6 +135,13 @@ namespace BS.System
         {
             if (enemy != null)
             {
+                // ✅ 충돌 무시 해제 (풀로 돌아갈 때)
+                if (enemy.Collider != null)
+                {
+                    RestoreCollisionWithOtherEnemies(enemy.Collider);
+                    _enemyColliders.Remove(enemy.Collider);
+                }
+                
                 enemy.gameObject.SetActive(false);
                 _activeEnemies.Remove(enemy);
             }
@@ -134,8 +151,41 @@ namespace BS.System
         {
             if (enemy != null)
             {
+                if (enemy.Collider != null)
+                {
+                    _enemyColliders.Remove(enemy.Collider);
+                }
+                
                 _activeEnemies.Remove(enemy);
                 UnityEngine.GameObject.Destroy(enemy.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// 특정 Enemy Collider와 다른 모든 Enemy Collider 간 충돌을 무시합니다
+        /// </summary>
+        private void IgnoreCollisionWithOtherEnemies(Collider2D newEnemyCollider)
+        {
+            foreach (var existingCollider in _enemyColliders)
+            {
+                if (existingCollider != null && existingCollider != newEnemyCollider)
+                {
+                    Physics2D.IgnoreCollision(newEnemyCollider, existingCollider, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 특정 Enemy Collider와 다른 모든 Enemy Collider 간 충돌 무시를 해제합니다
+        /// </summary>
+        private void RestoreCollisionWithOtherEnemies(Collider2D enemyCollider)
+        {
+            foreach (var otherCollider in _enemyColliders)
+            {
+                if (otherCollider != null && otherCollider != enemyCollider)
+                {
+                    Physics2D.IgnoreCollision(enemyCollider, otherCollider, false);
+                }
             }
         }
 
@@ -275,6 +325,7 @@ namespace BS.System
                 pool.Clear();
             }
             _enemyPools.Clear();
+            _enemyColliders.Clear();
         }
 
         /// <summary>

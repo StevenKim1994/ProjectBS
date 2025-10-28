@@ -53,12 +53,11 @@ namespace BS.System
         private void OnGetObject(DamageColider damageColider)
         {
             damageColider.SetPool(_dmgColiderPool);
-            damageColider.gameObject.SetActive(true);
+            //damageColider.gameObject.SetActive(true);
         }
 
         private void OnReleaseObject(DamageColider damageColider)
         {
-            damageColider.gameObject.SetActive(false);
             damageColider.SetDefault();
         }
 

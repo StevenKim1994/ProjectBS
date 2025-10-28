@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -18,19 +19,21 @@ namespace BS.GameObjects
         private float _damage;
         public float Damage => _damage;
 
-        private bool _enable = false; // DESC :: 사용가능 여부 
+        private bool _enable = false;
         public bool Enable => _enable;
 
         private float _duration;
 
-        private int _targetMaxCount; // DESC :: 한번에 공격 가능한 최대 타겟 수
+        private int _targetMaxCount;
         public int TargetMaxCount => _targetMaxCount;
 
-        private int _currentTargetCount; // DESC :: 현재 적중한 타겟의 수이 값이 _targetMaxCount를 넘으면 더이상 공격 불가
+        private int _currentTargetCount;
         public int CurrentTargetCount => _currentTargetCount;
 
         private CancellationTokenSource _timeCTS;
         private ObjectPool<DamageColider> _parentPool;
+
+        private HashSet<Collider2D> _hitTargets = new HashSet<Collider2D>();
 
         public void SetDamageInfo(AbstractCharacter owner, float damage, float duration = 0.33f, int targetMaxCount = 1)
         {
@@ -40,6 +43,8 @@ namespace BS.GameObjects
             _damage = damage;
             _enable = true;
             _duration = duration;
+            _hitTargets.Clear();
+
             if (_timeCTS != null)
             {
                 _timeCTS.Cancel();
@@ -49,12 +54,24 @@ namespace BS.GameObjects
 
             _timeCTS = new CancellationTokenSource();
             DurationTimer().Forget();
+            gameObject.SetActive(true);
         }
 
         private async UniTask DurationTimer()
         {
-            await UniTask.WaitForSeconds(_duration, cancelImmediately: true, cancellationToken: _timeCTS.Token);
-            _parentPool.Release(this);
+            try
+            {
+                await UniTask.WaitForSeconds(_duration, cancelImmediately: true, cancellationToken: _timeCTS.Token);
+                
+                if (_enable && _parentPool != null)
+                {
+                    _parentPool.Release(this);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Cancel된 경우 무시
+            }
         }
 
         public void SetPool(ObjectPool<DamageColider> parentPool)
@@ -64,40 +81,100 @@ namespace BS.GameObjects
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.gameObject.TryGetComponent<AbstractCharacter>(out var character))
-            {
-                if (_enable)
-                {
-                    if (_damageOwner != character)
-                    {
-                        Debug.Log("Attacker: " + _damageOwner.name);
-                        character.TakeDamage(_damage);
-                        _currentTargetCount++;
+            if (!_enable) return;
 
-                        if(_currentTargetCount >= _targetMaxCount)
-                        {
-                            Debug.Log("타겟 최대 수 도달, 콜라이더 비활성화");
-                            _parentPool.Release(this);
-                            _enable = false;
-                        }
-                    }
+            if (_hitTargets.Contains(collision))
+            {
+                Debug.Log($"[DamageCollider] 이미 적중한 타겟 무시: {collision.gameObject.name}");
+                return;
+            }
+
+            if (collision.gameObject == _damageOwner.gameObject)
+            {
+                return;
+            }
+
+            Debug.Log($"[DamageCollider] OnTriggerEnter2D: {collision.gameObject.name}");
+
+            // Player의 공격인 경우
+            if (_damageOwner.TryGetComponent<NightCharacter>(out var nightCharacter))
+            {
+                HandlePlayerAttack(collision);
+            }
+            // Enemy의 공격인 경우
+            else if (_damageOwner.TryGetComponent<AbstractEnermy>(out var enemyOwner))
+            {
+                HandleEnemyAttack(collision, enemyOwner);
+            }
+        }
+
+        /// <summary>
+        /// Player의 공격 처리
+        /// </summary>
+        private void HandlePlayerAttack(Collider2D collision)
+        {
+            if (collision.TryGetComponent<AbstractEnermy>(out var enemy))
+            {
+                Debug.Log($"[DamageCollider] Player가 Enemy 공격: {enemy.name}");
+                ApplyDamage(collision, enemy);
+            }
+        }
+
+        /// <summary>
+        /// Enemy의 공격 처리
+        /// </summary>
+        private void HandleEnemyAttack(Collider2D collision, AbstractEnermy enemyOwner)
+        {
+            if (collision.TryGetComponent<NightCharacter>(out var player))
+            {
+                Debug.Log($"[DamageCollider] Enemy가 Player 공격: {player.name}");
+                ApplyDamage(collision, player);
+            }
+        }
+
+        /// <summary>
+        /// 실제 데미지 적용 및 타겟 카운트 관리
+        /// </summary>
+        private void ApplyDamage(Collider2D targetCollider, AbstractCharacter target)
+        {
+            if (target == null || !target.IsAlive) return;
+
+            _hitTargets.Add(targetCollider);
+
+            target.TakeDamage(_damage);
+            _currentTargetCount++;
+
+            Debug.Log($"[DamageCollider] 데미지 적용: {_damage} -> {target.name} (적중: {_currentTargetCount}/{_targetMaxCount})");
+
+            if (_currentTargetCount >= _targetMaxCount)
+            {
+                Debug.Log($"[DamageCollider] 타겟 최대 수 도달, 콜라이더 비활성화");
+                if (_parentPool != null)
+                {
+                    _parentPool.Release(this);
                 }
             }
         }
 
         public void SetDefault()
         {
-            transform.gameObject.SetActive(false);
+            gameObject.SetActive(false);
             _enable = false;
-            _timeCTS.Cancel();
-            _timeCTS.Dispose();
-            _timeCTS = null;
+
+            if (_timeCTS != null)
+            {
+                _timeCTS.Cancel();
+                _timeCTS.Dispose();
+                _timeCTS = null;
+            }
+
             _duration = 0f;
             _damageOwner = null;
             _damage = 0f;
-            _currentTargetCount = 0;   
+            _currentTargetCount = 0;
             _targetMaxCount = 0;
+            
+            _hitTargets.Clear();
         }
     }
-
 }
