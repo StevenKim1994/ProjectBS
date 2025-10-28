@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 8739341776304845546}
   - component: {fileID: 1069097633625843313}
   - component: {fileID: 6722463708717170534}
+  - component: {fileID: 8607203434004714811}
   m_Layer: 6
   m_Name: ScareCrow
   m_TagString: Enermy
@@ -169,7 +170,7 @@ MonoBehaviour:
   _animator: {fileID: 1923280627117761818}
   _rigidbody: {fileID: 8739341776304845546}
   _colider: {fileID: 8726715099696286703}
-  _behaviorAgent: {fileID: 0}
+  _behaviorAgent: {fileID: 1069097633625843313}
 --- !u!61 &8726715099696286703
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -273,6 +274,24 @@ MonoBehaviour:
         Name: Self
         m_Value: {fileID: 8541334775206541584}
 --- !u!114 &6722463708717170534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8541334775206541584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569f12b656481e34c9df9cd7659be1cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BS.GameObjects.AbstractCharacterMover
+  _acceleration: 10
+  _deceleration: 8
+  _velocityPower: 0.9
+  _stopThreshold: 0.02
+  _maxJumpCount: 1
+  _knockbackUpwardForce: 3
+--- !u!114 &8607203434004714811
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

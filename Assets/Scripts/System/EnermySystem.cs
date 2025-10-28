@@ -26,7 +26,6 @@ namespace BS.System
         private bool _isInitialize = false;
         private Dictionary<string, ObjectPool<AbstractCharacter>> _enemyPools = new Dictionary<string, ObjectPool<AbstractCharacter>>();
 
-        // HashSetPool을 사용한 활성 적 추적으로 메모리 효율성 향상
         private HashSet<AbstractCharacter> _activeEnemies = new HashSet<AbstractCharacter>();
 
         public void Load()

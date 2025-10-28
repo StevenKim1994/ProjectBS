@@ -34,7 +34,10 @@ namespace BS.GameObjects
             .SetLoops(3, LoopType.Yoyo)
             .OnComplete(() =>
             {
-                Destroy(this.gameObject);
+                if (ParentPool != null)
+                {
+                    ParentPool.Release(this);
+                }
             });
         }
 
