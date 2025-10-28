@@ -120,7 +120,7 @@ namespace BS.GameObjects
         {
             if (_isAlive)
             {
-                Ability.SetHealth(_currentHealth - amount);
+                _currentHealth = _currentHealth - amount;
 
                 if (_currentHealth <= 0)
                 {

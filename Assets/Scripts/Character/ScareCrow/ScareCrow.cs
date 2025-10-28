@@ -24,19 +24,18 @@ namespace BS.GameObjects
 
         public override void Die()
         {
-            base.Die();
-
+            //base.Die();
             if(_twinkleTweener != null && _twinkleTweener.IsActive())
             {
                 _twinkleTweener.Kill(true);
                 _spriteRenderer.color = Color.white;
-                _twinkleTweener = _spriteRenderer.DOColor(Color.clear, 0.1f)
-               .SetLoops(3, LoopType.Yoyo)
-               .OnComplete(() =>
-               {
-                   Destroy(this.gameObject);
-               });
             }
+             _twinkleTweener = _spriteRenderer.DOColor(Color.clear, 0.1f)
+            .SetLoops(3, LoopType.Yoyo)
+            .OnComplete(() =>
+            {
+                Destroy(this.gameObject);
+            });
         }
 
         public override void HitAnim()
