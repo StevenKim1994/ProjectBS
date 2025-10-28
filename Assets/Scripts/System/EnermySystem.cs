@@ -24,8 +24,8 @@ namespace BS.System
         }
 
         private bool _isInitialize = false;
-        private Dictionary<string, ObjectPool<AbstractCharacter>> _enemyPools = new Dictionary<string, ObjectPool<AbstractCharacter>>();
-        private HashSet<AbstractCharacter> _activeEnemies = new HashSet<AbstractCharacter>();
+        private Dictionary<string, ObjectPool<AbstractEnermy>> _enemyPools = new Dictionary<string, ObjectPool<AbstractEnermy>>();
+        private HashSet<AbstractEnermy> _activeEnemies = new HashSet<AbstractEnermy>();
         
         // ✅ Enemy Collider 추적을 위한 리스트
         private List<Collider2D> _enemyColliders = new List<Collider2D>();
@@ -53,7 +53,7 @@ namespace BS.System
             if (_isInitialize)
             {
                 // 풀을 클리어하기 전에 모든 활성 적 해제
-                using (var pooledSet = HashSetPool<AbstractCharacter>.Get(out var enemiesToRelease))
+                using (var pooledSet = HashSetPool<AbstractEnermy>.Get(out var enemiesToRelease))
                 {
                     enemiesToRelease.UnionWith(_activeEnemies);
 
@@ -78,34 +78,38 @@ namespace BS.System
         /// </summary>
         /// <param name="enemyName">Resources의 적 프리팹 이름</param>
         /// <returns>지정된 적 타입에 대한 ObjectPool</returns>
-        private ObjectPool<AbstractCharacter> GetOrCreatePool(string enemyName)
+        private ObjectPool<AbstractEnermy> GetOrCreatePool(string enemyName)
         {
             if (_enemyPools.ContainsKey(enemyName))
             {
                 return _enemyPools[enemyName];
             }
 
-            ObjectPool<AbstractCharacter> pool = new ObjectPool<AbstractCharacter>
+            ObjectPool<AbstractEnermy> pool = new ObjectPool<AbstractEnermy>
              (
-                   createFunc: () => OnCreateEnemy(enemyName),
-           actionOnGet: OnGetEnemy,
-           actionOnRelease: OnReleaseEnemy,
-               actionOnDestroy: OnDestroyEnemy
+                    createFunc: () => OnCreateEnemy(enemyName),
+                    actionOnGet: OnGetEnemy,
+                    actionOnRelease: OnReleaseEnemy,
+                    actionOnDestroy: OnDestroyEnemy
              );
 
             _enemyPools.Add(enemyName, pool);
             return pool;
         }
 
-        private AbstractCharacter OnCreateEnemy(string enemyName)
+        private AbstractEnermy OnCreateEnemy(string enemyName)
         {
             var loadObject = ResourceSystem.Instance.GetLoadGameObject(enemyName);
             if (loadObject != null)
             {
                 loadObject = UnityEngine.GameObject.Instantiate(loadObject);
-                if (loadObject.TryGetComponent<AbstractCharacter>(out var result))
+                if (loadObject.TryGetComponent<AbstractEnermy>(out var result))
                 {
                     loadObject.tag = Constrants.TAG_ENERMY;
+                    if(_enemyPools.ContainsKey(enemyName))
+                    {
+                        result.SetParentPool(_enemyPools[enemyName]);
+                    }
                     return result;
                 }
             }
@@ -114,7 +118,7 @@ namespace BS.System
             return null;
         }
 
-        private void OnGetEnemy(AbstractCharacter enemy)
+        private void OnGetEnemy(AbstractEnermy enemy)
         {
             if (enemy != null)
             {
@@ -131,11 +135,10 @@ namespace BS.System
             }
         }
 
-        private void OnReleaseEnemy(AbstractCharacter enemy)
+        private void OnReleaseEnemy(AbstractEnermy enemy)
         {
             if (enemy != null)
             {
-                // ✅ 충돌 무시 해제 (풀로 돌아갈 때)
                 if (enemy.Collider != null)
                 {
                     RestoreCollisionWithOtherEnemies(enemy.Collider);
@@ -147,7 +150,7 @@ namespace BS.System
             }
         }
 
-        private void OnDestroyEnemy(AbstractCharacter enemy)
+        private void OnDestroyEnemy(AbstractEnermy enemy)
         {
             if (enemy != null)
             {
@@ -195,7 +198,7 @@ namespace BS.System
         /// <param name="enemyName">적 프리팹 이름</param>
         /// <param name="position">스폰 위치</param>
         /// <returns>스폰된 적 캐릭터</returns>
-        public AbstractCharacter GetEnemy(string enemyName, Vector3 position)
+        public AbstractEnermy GetEnemy(string enemyName, Vector3 position)
         {
             var pool = GetOrCreatePool(enemyName);
             var enemy = pool.Get();
@@ -215,7 +218,7 @@ namespace BS.System
         /// <param name="position">스폰 위치</param>
         /// <param name="rotation">스폰 회전값</param>
         /// <returns>스폰된 적 캐릭터</returns>
-        public AbstractCharacter GetEnemy(string enemyName, Vector3 position, Quaternion rotation)
+        public AbstractEnermy GetEnemy(string enemyName, Vector3 position, Quaternion rotation)
         {
             var enemy = GetEnemy(enemyName, position);
 
@@ -254,7 +257,7 @@ namespace BS.System
         /// </summary>
         /// <param name="enemyName">적 프리팹 이름</param>
         /// <param name="enemy">반환할 적</param>
-        public void ReleaseEnemy(string enemyName, AbstractCharacter enemy)
+        public void ReleaseEnemy(string enemyName, AbstractEnermy enemy)
         {
             if (_enemyPools.ContainsKey(enemyName))
             {
@@ -273,7 +276,7 @@ namespace BS.System
         /// </summary>
         /// <param name="enemyName">적 프리팹 이름</param>
         /// <param name="enemies">반환할 적들의 리스트 (ListPool로 반환됨)</param>
-        public void ReleaseEnemies(string enemyName, List<AbstractCharacter> enemies)
+        public void ReleaseEnemies(string enemyName, List<AbstractEnermy> enemies)
         {
             if (enemies == null) return;
 
@@ -285,7 +288,7 @@ namespace BS.System
                 }
             }
 
-            ListPool<AbstractCharacter>.Release(enemies);
+            ListPool<AbstractEnermy>.Release(enemies);
         }
 
         /// <summary>
@@ -333,7 +336,7 @@ namespace BS.System
         /// </summary>
         public void ReleaseAllActiveEnemies()
         {
-            using (var pooledList = ListPool<AbstractCharacter>.Get(out var enemiesToRelease))
+            using (var pooledList = ListPool<AbstractEnermy>.Get(out var enemiesToRelease))
             {
                 enemiesToRelease.AddRange(_activeEnemies);
 

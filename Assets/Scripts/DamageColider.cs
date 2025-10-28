@@ -53,6 +53,7 @@ namespace BS.GameObjects
             }
 
             _timeCTS = new CancellationTokenSource();
+
             DurationTimer().Forget();
             gameObject.SetActive(true);
         }
@@ -61,12 +62,9 @@ namespace BS.GameObjects
         {
             try
             {
-                await UniTask.WaitForSeconds(_duration, cancelImmediately: true, cancellationToken: _timeCTS.Token);
+                await UniTask.WaitForSeconds(_duration, delayTiming: PlayerLoopTiming.FixedUpdate, cancelImmediately: true, cancellationToken: _timeCTS.Token);
                 
-                if (_enable && _parentPool != null)
-                {
-                    _parentPool.Release(this);
-                }
+                _parentPool.Release(this);
             }
             catch (OperationCanceledException)
             {
@@ -93,7 +91,7 @@ namespace BS.GameObjects
             {
                 return;
             }
-
+                 
             Debug.Log($"[DamageCollider] OnTriggerEnter2D: {collision.gameObject.name}");
 
             // Player의 공격인 경우
@@ -106,6 +104,8 @@ namespace BS.GameObjects
             {
                 HandleEnemyAttack(collision, enemyOwner);
             }
+
+            _hitTargets.Add(collision);
         }
 
         /// <summary>

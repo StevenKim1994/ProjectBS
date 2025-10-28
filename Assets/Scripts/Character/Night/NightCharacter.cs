@@ -23,7 +23,22 @@ namespace BS.GameObjects
         public override void Attack()
         {
             base.Attack();
+            // DESC :: ViewDirection 방향으로 공격 위치 설정
+            Vector2 viewDirection = _mover.ViewDirection;
 
+            // DESC :: ViewDirection이 0인 경우 기본 방향 설정 (오른쪽)
+            if (viewDirection.sqrMagnitude < 0.001f)
+            {
+                viewDirection = Vector2.right;
+            }
+            MeleeAttackColider.SetMeleeDamage(_currentAttackDamage)
+                .SetPosition(_spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _currentAttackRange))
+                .SetOwnerCharacter(this)
+                .SetSize(new Vector2(_currentAttackRange, 1.0f))
+                .SetActiveTime(0.33f)
+                .SetActiveColider(true);
+
+            /*
             var damageColider = DamageColiderSystem.Instance.GetDamageCollider();
             if (damageColider != null)
             {
@@ -42,6 +57,7 @@ namespace BS.GameObjects
                 Vector3 attackPosition = _spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _currentAttackRange);
                 damageColider.transform.position = attackPosition;
             }
+            */
         }
 
         public override void Die()

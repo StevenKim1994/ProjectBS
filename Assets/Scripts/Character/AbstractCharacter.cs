@@ -47,6 +47,11 @@ namespace BS.GameObjects
         protected Collider2D _colider;
         public Collider2D Collider => _colider;
 
+        [SerializeField]
+        protected AttachedDamageColider _attachedDamageColider;
+
+        public AttachedDamageColider MeleeAttackColider => _attachedDamageColider;
+
         protected bool _isAlive = true;
         public bool IsAlive => _isAlive;
 
