@@ -4,6 +4,7 @@ using BS.Common;
 using BS.GameObjects;
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 
 namespace BS.System
 {
@@ -205,6 +206,8 @@ namespace BS.System
 
             if (enemy != null)
             {
+                enemy.gameObject.SetActive(true);
+                enemy.SetDefault();
                 enemy.transform.position = position;
             }
 

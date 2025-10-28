@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Pool;
 using Unity.Behavior;
+using System;
 
 namespace BS.GameObjects
 {
@@ -28,6 +29,11 @@ namespace BS.GameObjects
         public void SetParentPool(ObjectPool<AbstractEnermy> parentPool)
         {
             _parentPool = parentPool;
+        }
+
+        public virtual void SetDefault()
+        {
+
         }
     }
 }

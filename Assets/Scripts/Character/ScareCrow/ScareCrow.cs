@@ -1,5 +1,7 @@
 ﻿using BS.System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 namespace BS.GameObjects
@@ -34,10 +36,16 @@ namespace BS.GameObjects
             .SetLoops(3, LoopType.Yoyo)
             .OnComplete(() =>
             {
+                UniTask.Create(async () =>
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
+                    EnermySystem.Instance.GetEnemy("ScareCrow", this.transform.position);
+                }).Forget();
                 if (ParentPool != null)
                 {
-                    ParentPool.Release(this);
+                     ParentPool.Release(this);
                 }
+                _twinkleTweener.Kill(true);
             });
         }
 
@@ -48,14 +56,25 @@ namespace BS.GameObjects
             if (_twinkleTweener != null && _twinkleTweener.IsActive())
             {
                 _twinkleTweener.Kill(true);
-                _spriteRenderer.color = Color.white;
             }
+            _spriteRenderer.color = Color.white;
             TwinkleColor(Color.red);
         }
 
         public override void TakeDamage(float amount)
         {
             base.TakeDamage(amount);
+        }
+
+        public override void SetDefault()
+        {
+            base.SetDefault();
+
+            if(_twinkleTweener != null && _twinkleTweener.IsActive())
+            {
+                _twinkleTweener.Kill(true);
+            }
+            _spriteRenderer.color = Color.white;
         }
 
         private void TwinkleColor(Color color, int repeatCount = 3)
