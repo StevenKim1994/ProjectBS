@@ -65,10 +65,7 @@ namespace BS.GameObjects
 
         public virtual void Attack()
         {
-            if(_mover != null)
-            {
-                _mover.Stop();
-            }
+            Stop();
 
             _animator.CrossFade(Constrants.STR_INPUT_ACTION_ATTACK, 0.3f);
             // TODO :: 콜라이더 처리
@@ -91,7 +88,7 @@ namespace BS.GameObjects
                 {
                     if (direction == Vector2.zero)
                     {
-                        _mover.Stop();
+                        Stop();
                     }
                     else
                     {
@@ -106,6 +103,18 @@ namespace BS.GameObjects
                 }
             }
         }
+
+        public virtual void Stop()
+        {
+            if (_isAlive)
+            {
+                if (_mover != null)
+                {
+                    _mover.Stop();
+                }
+            }
+        }
+
 
         public virtual void TakeDamage(float amount)
         {

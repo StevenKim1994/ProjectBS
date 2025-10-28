@@ -16,6 +16,6 @@ MonoBehaviour:
   _mana: 0
   _maxHealth: 33
   _maxMana: 0
-  _moveSpeed: 1
+  _moveSpeed: 3
   _attackRange: 2
   _jumpForce: 0

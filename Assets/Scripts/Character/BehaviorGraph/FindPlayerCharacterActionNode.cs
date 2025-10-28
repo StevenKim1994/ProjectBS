@@ -1,25 +1,32 @@
 ﻿using UnityEngine;
 using Unity.Behavior;
 using BS.Common;
+using BS.GameObjects;
 
 [NodeDescription("Find Player Character",
     story: "Find Player Character",
-    category: "AI/Action")]
+    category: "AI/Action", id: "find_player_character")]
 public class FindPlayerCharacterActionNode : Action
 {
-    [SerializeField, Tooltip("탐색 반경")]
     public BlackboardVariable<float> _searchRadius;
-
-    [SerializeField, Tooltip("찾은 Player Tag GameObject를 저장할 Blackboard 변수")]
     public BlackboardVariable<Transform> _target;
+    public BlackboardVariable<float> _patrolSpeed;
+    public BlackboardVariable<float> _directionChangeTime;
+
+    private float _currentDirectionTime;
+    private int _moveDirection = 1; // 1: 오른쪽, -1: 왼쪽
+    private AbstractEnermy _currentEnermy;
+    private BehaviorGraphAgent _agent;
 
     protected override Status OnStart()
     {
-        // 시작 시 초기화 
-        if (_target != null)
-        {
-            _target.Value = null;
-        }
+        _agent = GameObject.GetComponent<BehaviorGraphAgent>();
+        _currentEnermy = GameObject.GetComponent<AbstractEnermy>();
+        _agent.SetVariableValue<AbstractEnermy>("Current Enermy", _currentEnermy);
+        _agent.SetVariableValue<float>("Patrol Speed", _currentEnermy.Ability.MoveSpeed);
+
+        _currentDirectionTime = 0f;
+        _moveDirection = 1;
         return Status.Running;
     }
 
@@ -30,26 +37,40 @@ public class FindPlayerCharacterActionNode : Action
 
         if (playerTransform != null)
         {
-            // 플레이어를 찾았으면 Blackboard 변수에 저장
-            if (_target != null)
-            {
-                _target.Value = playerTransform;
-                if(Parent.GameObject.TryGetComponent<BehaviorGraphAgent>(out var agent))
-                {
-                    agent.SetVariableValue<Transform>("Target", _target);
-                }
-            }
+            _target.Value = playerTransform;
+            _agent.SetVariableValue<Transform>("Target", playerTransform);
 
             return Status.Success;
         }
 
-            // 플레이어를 찾지 못했으면 계속 탐색
+        // 플레이어를 찾지 못했으면 좌우로 이동
+        PatrolLeftRight();
+
+        // 플레이어를 찾지 못했으면 계속 탐색
         return Status.Running;
     }
 
     protected override void OnEnd()
     {
-        // 종료 시 정리 작업 (필요한 경우)
+        _currentEnermy.Stop();
+    }
+
+    /// <summary>
+    /// 좌우로 이동하는 순찰 로직 
+    /// </summary>
+    private void PatrolLeftRight()
+    {
+        // 방향 전환 시간 체크
+        _currentDirectionTime += Time.deltaTime;
+        if (_currentDirectionTime >= _directionChangeTime.Value)
+        {
+            _moveDirection *= -1; // 방향 전환
+            _currentDirectionTime = 0f;
+        }
+
+        Vector2 direction = new Vector2(_moveDirection, 0f);
+
+        _currentEnermy.Move(direction);
     }
 
     /// <summary>
@@ -58,7 +79,7 @@ public class FindPlayerCharacterActionNode : Action
     private Transform FindPlayerInRadius()
     {
         // Agent의 현재 위치
-        Vector3 agentPosition = GameObject.transform.position;
+        Vector3 agentPosition = _currentEnermy.transform.position;
 
         // Player 태그를 가진 모든 GameObject 찾기
         GameObject[] players = GameObject.FindGameObjectsWithTag(Constrants.TAG_PLAYER);
@@ -69,24 +90,12 @@ public class FindPlayerCharacterActionNode : Action
             float distance = Vector3.Distance(agentPosition, player.transform.position);
 
             // 탐색 반경 내에 있는지 확인
-            if (distance <= _searchRadius)
+            if (distance <= _searchRadius.Value)
             {
                 return player.transform;
             }
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// 에디터에서 탐색 범위를 시각화 (Gizmos)
-    /// </summary>
-    private void OnDrawGizmosSelected()
-    {
-        if (GameObject != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(GameObject.transform.position, _searchRadius);
-        }
     }
 }
