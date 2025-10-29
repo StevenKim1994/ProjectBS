@@ -36,7 +36,7 @@ namespace BS.System
 
         private DamageColider OnCreateObject()
         {
-            var loadObject = ResourceSystem.Instance.GetLoadGameObject(Constrants.STR_DAMAGE_COLIDER);
+            var loadObject = ResourceSystem.Instance.GetLoadGameObject(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_DAMAGE_COLIDER_PREFAB);
             if (loadObject != null)
             {
                 loadObject = UnityEngine.GameObject.Instantiate(loadObject);
