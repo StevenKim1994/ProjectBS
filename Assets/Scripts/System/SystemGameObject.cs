@@ -69,6 +69,8 @@ namespace BS.GameObjects
             {
                 system.Unload();
             }
+
+            _systems.Clear();
         }
 
     }
