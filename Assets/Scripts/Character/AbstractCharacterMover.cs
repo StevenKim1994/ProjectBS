@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace BS.GameObjects
 {
-    public class AbstractCharacterMover : MonoBehaviour, ICharacterMover
+    public abstract class AbstractCharacterMover : MonoBehaviour, ICharacterMover
     {
         public Vector2 ViewDirection => _viewDirection;
         public float Velocity => _velocity;

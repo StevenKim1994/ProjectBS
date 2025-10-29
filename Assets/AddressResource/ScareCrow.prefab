@@ -126,8 +126,7 @@ GameObject:
   - component: {fileID: 8726715099696286703}
   - component: {fileID: 8739341776304845546}
   - component: {fileID: 1069097633625843313}
-  - component: {fileID: 6722463708717170534}
-  - component: {fileID: 8607203434004714811}
+  - component: {fileID: 960845456931108091}
   m_Layer: 6
   m_Name: ScareCrow
   m_TagString: Enermy
@@ -165,11 +164,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScareCrow
   _ability: {fileID: 11400000, guid: 35244020f394c5a4e90f6d8d40e5411d, type: 2}
   _inputActionAsset: {fileID: 0}
-  _mover: {fileID: 6722463708717170534}
+  _mover: {fileID: 960845456931108091}
   _spriteRenderer: {fileID: 783397303091984002}
   _animator: {fileID: 1923280627117761818}
   _rigidbody: {fileID: 8739341776304845546}
   _colider: {fileID: 8726715099696286703}
+  _attachedDamageColider: {fileID: 0}
   _behaviorAgent: {fileID: 1069097633625843313}
 --- !u!61 &8726715099696286703
 BoxCollider2D:
@@ -273,7 +273,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 8541334775206541584}
---- !u!114 &6722463708717170534
+--- !u!114 &960845456931108091
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,27 +282,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8541334775206541584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 569f12b656481e34c9df9cd7659be1cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c997f677900d2342a9acfc842d7a279, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BS.GameObjects.AbstractCharacterMover
-  _acceleration: 10
-  _deceleration: 8
-  _velocityPower: 0.9
-  _stopThreshold: 0.02
-  _maxJumpCount: 1
-  _knockbackUpwardForce: 3
---- !u!114 &8607203434004714811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8541334775206541584}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 569f12b656481e34c9df9cd7659be1cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BS.GameObjects.AbstractCharacterMover
+  m_EditorClassIdentifier: Assembly-CSharp::BS.GameObjects.ScareCrowMover
   _acceleration: 10
   _deceleration: 8
   _velocityPower: 0.9

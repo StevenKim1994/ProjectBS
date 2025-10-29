@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using BS.Common;
+using BS.UI;
 //using BS.UI;
 
 namespace BS.System
@@ -63,6 +64,25 @@ namespace BS.System
                 _flashImage.color = Color.white;
                 _flashImage.gameObject.SetActive(false);
             });
+        }
+
+        public T Show<T>() 
+        {
+            T presenter = default(T);
+
+            return presenter;
+        }
+
+        public T Hide<T>()
+        {
+            T presenter = default(T);
+
+            return presenter;
+        }
+
+        public bool IsShowing<T>()
+        {
+            return false;
         }
     }
 }

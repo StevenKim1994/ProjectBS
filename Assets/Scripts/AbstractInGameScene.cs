@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using BS.System;
+using BS.UI;
 
 namespace BS.GameObjects
 {
@@ -46,6 +47,8 @@ namespace BS.GameObjects
             var player = FindFirstObjectByType<NightCharacter>();
             InputControlSystem.Instance.SetPlayableCharacter(player);
             InputControlSystem.Instance.SetInputActionAsset(player.InputActionAsset);
+
+            UISystem.Instance.Show<HUDUIPresenter>();
         }
     }
 }
