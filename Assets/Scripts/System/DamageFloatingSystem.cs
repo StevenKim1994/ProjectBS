@@ -61,9 +61,15 @@ namespace BS.System
             
             floating
                 .SetFloatingText(text, color, size)
-                .SetPosition(position);
+                .SetPosition(position)
+                .StartTween();
 
             return floating;
+        }
+
+        public void ReleaseDamageFloating(DamageFloating damageFloating)
+        {
+            _damageFloatingPool.Release(damageFloating);
         }
     }
 }

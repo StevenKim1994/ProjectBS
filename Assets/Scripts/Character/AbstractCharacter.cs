@@ -130,7 +130,7 @@ namespace BS.GameObjects
                 DamageFloatingSystem.Instance.GetDamageFloating(
                     text: amount.ToString(),
                     color: Color.red,
-                    size: 1.0f,
+                    size: 11.0f,
                     position: this.transform.position + new Vector3(0, 1.0f, 0)
                 );
                 if (_currentHealth <= 0)

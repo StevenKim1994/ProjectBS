@@ -14,7 +14,7 @@ TagManager:
   - Water
   - UI
   - Actor
-  - 
+  - Floating
   - 
   - 
   - 
@@ -54,6 +54,9 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 3496651631
+    locked: 0
+  - name: Floating
+    uniqueID: 3194668653
     locked: 0
   m_RenderingLayers:
   - Default
