@@ -2,6 +2,7 @@
 using UnityEngine.Rendering.Universal;
 using DG.Tweening;
 using BS.GameObjects;
+using System;
 
 
 namespace BS.System
@@ -23,6 +24,7 @@ namespace BS.System
 
         private PixelPerfectCamera _pixelPerfectCamera;
         private Camera _camera;
+        private Sequence _cameraZoomInSeq;
 
         public void Load()
         {
@@ -68,6 +70,33 @@ namespace BS.System
                 {
                     _camera.transform.position = originalPosition;
                 });
+            }
+        }
+
+        public void ZoomInCamera(Vector3 position, float zoomValue, float duration)
+        {
+            // TODO :: 수정필요
+            if(_cameraZoomInSeq != null && _cameraZoomInSeq.IsActive())
+            {
+                _cameraZoomInSeq.Kill(true);
+                _cameraZoomInSeq = null;
+            }
+
+            if (_camera != null && _pixelPerfectCamera != null)
+            {
+                var originalOrthoSize = _camera.orthographicSize;
+                var targetOrthoSize = originalOrthoSize * zoomValue;
+                var originalPosition = _camera.transform.position;
+
+                _cameraZoomInSeq = DOTween.Sequence()
+                    .Append(_camera.transform.DOMove(new Vector3(position.x, position.y, originalPosition.z), duration))
+                    .Join(DOTween.To(() => _camera.orthographicSize, x => _camera.orthographicSize = x, targetOrthoSize, duration))
+                    .SetEase(Ease.InOutQuad)
+                    .OnComplete(() =>
+                    {
+                        _camera.transform.position = originalPosition;
+                        _camera.orthographicSize = originalOrthoSize;
+                    });
             }
         }
     }

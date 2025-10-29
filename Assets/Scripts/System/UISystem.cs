@@ -128,6 +128,17 @@ namespace BS.System
             return presenter;
         }
 
+        public TPresenter GetPresenter<TPresenter>() where TPresenter : class, IUIPresenter
+        {
+            TPresenter presenter = null;
+            Type type = typeof(TPresenter);
+            if (_presenters.TryGetValue(type, out var result))
+            {
+                presenter = result[0] as TPresenter;
+            }
+            return presenter;
+        }
+
         public bool IsShowing<TPresenter>() where TPresenter : class, IUIPresenter
         {
             Type type = typeof(TPresenter);

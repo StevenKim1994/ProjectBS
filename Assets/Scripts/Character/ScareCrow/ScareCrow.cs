@@ -5,6 +5,7 @@ using System;
 using BS.System;
 using BS.Common;
 using UnityEditor.Tilemaps;
+using BS.UI;
 
 namespace BS.GameObjects
 {
@@ -37,6 +38,8 @@ namespace BS.GameObjects
         public override void Die()
         {
             //base.Die();
+            UISystem.Instance.GetPresenter<HUDUIPresenter>().AddKillCount(1);
+
             if(_twinkleTweener != null && _twinkleTweener.IsActive())
             {
                 _twinkleTweener.Kill(true);
@@ -67,6 +70,8 @@ namespace BS.GameObjects
             {
                 _twinkleTweener.Kill(true);
             }
+
+            //ScreenSystem.Instance.ZoomInCamera(this.transform.position, 1f, 1f);
             _spriteRenderer.color = Color.white;
             TwinkleColor(Color.red);
         }

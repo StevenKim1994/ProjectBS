@@ -48,11 +48,13 @@ namespace BS.GameObjects
             }
 
             _systems.Add(typeof(ResourceSystem), new ResourceSystem());
+            _systems.Add(typeof(DataSystem), new DataSystem());
             _systems.Add(typeof(ScreenSystem), new ScreenSystem());
             _systems.Add(typeof(InputControlSystem), new InputControlSystem());
             _systems.Add(typeof(DamageColiderSystem), new DamageColiderSystem());
             _systems.Add(typeof(UISystem), new UISystem());
             _systems.Add(typeof(EnermySystem), new EnermySystem());
+            _systems.Add(typeof(DamageFloatingSystem), new DamageFloatingSystem());
         }
 
         public void LoadAllSystems()
@@ -69,8 +71,6 @@ namespace BS.GameObjects
             {
                 system.Unload();
             }
-
-            _systems.Clear();
         }
 
     }
