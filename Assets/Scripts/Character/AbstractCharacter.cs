@@ -1,4 +1,5 @@
 ﻿using BS.Common;
+using BS.System;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -126,7 +127,12 @@ namespace BS.GameObjects
             if (_isAlive)
             {
                 _currentHealth = _currentHealth - amount;
-
+                DamageFloatingSystem.Instance.GetDamageFloating(
+                    text: amount.ToString(),
+                    color: Color.red,
+                    size: 1.0f,
+                    position: this.transform.position + new Vector3(0, 1.0f, 0)
+                );
                 if (_currentHealth <= 0)
                 {
                     Die();

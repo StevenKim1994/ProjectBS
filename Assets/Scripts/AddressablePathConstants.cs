@@ -14,6 +14,7 @@ namespace BS.Common
  public static class DefaultLocalGroup
  {
  public const string ASSETS_ADDRESS_RESOURCE_DAMAGE_COLIDER_PREFAB = "Assets/AddressResource/DamageColider.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_FLOATING_DAMAGE_FLOATING_PREFAB = "Assets/AddressResource/Floating/DamageFloating.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_GAME_SYSTEM_PREFAB = "Assets/AddressResource/GameSystem.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_NIGHT_PREFAB = "Assets/AddressResource/Night.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SCARE_CROW_PREFAB = "Assets/AddressResource/ScareCrow.prefab";
