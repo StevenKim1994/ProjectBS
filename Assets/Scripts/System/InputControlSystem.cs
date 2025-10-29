@@ -21,8 +21,12 @@ namespace BS.System
             }
         }
 
+        public Transform CurrentPlayableTransform => _currentPlayableCharacter.transform;
+
         private InputActionAsset _currentInputAsset;
         private AbstractCharacter _currentPlayableCharacter;
+
+
 
         private bool _leftPressed;
         private bool _rightPressed;

@@ -362,7 +362,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0049039, y: 0.99039936, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1448427235}
@@ -852,8 +852,8 @@ Transform:
   m_GameObject: {fileID: 1307745061}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.00786, y: -0.02576, z: 0}
-  m_LocalScale: {x: 0.99957526, y: 0.9803435, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1448427235}
@@ -1047,8 +1047,8 @@ Transform:
   m_GameObject: {fileID: 1448427233}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0967, z: 0}
-  m_LocalScale: {x: 6.015869, y: 6.199783, z: 1}
+  m_LocalPosition: {x: 0.0652, y: 0.6408, z: 0}
+  m_LocalScale: {x: 6.9887056, y: 6.853967, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 445464995}
@@ -1071,6 +1071,10 @@ MonoBehaviour:
   _layerSpriteList:
   - {fileID: 445464996}
   - {fileID: 1307745063}
+  _targetTransform: {fileID: 0}
+  _parallaxFactors: []
+  _parallaxIntensity: 0.3
+  _smoothTime: 0.3
 --- !u!1 &1697076817
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,6 +5,12 @@ namespace BS.UI
 {
     public class HUDUIPresenter : AbstractUIPresenter<HUDUIView>
     {
+        public override void Init(AbstractUIView bindView)
+        {
+            base.Init(bindView);
+
+        }
+
         public override void Show()
         {
             base.Show();

@@ -5,11 +5,55 @@ using DG.Tweening;
 
 namespace BS.UI
 {
-    public abstract class AbstractUIPresenter<T> where T : AbstractUIView
+    public interface IUIPresenter
+    {
+        AbstractUIView View
+        {
+            get;
+        }
+        void Init(AbstractUIView bindView);
+        void Show();
+        void Hide();
+        bool IsInit();
+        bool IsShowing();
+        IUIPresenter SetParentCanvas(Canvas mainCanvas);
+    }
+
+    public abstract class AbstractUIPresenter<T> : IUIPresenter where T : AbstractUIView
     {
         protected T _view;
+        public AbstractUIView View => _view;
+
         protected Tweener _viewShowTweener;
         protected Tweener  _viewHideTweener;
+        protected bool _isInit = false;
+        protected Canvas _parentCanvas;
+
+        public virtual IUIPresenter SetParentCanvas(Canvas canvas)
+        {
+            _parentCanvas = canvas;
+            _view.transform.SetParent(_parentCanvas.transform);
+            _view.transform.localPosition = Vector2.zero;
+            _view.transform.localScale = Vector2.one;
+
+            return this;
+        }
+
+        public bool IsInit()
+        {
+            return _isInit;
+        }
+
+
+        public virtual void Init(AbstractUIView bindView)
+        {
+            _view = bindView as T;
+            _isInit = true;
+        }
+        public virtual bool IsShowing()
+        {
+            return _view.gameObject.activeSelf;
+        }
 
         public virtual void Show()
         {
