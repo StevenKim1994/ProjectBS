@@ -207,7 +207,7 @@ namespace BS.System
             if (enemy != null)
             {
                 enemy.gameObject.SetActive(true);
-                enemy.SetDefault();
+                enemy.OnSpawn();
                 enemy.transform.position = position;
             }
 

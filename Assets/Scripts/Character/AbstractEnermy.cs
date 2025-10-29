@@ -31,6 +31,11 @@ namespace BS.GameObjects
             _parentPool = parentPool;
         }
 
+        public virtual void OnSpawn()
+        {
+
+        }
+
         public virtual void SetDefault()
         {
 

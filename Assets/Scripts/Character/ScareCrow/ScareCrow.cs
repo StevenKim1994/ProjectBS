@@ -1,8 +1,10 @@
-﻿using BS.System;
+﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System;
-using UnityEngine;
+using BS.System;
+using BS.Common;
+using UnityEditor.Tilemaps;
 
 namespace BS.GameObjects
 {
@@ -24,6 +26,14 @@ namespace BS.GameObjects
             base.Move(direction);
         }
 
+        public override void OnSpawn()
+        {
+            base.OnSpawn();
+
+            _spriteRenderer.color = Color.white;
+
+        }
+
         public override void Die()
         {
             //base.Die();
@@ -39,7 +49,7 @@ namespace BS.GameObjects
                 UniTask.Create(async () =>
                 {
                     await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
-                    EnermySystem.Instance.GetEnemy("ScareCrow", this.transform.position);
+                    EnermySystem.Instance.GetEnemy(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_SCARE_CROW_PREFAB, this.transform.position);
                 }).Forget();
                 if (ParentPool != null)
                 {
@@ -72,9 +82,9 @@ namespace BS.GameObjects
 
             if(_twinkleTweener != null && _twinkleTweener.IsActive())
             {
-                _twinkleTweener.Kill(true);
+                _twinkleTweener.Kill();
             }
-            _spriteRenderer.color = Color.white;
+            //_spriteRenderer.color = Color.white;
         }
 
         private void TwinkleColor(Color color, int repeatCount = 3)
