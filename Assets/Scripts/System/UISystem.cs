@@ -77,10 +77,10 @@ namespace BS.System
 
             if(_presenters.ContainsKey(typeof(TPresenter)) == false)
             {
+                presenter = new TPresenter();
                 Type type = typeof(TPresenter);
-                var attributes = type.GetCustomAttribute<UIViewAttribute>();
 
-                GameObject viewObject = ResourceSystem.Instance.GetLoadGameObject(attributes.AddressablePath);
+                GameObject viewObject = ResourceSystem.Instance.GetLoadGameObject(presenter.GetViewPrefabPath());
                 if (viewObject != null)
                 {
                     var clone = GameObject.Instantiate(viewObject);

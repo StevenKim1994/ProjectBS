@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Reflection;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -7,16 +9,14 @@ namespace BS.UI
 {
     public interface IUIPresenter
     {
-        AbstractUIView View
-        {
-            get;
-        }
         void Init(AbstractUIView bindView);
         void Show();
         void Hide();
         bool IsInit();
         bool IsShowing();
         IUIPresenter SetParentCanvas(Canvas mainCanvas);
+
+        string GetViewPrefabPath();
     }
 
     public abstract class AbstractUIPresenter<T> : IUIPresenter where T : AbstractUIView
@@ -28,15 +28,36 @@ namespace BS.UI
         protected Tweener  _viewHideTweener;
         protected bool _isInit = false;
         protected Canvas _parentCanvas;
+        protected string _viewPrefabPath;
 
         public virtual IUIPresenter SetParentCanvas(Canvas canvas)
         {
             _parentCanvas = canvas;
             _view.transform.SetParent(_parentCanvas.transform);
-            _view.transform.localPosition = Vector2.zero;
-            _view.transform.localScale = Vector2.one;
+
+            if(_view.gameObject.TryGetComponent<RectTransform>(out var rectTransform))
+            {
+                rectTransform.anchoredPosition = Vector2.zero;
+                rectTransform.sizeDelta = Vector2.zero;
+                rectTransform.localScale = Vector2.one;
+            }
 
             return this;
+        }
+
+        public string GetViewPrefabPath()
+        {
+            if (string.IsNullOrEmpty(_viewPrefabPath))
+            {
+                var viewType = typeof(T);
+                var custumAttribute = viewType.GetCustomAttribute<UIViewAttribute>();
+                if (custumAttribute != null)
+                {
+                    _viewPrefabPath = custumAttribute.AddressablePath;
+                }
+            }
+
+            return _viewPrefabPath;
         }
 
         public bool IsInit()

@@ -8,7 +8,6 @@ namespace BS.UI
         public override void Init(AbstractUIView bindView)
         {
             base.Init(bindView);
-
         }
 
         public override void Show()
