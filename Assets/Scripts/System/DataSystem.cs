@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BS.Common;
 using BS.GameObjects;
+using BS.UI;
 
 namespace BS.System
 {
@@ -48,7 +49,18 @@ namespace BS.System
 
         public void AddReward(AbstractRewardableObject rewardableObject)
         {
-
+            // TODO :: 보상아이템에 따른 보상 처리 
+            if(rewardableObject is GoldCoinObject)
+            {
+                PlayerGold += 10; // 예시: 골드 코인 획득 시 골드 1 증가
+                Debug.Log($"Gold Coin Collected! Total Gold: {PlayerGold}");
+                var hud = UISystem.Instance.GetPresenter<HUDUIPresenter>(); 
+                hud.UpdateGoldText(PlayerGold);
+            }
+            else
+            {
+                // TODO :: 일반 보상 아이템 처리
+            }
         }
     }
 }

@@ -14,13 +14,16 @@ namespace BS.UI
         private const float KILL_FONT_UP_DURATION = 0.12f;
         private const float KILL_FONT_DOWN_DURATION = 0.12f;
 
-        private Sequence _killCountFontSequence;
+        private Sequence _killCountFontSequence;     
+        private Sequence _goldTextSequence;
+        private Vector2 _goldIconImageBasicSize;
 
         public override void Init(AbstractUIView bindView)
         {
             base.Init(bindView);
 
             _view.KillCountText.SetText(string.Format(KILL_COUNT_TEXT_FORMAT, DataSystem.Instance.PlayerHighScore));
+            _goldIconImageBasicSize = _view.GoldIconImage.rectTransform.sizeDelta;
         }
 
         public override void Show()
@@ -56,7 +59,31 @@ namespace BS.UI
 
         public Vector2 GetGoldImageScreenPos()
         {
-            return RectTransformUtility.WorldToScreenPoint(null, _view.GoldIconImage.rectTransform.position);
+            return RectTransformUtility.WorldToScreenPoint(null, _view.GoldIconImage.rectTransform.TransformPoint(_view.GoldIconImage.rectTransform.rect.center));
+        }
+
+        public void UpdateGoldText(int playerGold)
+        {
+            var rect = _view.GoldIconImage.rectTransform;
+
+            if (_goldTextSequence != null && _goldTextSequence.IsActive())
+            {
+                _goldTextSequence.Kill(true); // 완료로 Kill하여 사이즈 원복 보장
+                _goldTextSequence = null;
+            }
+
+            var targetSize = _goldIconImageBasicSize * 1.2f;
+
+            _goldTextSequence = DOTween.Sequence()
+                .Append(rect.DOSizeDelta(targetSize, 0.1f).SetEase(Ease.OutQuad))
+                .Append(rect.DOSizeDelta(_goldIconImageBasicSize , 0.1f).SetEase(Ease.InQuad))
+                .OnComplete(() =>
+                {
+                    _view.GoldIconImage.rectTransform.sizeDelta = _goldIconImageBasicSize;
+                })
+                .SetUpdate(false);
+
+            _view.GoldAmountText.SetText(playerGold.ToString());
         }
     }
 }

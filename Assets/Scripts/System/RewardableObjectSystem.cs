@@ -83,7 +83,7 @@ namespace BS.GameObjects
             }
         }
 
-        public void PlayGainRewardEffect(AbstractRewardableObject rewardableObject, Vector2 destScreenPosition, float moveTime = 0.77f)
+        public void PlayGainRewardEffect(AbstractRewardableObject rewardableObject, Vector2 destScreenPosition, float moveTime = 0.5f)
         {
             var camera = ScreenSystem.Instance.WorldCamera;
             var targetWorld = camera.ScreenToWorldPoint(new Vector3(destScreenPosition.x, destScreenPosition.y, camera.nearClipPlane));
