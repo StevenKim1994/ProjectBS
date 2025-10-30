@@ -55,6 +55,7 @@ namespace BS.GameObjects
             _systems.Add(typeof(UISystem), new UISystem());
             _systems.Add(typeof(EnermySystem), new EnermySystem());
             _systems.Add(typeof(DamageFloatingSystem), new DamageFloatingSystem());
+            _systems.Add(typeof(RewardableObjectSystem), new RewardableObjectSystem());
         }
 
         public void LoadAllSystems()

@@ -22,6 +22,9 @@ namespace BS.System
             }
         }
 
+
+        public Camera WorldCamera => _camera;
+
         private PixelPerfectCamera _pixelPerfectCamera;
         private Camera _camera;
         private Sequence _cameraZoomInSeq;

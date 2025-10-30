@@ -11,5 +11,13 @@ namespace BS.UI
         [SerializeField]
         private TextMeshProUGUI _killCountText;
         public TextMeshProUGUI KillCountText => _killCountText;
+
+        [SerializeField]
+        private TextMeshProUGUI _goldAmountText;
+        public TextMeshProUGUI GoldAmountText => _goldAmountText;
+
+        [SerializeField]
+        private Image _goldIconImage;
+        public Image GoldIconImage => _goldIconImage;
     }
 }

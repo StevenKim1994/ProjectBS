@@ -5,6 +5,7 @@ using UnityEngine.Pool;
 using UnityEngine.U2D;
 using BS.GameObjects;
 using BS.Common;
+using DG.Tweening;
 
 namespace BS.System
 {
@@ -52,17 +53,24 @@ namespace BS.System
 
         public void Unload()
         {
+            if (_damageFloatingPool != null)
+            {
+                _damageFloatingPool.Clear();
+            }
 
+            _floatingObjectOriginalPrefab = null;
         }
 
-        public DamageFloating GetDamageFloating(string text, Color color, float size, Vector3 position)
+        public DamageFloating GetDamageFloating(float damageValue, Color color, float startSize, float endTweenSize, Vector3 position, float duration = 0.75f, Ease easeFunc = Ease.OutSine)
         {
             var floating = _damageFloatingPool.Get();
             
             floating
-                .SetFloatingText(text, color, size)
+                .SetText(damageValue.ToString())
+                .SetColor(color)
+                .SetSize(startSize, endTweenSize)
                 .SetPosition(position)
-                .StartTween();
+                .StartTween(duration, easeFunc);
 
             return floating;
         }

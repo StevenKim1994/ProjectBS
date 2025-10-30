@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Enermy
+  - RewardableObject
   layers:
   - Default
   - TransparentFX
@@ -54,6 +55,9 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 3496651631
+    locked: 0
+  - name: RewardableObject
+    uniqueID: 3454334387
     locked: 0
   - name: Floating
     uniqueID: 3194668653

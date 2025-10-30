@@ -127,10 +127,12 @@ namespace BS.GameObjects
             if (_isAlive)
             {
                 _currentHealth = _currentHealth - amount;
-                DamageFloatingSystem.Instance.GetDamageFloating(
-                    text: amount.ToString(),
+                DamageFloatingSystem.Instance.GetDamageFloating
+                (
+                    damageValue: amount,
                     color: Color.red,
-                    size: 11.0f,
+                    startSize : 11.0f,
+                    endTweenSize : 15.0f,
                     position: this.transform.position + new Vector3(0, 1.0f, 0)
                 );
                 if (_currentHealth <= 0)
@@ -143,7 +145,7 @@ namespace BS.GameObjects
                     if (_mover != null)
                     {
                         _mover.Knockback(2);
-                        //_mover.Slow(0.9f);
+                        _mover.Slow(0.9f);
                     }
                 }
             }

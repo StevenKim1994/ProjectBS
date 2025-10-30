@@ -3,6 +3,7 @@ using UnityEngine.U2D;
 using TMPro;
 using DG.Tweening;
 using BS.System;
+using System;
 
 namespace BS.GameObjects
 {
@@ -10,20 +11,30 @@ namespace BS.GameObjects
     {
         [SerializeField]
         private TextMeshPro _floatingText;
-
-        private Tweener _performTweener;
+        private Sequence _performTweenSeqence;
 
         private void Awake()
         {
             _floatingText.renderer.sortingOrder = 5000;
         }
 
-        public DamageFloating SetFloatingText(string text, Color color, float size)
+        public DamageFloating SetText(string text)
         {
-            _floatingText.text = text;
-            _floatingText.color = color;
-            _floatingText.fontSize = size;
+            _floatingText.SetText(text);
 
+            return this;
+        }
+
+        public DamageFloating SetColor(Color color)
+        {
+            _floatingText.color = color;
+            return this;
+        }
+
+        public DamageFloating SetSize(float size, float tweenSize)
+        {
+            _floatingText.fontSizeMax = tweenSize;
+            _floatingText.fontSize = size;
             return this;
         }
 
@@ -34,14 +45,29 @@ namespace BS.GameObjects
             return this;
         }
 
-        public DamageFloating StartTween()
+        public DamageFloating StartTween(float duration = 1.5f, Ease easeFunc = Ease.OutCubic)
         {
-            _performTweener = this.transform.DOMoveY(this.transform.position.y + 1.5f, 0.5f)
-            .SetEase(Ease.OutCubic)
-            .OnComplete(() =>
+            if(_performTweenSeqence != null)
             {
-                DamageFloatingSystem.Instance.ReleaseDamageFloating(this);
-            });
+                _performTweenSeqence.Kill();
+                _performTweenSeqence = null;
+            }
+
+            float targetY = transform.position.y + 1.5f;
+            var moveTween = transform.DOMoveY(targetY, duration)
+                .SetEase(easeFunc);
+
+            var fontSizeTween = _floatingText.DOFontSize(_floatingText.fontSizeMax, duration)
+                .SetEase(easeFunc);
+
+            _performTweenSeqence = DOTween.Sequence()
+                .Join(moveTween)
+                .Join(fontSizeTween)
+                .OnComplete(() =>
+                {
+                    DamageFloatingSystem.Instance.ReleaseDamageFloating(this);
+                });
+
             return this;
         }
     }

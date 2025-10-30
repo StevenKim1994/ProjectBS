@@ -29,12 +29,24 @@ namespace BS.System
             set { _playerHighScore = value; }
         }
 
+        private int _playerGold;
+        public int PlayerGold
+        {
+            get { return _playerGold; }
+            set { _playerGold = value; }
+        }
+
         public void Load()
         {
 
         }
 
         public void Unload()
+        {
+
+        }
+
+        public void AddReward(AbstractRewardableObject rewardableObject)
         {
 
         }

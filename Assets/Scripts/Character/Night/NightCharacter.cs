@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using BS.System;
 using BS.Common;
+using BS.UI;
 
 namespace BS.GameObjects
 {
@@ -99,6 +100,16 @@ namespace BS.GameObjects
             ScreenSystem.Instance.ShakeCamera(0.25f, 0.2f, 1);
             UISystem.Instance.FlashScreen(Color.red, 0.3f);
             Debug.Log("Night Character Take Damage!");
+        }
+
+        public void GainRewardableObject(AbstractRewardableObject rewardableObject)
+        {
+            if(!rewardableObject.IsRewarded)
+            {
+                DataSystem.Instance.AddReward(rewardableObject);
+                var destScreenPos = UISystem.Instance.GetPresenter<HUDUIPresenter>().GetGoldImageScreenPos();
+                RewardableObjectSystem.Instance.PlayGainRewardEffect(rewardableObject, destScreenPos);
+            }
         }
     }
 }

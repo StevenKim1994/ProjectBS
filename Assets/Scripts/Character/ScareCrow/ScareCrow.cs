@@ -57,9 +57,12 @@ namespace BS.GameObjects
                 if (ParentPool != null)
                 {
                      ParentPool.Release(this);
-                }
+                }                 
                 _twinkleTweener.Kill(true);
+
             });
+
+            RewardableObjectSystem.Instance.SpawnRewardableObject(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_PROPS_GOLD_COIN_PREFAB, this.transform.position);
         }
 
         public override void HitAnim()

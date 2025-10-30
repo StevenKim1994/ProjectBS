@@ -16,7 +16,9 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_DAMAGE_COLIDER_PREFAB = "Assets/AddressResource/DamageColider.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_FLOATING_DAMAGE_FLOATING_PREFAB = "Assets/AddressResource/Floating/DamageFloating.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_GAME_SYSTEM_PREFAB = "Assets/AddressResource/GameSystem.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_IMAGE_COIN_1_PNG = "Assets/AddressResource/Image/coin_1.png";
  public const string ASSETS_ADDRESS_RESOURCE_NIGHT_PREFAB = "Assets/AddressResource/Night.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_PROPS_GOLD_COIN_PREFAB = "Assets/AddressResource/Props/GoldCoin.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SCARE_CROW_PREFAB = "Assets/AddressResource/ScareCrow.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_HUD_PREFAB = "Assets/AddressResource/UI/HUD.prefab";
  }

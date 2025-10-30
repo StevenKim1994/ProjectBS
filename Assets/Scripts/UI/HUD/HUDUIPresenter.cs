@@ -1,5 +1,6 @@
 ﻿using BS.System;
 using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +52,13 @@ namespace BS.UI
                 .Append(_view.KillCountText.DOFontSize(targetSize, KILL_FONT_UP_DURATION).SetEase(Ease.OutQuad))
                 .Append(_view.KillCountText.DOFontSize(baseSize, KILL_FONT_DOWN_DURATION).SetEase(Ease.InQuad))
                 .SetUpdate(false);
+        }
+
+        public Vector2 GetGoldImageScreenPos()
+        {
+            Vector3 worldPos = _view.GoldIconImage.transform.position;
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(ScreenSystem.Instance.WorldCamera, worldPos);
+            return screenPos;
         }
     }
 }
