@@ -13,27 +13,39 @@ namespace BS.GameObjects
             base.Reward(rewardCallback);
         }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
+        // 플레이어와의 트리거 감지만 처리 (스폰 연출 중에는 무시)
         protected override void OnTriggerEnter2D(Collider2D collision)
         {
+            if (_isRewarded)
+                return;
+
             base.OnTriggerEnter2D(collision);
         }
 
         public override void Spawn()
         {
             base.Spawn();
+
+            // 스폰 연출 동안엔 물리 영향 제거(Kinematic), 끝나면 Dynamic으로 전환
+            if (Rigidbody != null)
+            {
+                Rigidbody.linearVelocity = Vector2.zero;
+                Rigidbody.angularVelocity = 0f;
+                Rigidbody.bodyType = RigidbodyType2D.Kinematic;
+            }
+
             _spawnTweener = transform.DOMoveY(transform.position.y + 0.5f, 0.5f).SetEase(Ease.InOutSine)
-                .OnStart(()=>
+                .OnStart(() =>
                 {
-                    _isRewarded = true; // DESC :: 스폰 연출중에는 획득안되도록 기믹 처리를 해야하므로
+                    _isRewarded = true;   // 스폰 연출 중 획득 방지
                 })
-                .OnComplete(()=>
+                .OnComplete(() =>
                 {
-                    _isRewarded = false; // DESC :: 스폰 연출이 끝나면 획득 가능하도록 기믹 처리를 해제
+                    _isRewarded = false;  // 스폰 연출 종료 후 획득 가능
+                    if (Rigidbody != null)
+                    {
+                        Rigidbody.bodyType = RigidbodyType2D.Dynamic; // 중력/바닥 물리 재개
+                    }
                 });
         }
     }

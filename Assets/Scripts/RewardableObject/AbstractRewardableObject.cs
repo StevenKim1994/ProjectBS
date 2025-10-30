@@ -24,6 +24,12 @@ namespace BS.GameObjects
         private Animator _animator;
         public Animator Animator => _animator;
 
+        [Header("Physics")]
+        [Tooltip("바닥 물리 충돌용 콜라이더(Trigger=false)")]
+        [SerializeField]
+        private Collider2D _physicsCollider;
+        public Collider2D PhysicsCollider => _physicsCollider;
+
         protected bool _isRewarded = false;
 
         protected Tweener _spawnTweener;
@@ -47,6 +53,35 @@ namespace BS.GameObjects
         protected virtual void Initialize()
         {
             _isRewarded = false;
+
+            // 물리 콜라이더 기본 설정 (바닥 충돌 전용)
+            if (_physicsCollider != null)
+            {
+                _physicsCollider.isTrigger = false;
+
+                // 플레이어와의 물리 충돌은 무시 (플레이어는 트리거로만 감지)
+                var playerGo = GameObject.FindWithTag(Constrants.TAG_PLAYER);
+                if (playerGo != null)
+                {
+                    var playerColliders = playerGo.GetComponentsInChildren<Collider2D>();
+                    foreach (var plc in playerColliders)
+                    {
+                        if (plc != null)
+                            Physics2D.IgnoreCollision(_physicsCollider, plc, true);
+                    }
+                }
+            }
+
+            // Rigidbody2D 기본 물리 세팅
+            if (_rigidbody != null)
+            {
+                _rigidbody.simulated = true;
+                _rigidbody.bodyType = RigidbodyType2D.Dynamic;
+                _rigidbody.gravityScale = Mathf.Max(1f, _rigidbody.gravityScale);
+                _rigidbody.freezeRotation = true;
+                _rigidbody.interpolation = RigidbodyInterpolation2D.Interpolate;
+                _rigidbody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            }
         }
 
         public virtual void Reward(Action rewardCallback = null)
