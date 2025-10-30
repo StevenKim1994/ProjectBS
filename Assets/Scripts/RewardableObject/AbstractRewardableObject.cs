@@ -3,6 +3,7 @@ using UnityEngine;
 using BS.Common;
 using UnityEngine.Pool;
 using DG.Tweening;
+using System.Linq;
 
 namespace BS.GameObjects
 {
@@ -68,6 +69,38 @@ namespace BS.GameObjects
                     {
                         if (plc != null)
                             Physics2D.IgnoreCollision(_physicsCollider, plc, true);
+                    }
+                }
+
+                // 다른 보상 아이템과의 물리 충돌 무시
+                var rewardableObjects = GameObject.FindGameObjectsWithTag(Constrants.TAG_REWARDABLE).ToList();
+                foreach (var rewardable in rewardableObjects)
+                {
+                    if (rewardable != null) 
+                    {
+                        if(rewardable.TryGetComponent<AbstractRewardableObject>(out var rewardableObject))
+                        {
+                            if(rewardableObject.PhysicsCollider != null)
+                            {
+                                Physics2D.IgnoreCollision(_physicsCollider, rewardableObject.PhysicsCollider, true);
+                            }
+                        }
+                    }
+                }
+
+                // 다른 Enemy들과의 물리 충돌 무시
+                var enemyObjects = GameObject.FindGameObjectsWithTag(Constrants.TAG_ENERMY);
+                foreach (var enemy in enemyObjects)
+                {
+                    if (enemy != null)
+                    {
+                        if(enemy.TryGetComponent<AbstractEnermy>(out var enemyObject))
+                        {
+                            if (enemyObject.Collider != null)
+                            {
+                                Physics2D.IgnoreCollision(_physicsCollider, enemyObject.Collider, true);
+                            }
+                        }
                     }
                 }
             }

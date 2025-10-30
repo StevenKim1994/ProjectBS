@@ -83,13 +83,24 @@ namespace BS.GameObjects
             }
         }
 
-        public void PlayGainRewardEffect(AbstractRewardableObject rewardableObject, Vector2 destScreenPosition)
+        public void PlayGainRewardEffect(AbstractRewardableObject rewardableObject, Vector2 destScreenPosition, float moveTime = 0.77f)
         {
-            rewardableObject.transform.DOMove(destScreenPosition, 0.5f).SetEase(Ease.InQuad)
-                .OnComplete(()=>
-                {
-                    rewardableObject.Release();
-                });
+            var camera = ScreenSystem.Instance.WorldCamera;
+            var targetWorld = camera.ScreenToWorldPoint(new Vector3(destScreenPosition.x, destScreenPosition.y, camera.nearClipPlane));
+
+            var rb = rewardableObject.Rigidbody;
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+                rb.bodyType = RigidbodyType2D.Kinematic;
+            }
+
+            rewardableObject.transform.DOMove(targetWorld, moveTime).SetEase(Ease.InQuad)
+                 .OnComplete(() =>
+                 {
+                     rewardableObject.Release();
+                 });
         }
     }
 }

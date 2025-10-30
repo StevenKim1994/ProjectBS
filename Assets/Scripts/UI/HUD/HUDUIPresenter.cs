@@ -56,9 +56,7 @@ namespace BS.UI
 
         public Vector2 GetGoldImageScreenPos()
         {
-            Vector3 worldPos = _view.GoldIconImage.transform.position;
-            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(ScreenSystem.Instance.WorldCamera, worldPos);
-            return screenPos;
+            return RectTransformUtility.WorldToScreenPoint(null, _view.GoldIconImage.rectTransform.position);
         }
     }
 }
