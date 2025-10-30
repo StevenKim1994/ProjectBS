@@ -2,6 +2,7 @@
 using UnityEngine.InputSystem;
 using BS.GameObjects;
 using BS.Common;
+using System;
 
 namespace BS.System
 {
@@ -69,6 +70,7 @@ namespace BS.System
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_ATTACK).performed += AttackInput;
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_DEFENSE).performed += DefenseInput;
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_JUMP).performed += JumpInput;
+                actionMap.FindAction(Constrants.STR_INPUT_ACTION_THROWING).performed += ThrowingInput;
 
                 var actLeft = actionMap.FindAction(Constrants.STR_INPUT_ACTION_LEFT);
                 var actRight = actionMap.FindAction(Constrants.STR_INPUT_ACTION_RIGHT);
@@ -95,6 +97,14 @@ namespace BS.System
         public void SetPlayableCharacter(AbstractCharacter character)
         {
             _currentPlayableCharacter = character;
+        }
+
+        private void ThrowingInput(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                _currentPlayableCharacter.Throwing();
+            }
         }
 
         private void AttackInput(InputAction.CallbackContext context)

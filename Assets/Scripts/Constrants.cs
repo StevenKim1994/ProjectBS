@@ -10,6 +10,7 @@
         public const string STR_CHARACTER_NIGHT = "Night";
         public const string STR_INPUT_ACTION_ATTACK = "Attack";
         public const string STR_INPUT_ACTION_DEFENSE = "Defense";
+        public const string STR_INPUT_ACTION_THROWING = "Throwing";
         public const string STR_INPUT_ACTION_JUMP = "Jump";
         public const string STR_INPUT_ACTION_LEFT = "Left";
         public const string STR_INPUT_ACTION_RIGHT = "Right";

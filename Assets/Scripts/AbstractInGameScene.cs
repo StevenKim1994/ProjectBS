@@ -2,6 +2,7 @@
 using UnityEngine.Rendering.Universal;
 using BS.System;
 using BS.UI;
+using BS.Common;
 
 namespace BS.GameObjects
 {
@@ -37,6 +38,16 @@ namespace BS.GameObjects
             }
         }
 
+        [SerializeField]
+        private Transform _spawnPoint;
+        public Transform SpawnPoint
+        {
+            get
+            {
+                return _spawnPoint;
+            }
+        }
+
         protected virtual void Awake()
         {
             SystemGameObject.Instance.LoadAllSystems();
@@ -44,11 +55,15 @@ namespace BS.GameObjects
 
         protected virtual void Start()
         {
-            var player = FindFirstObjectByType<NightCharacter>();
-            InputControlSystem.Instance.SetPlayableCharacter(player);
-            InputControlSystem.Instance.SetInputActionAsset(player.InputActionAsset);
+            var playerObject = GameObject.Instantiate( ResourceSystem.Instance.GetLoadGameObject(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_NIGHT_PREFAB));
+            if(playerObject.TryGetComponent<NightCharacter>(out var night))
+            {
+                night.transform.position = SpawnPoint.position;
+                InputControlSystem.Instance.SetPlayableCharacter(night);
+                InputControlSystem.Instance.SetInputActionAsset(night.InputActionAsset);
 
-            UISystem.Instance.Show<HUDUIPresenter>();
+                UISystem.Instance.Show<HUDUIPresenter>();
+            }
         }
     }
 }

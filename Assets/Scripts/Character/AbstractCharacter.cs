@@ -131,8 +131,8 @@ namespace BS.GameObjects
                 (
                     damageValue: amount,
                     color: Color.red,
-                    startSize : 11.0f,
-                    endTweenSize : 15.0f,
+                    startSize: 11.0f,
+                    endTweenSize: 15.0f,
                     position: this.transform.position + new Vector3(0, 1.0f, 0)
                 );
                 if (_currentHealth <= 0)
@@ -157,7 +157,7 @@ namespace BS.GameObjects
             {
                 _animator.CrossFade(AnimStateConstants.HIT, 0.1f);
             }
-            }
+        }
 
         public virtual void Defense()
         {
@@ -168,6 +168,14 @@ namespace BS.GameObjects
             }
         }
 
+        public virtual void Throwing()
+        {
+            if (_isAlive)
+            {
+                Stop();
+                // TODO :: 투척 처리
+            }
+        }
         public virtual void Jump()
         {
             if (_isAlive)
