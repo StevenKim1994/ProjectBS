@@ -102,6 +102,7 @@ namespace BS.System
             }
 
             presenter.SetParentCanvas(_mainCanvas);
+            presenter.SetHiearchy(_mainCanvas.transform.childCount - 1);
             presenter.Show();
 
             return presenter;

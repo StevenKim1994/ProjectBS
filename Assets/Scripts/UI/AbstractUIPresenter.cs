@@ -17,12 +17,13 @@ namespace BS.UI
         IUIPresenter SetParentCanvas(Canvas mainCanvas);
 
         string GetViewPrefabPath();
+        void SetHiearchy(int v);
     }
 
     public abstract class AbstractUIPresenter<T> : IUIPresenter where T : AbstractUIView
     {
         protected T _view;
-        public AbstractUIView View => _view;
+        public T View => _view;
 
         protected Tweener _viewShowTweener;
         protected Tweener  _viewHideTweener;
@@ -150,6 +151,11 @@ namespace BS.UI
             {
                 _viewHideTweener.Kill();
             }
+        }
+
+        public void SetHiearchy(int index)
+        {
+            View.transform.SetSiblingIndex(index);
         }
     }
 }
