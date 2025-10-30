@@ -34,43 +34,24 @@ namespace BS.UI
         protected override void PostShow()
         {
             base.PostShow();
-
-            PreHide();
-        }
-
-        protected override void PreHide()
-        {
-            base.PreHide();
-
-            DelayHideAsync().Forget();
         }
 
         public override void Hide()
         {
             TimeSystem.Instance.TimeSpeedUp(1.0f);
-            PostHide();
-        }
-
-        protected override void PostHide()
-        {
-            base.PostHide();
-
             _viewHideTweener = View.CanvasGroup.DOFade(0f, 0.5f).SetEase(View.HideEaseType).OnComplete(() =>
             {
-                View.gameObject.SetActive(false);
+                base.Hide();
             });
         }
 
-        private async UniTask DelayHideAsync()
+        protected override void BindEvents()
         {
-            if(_delayCTS != null)
+            base.BindEvents();
+            View.StartButton.onClick.AddListener(() =>
             {
-                _delayCTS.Cancel();
-                _delayCTS.Dispose();
-            }
-            _delayCTS = new CancellationTokenSource();
-            await UniTask.Delay(TimeSpan.FromSeconds(1.5f), cancellationToken: _delayCTS.Token,ignoreTimeScale: true);
-            Hide();
+                Hide();
+            });
         }
     }
 }

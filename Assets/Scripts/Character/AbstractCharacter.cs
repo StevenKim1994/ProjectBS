@@ -131,8 +131,8 @@ namespace BS.GameObjects
                 (
                     damageValue: amount,
                     color: Color.red,
-                    startSize: 11.0f,
-                    endTweenSize: 15.0f,
+                    startSize: 5.0f,
+                    endTweenSize: 11.0f,
                     position: this.transform.position + new Vector3(0, 1.0f, 0)
                 );
                 if (_currentHealth <= 0)

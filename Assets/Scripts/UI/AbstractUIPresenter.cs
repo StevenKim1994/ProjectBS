@@ -70,8 +70,15 @@ namespace BS.UI
         public virtual void Init(AbstractUIView bindView)
         {
             _view = bindView as T;
+            BindEvents();
             _isInit = true;
         }
+
+        protected virtual void BindEvents()
+        {
+
+        }
+
         public virtual bool IsShowing()
         {
             return _view.gameObject.activeSelf;
@@ -93,6 +100,7 @@ namespace BS.UI
 
         protected virtual void PreShow()
         {
+            View.gameObject.SetActive(true);
             if(_viewHideTweener != null && _viewHideTweener.IsActive())
             {
                 _viewHideTweener.Kill(false);
@@ -151,6 +159,8 @@ namespace BS.UI
             {
                 _viewHideTweener.Kill();
             }
+
+            View.gameObject.SetActive(false);
         }
 
         public void SetHiearchy(int index)

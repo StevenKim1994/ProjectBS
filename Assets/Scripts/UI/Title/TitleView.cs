@@ -15,5 +15,10 @@ namespace BS.UI
         [SerializeField]
         private TextMeshProUGUI _titleText;
         public TextMeshProUGUI TitleText => _titleText;
+
+        [SerializeField]
+        private Button _startButton;
+        public Button StartButton => _startButton;
+
     }
 }
