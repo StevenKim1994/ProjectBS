@@ -73,7 +73,6 @@ namespace BS.GameObjects
         {
             Stop();
 
-            _animator.CrossFade(Constrants.STR_INPUT_ACTION_ATTACK, 0.3f);
             // TODO :: 콜라이더 처리
         }
 

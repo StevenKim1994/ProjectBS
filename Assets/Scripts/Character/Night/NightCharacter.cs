@@ -12,6 +12,13 @@ namespace BS.GameObjects
         private float _currentAttackRange;
         private float _currentAttackDamage;
 
+        // DESC :: 콤보 시스템 관련 변수
+        private int _currentComboCount = 0;
+        private float _lastAttackTime = -999f;
+        [SerializeField]
+        private float _comboWindowTime = 1.0f; // 콤보 유지 시간 (초)
+        private const int MAX_COMBO_COUNT = 2; // 최대 콤보 수 (Attack1, Attack2)
+
         protected override void Awake()
         {
             base.Awake();
@@ -24,6 +31,33 @@ namespace BS.GameObjects
         public override void Attack()
         {
             base.Attack();
+
+            // DESC :: 콤보 시스템 처리
+            float currentTime = Time.time;
+
+            // DESC :: 마지막 공격으로부터 일정 시간이 지났으면 콤보 초기화
+            if (currentTime - _lastAttackTime > _comboWindowTime)
+            {
+                _currentComboCount = 0;
+            }
+
+            // DESC :: 콤보 카운트 증가
+            _currentComboCount++;
+
+            // DESC :: 최대 콤보 수를 넘으면 다시 1로 리셋
+            if (_currentComboCount > MAX_COMBO_COUNT)
+            {
+                _currentComboCount = 1;
+            }
+
+            // DESC :: 애니메이터에 콤보 카운트 전달
+            _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, _currentComboCount);
+
+            // DESC :: 마지막 공격 시간 업데이트
+            _lastAttackTime = currentTime;
+
+            Debug.Log($"Attack Combo: {_currentComboCount}");
+
             // DESC :: ViewDirection 방향으로 공격 위치 설정
             Vector2 viewDirection = _mover.ViewDirection;
 
@@ -56,7 +90,7 @@ namespace BS.GameObjects
         public override void Throwing()
         {
             base.Throwing();
-            if(_isAlive)
+            if (_isAlive)
             {
                 Debug.Log("투사체 던집니다!");
             }
@@ -66,7 +100,7 @@ namespace BS.GameObjects
         {
             base.Move(direction);
 
-            if(direction != Vector2.zero)
+            if (direction != Vector2.zero)
             {
                 if (direction == Vector2.left)
                 {
@@ -93,7 +127,7 @@ namespace BS.GameObjects
 
         public void GainRewardableObject(AbstractRewardableObject rewardableObject)
         {
-            if(!rewardableObject.IsRewarded)
+            if (!rewardableObject.IsRewarded)
             {
                 DataSystem.Instance.AddReward(rewardableObject);
                 var destScreenPos = UISystem.Instance.GetPresenter<HUDUIPresenter>().GetGoldImageScreenPos();
