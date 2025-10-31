@@ -354,5 +354,17 @@ namespace BS.System
                 }
             }
         }
+
+        public void KillEnermy(AbstractEnermy enermy, bool isPlayerKill = true)
+        {
+            enermy.ParentPool.Release(enermy);
+
+            if (isPlayerKill)
+            {
+                UISystem.Instance.GetPresenter<BS.UI.HUDUIPresenter>().AddKillCount(1);
+            }
+
+            RewardableObjectSystem.Instance.SpawnRewardableObject(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_PROPS_GOLD_COIN_PREFAB, enermy.transform.position);
+        }
     }
 }
