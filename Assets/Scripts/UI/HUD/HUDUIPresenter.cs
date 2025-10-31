@@ -1,4 +1,5 @@
-﻿using BS.System;
+﻿using BS.GameObjects;
+using BS.System;
 using DG.Tweening;
 using System;
 using UnityEngine;
@@ -9,14 +10,17 @@ namespace BS.UI
     public class HUDUIPresenter : AbstractUIPresenter<HUDUIView>
     {
         private const string KILL_COUNT_TEXT_FORMAT = "Kills: {0}";
-
         private const float KILL_FONT_DELTA = 8f;
         private const float KILL_FONT_UP_DURATION = 0.12f;
         private const float KILL_FONT_DOWN_DURATION = 0.12f;
+        private const float HP_MINUS_DELAY = 0.15f;     // 지연 시간
+        private const float HP_MINUS_DURATION = 0.35f;  // 따라오는 시간
 
         private Sequence _killCountFontSequence;     
         private Sequence _goldTextSequence;
         private Vector2 _goldIconImageBasicSize;
+        private Tweener _hpMinusTweener;
+
 
         public override void Init(AbstractUIView bindView)
         {
@@ -24,6 +28,32 @@ namespace BS.UI
 
             _view.KillCountText.SetText(string.Format(KILL_COUNT_TEXT_FORMAT, DataSystem.Instance.PlayerHighScore));
             _goldIconImageBasicSize = _view.GoldIconImage.rectTransform.sizeDelta;
+
+            var player = InputControlSystem.Instance.CurrentPlayableTransform.GetComponent<AbstractCharacter>();
+            var currentHealth = player.CurrentHealth;
+            _view.HPStateSlider.maxValue = player.Ability.MaxHealth;
+            _view.HPStateSlider.value = currentHealth;
+        }
+
+        protected override void BindEvents()
+        {
+            base.BindEvents();
+
+            _view.HPStateSlider.onValueChanged.AddListener(OnChangeHPStateSlider);
+        }
+
+        private void OnChangeHPStateSlider(float value)
+        {
+            var diffSize = 1f - _view.HPStateSlider.normalizedValue;
+            if (_hpMinusTweener != null && _hpMinusTweener.IsActive())
+            {
+                _hpMinusTweener.Kill(true);
+            }
+
+            _hpMinusTweener = _view.HPStateMinusPerformImage.DOFillAmount(1f - diffSize, HP_MINUS_DURATION)
+                .SetDelay(HP_MINUS_DELAY)
+                .SetEase(Ease.OutQuad)
+                .SetUpdate(false);
         }
 
         public override void Show()
@@ -84,6 +114,11 @@ namespace BS.UI
                 .SetUpdate(false);
 
             _view.GoldAmountText.SetText(playerGold.ToString());
+        }
+
+        public void TakeDamage(float damage)
+        {
+            _view.HPStateSlider.value = _view.HPStateSlider.value - damage;
         }
     }
 }

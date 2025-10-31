@@ -16,30 +16,36 @@ namespace BS.GameObjects
         private float _currentAttackDamage;
 
         // DESC :: 콤보 시스템 관련 변수
-        private int _currentComboCount = 0;
+        private int _currentComboCount =0;
         private float _lastAttackTime = -999f;
         private bool _isAttacking = false;
         private CancellationTokenSource _attackResetCTS;
 
         [SerializeField]
-        private float _comboWindowTime = 1.0f;
-        private const int MAX_COMBO_COUNT = 2;
+        private float _comboWindowTime =1.0f;
+        private const int MAX_COMBO_COUNT =2;
 
         // DESC :: 공격 시 전진 관련 변수
         [Header("Attack Movement Settings")]
         [SerializeField]
-        private float _attackForwardDistance = 0.5f; // 공격 시 전진 거리
+        private float _attackForwardDistance =0.5f; // 공격 시 전진 거리
         [SerializeField]
-        private float _attackForwardDuration = 0.15f; // 전진 시간 (애니메이션 초반에만)
+        private float _attackForwardDuration =0.15f; // 전진 시간 (애니메이션 초반에만)
         [SerializeField]
-        private AnimationCurve _attackMovementCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f); // 전진 곡선
+        private AnimationCurve _attackMovementCurve = AnimationCurve.EaseInOut(0f,0f,1f,1f); // 전진 곡선
 
         // DESC :: 점프 애니메이션 관련 변수
         [Header("Jump Animation Settings")]
         [SerializeField]
-        private float _jumpVelocityThreshold = 0.1f;
+        private float _jumpVelocityThreshold =0.1f;
         private bool _isJumping = false;
         private bool _isJumpRising = false;
+        private bool _isHit = false;
+
+        // DESC :: 접촉 데미지 및 무적 관련
+        [Header("Contact Damage Settings")]
+        [SerializeField]
+        private CancellationTokenSource _hitInvincibleCTS;
 
         protected override void Awake()
         {
@@ -48,7 +54,7 @@ namespace BS.GameObjects
 
             _currentAttackRange = _castingAbility.AttackRange;
             _currentAttackDamage = _castingAbility.AttackDamage;
-            _animator.SetFloat(AnimParamConstants.ATTACK_SPEED, 0.5f);
+            _animator.SetFloat(AnimParamConstants.ATTACK_SPEED,0.5f);
         }
 
         private void Update()
@@ -68,7 +74,7 @@ namespace BS.GameObjects
                 if (!_isJumpRising)
                 {
                     _isJumpRising = true;
-                    _animator.CrossFade(AnimStateConstants.JUMP_START, 0.1f);
+                    _animator.CrossFade(AnimStateConstants.JUMP_START,0.1f);
                     Debug.Log("Jump Rising - Playing JumpStart");
                 }
             }
@@ -77,7 +83,7 @@ namespace BS.GameObjects
                 if (_isJumpRising)
                 {
                     _isJumpRising = false;
-                    _animator.CrossFade(AnimStateConstants.JUMP_END, 0.1f);
+                    _animator.CrossFade(AnimStateConstants.JUMP_END,0.1f);
                     Debug.Log("Jump Falling - Playing JumpEnd");
                 }
             }
@@ -108,6 +114,23 @@ namespace BS.GameObjects
                 _animator.SetBool(AnimParamConstants.IS_JUMPING, _isJumping);
                 Debug.Log("Landed on ground");
             }
+            else
+            {
+                Debug.Log("Enter Collision : " + collision.gameObject.name);
+
+                if (_isAlive && collision.gameObject.CompareTag(Constrants.TAG_ENERMY))
+                {
+                    if (!_isHit)
+                    {
+                        if(collision.gameObject.TryGetComponent<AbstractEnermy>(out var enemyCharacter))
+                        {
+                            TakeDamage(enemyCharacter.CurrentDamage);
+                            UISystem.Instance.GetPresenter<HUDUIPresenter>().TakeDamage(enemyCharacter.CurrentDamage);
+                            StartHitInvincible(0.33f).Forget();
+                        }
+                    }
+                }
+            }
         }
 
         private void OnDestroy()
@@ -117,6 +140,13 @@ namespace BS.GameObjects
                 _attackResetCTS.Cancel();
                 _attackResetCTS.Dispose();
                 _attackResetCTS = null;
+            }
+
+            if (_hitInvincibleCTS != null)
+            {
+                _hitInvincibleCTS.Cancel();
+                _hitInvincibleCTS.Dispose();
+                _hitInvincibleCTS = null;
             }
         }
 
@@ -130,14 +160,14 @@ namespace BS.GameObjects
 
             if (currentTime - _lastAttackTime > _comboWindowTime)
             {
-                _currentComboCount = 0;
+                _currentComboCount =0;
             }
 
             _currentComboCount++;
 
             if (_currentComboCount > MAX_COMBO_COUNT)
             {
-                _currentComboCount = 1;
+                _currentComboCount =1;
             }
 
             _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, _currentComboCount);
@@ -160,7 +190,7 @@ namespace BS.GameObjects
             // DESC :: 공격 방향 설정
             Vector2 viewDirection = _mover.ViewDirection;
 
-            if (viewDirection.sqrMagnitude < 0.001f)
+            if (viewDirection.sqrMagnitude <0.001f)
             {
                 viewDirection = Vector2.right;
             }
@@ -172,7 +202,7 @@ namespace BS.GameObjects
             MeleeAttackColider.SetMeleeDamage(_currentAttackDamage)
                 .SetPosition(_spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _currentAttackRange))
                 .SetOwnerCharacter(this)
-                .SetSize(new Vector2(_currentAttackRange, 1.0f))
+                .SetSize(new Vector2(_currentAttackRange,1.0f))
                 .SetActiveTime(0.33f)
                 .SetActiveColider(true);
         }
@@ -182,7 +212,7 @@ namespace BS.GameObjects
         /// </summary>
         private async UniTaskVoid ApplyAttackForwardMovement(Vector2 direction)
         {
-            if (_attackForwardDistance <= 0f || _attackForwardDuration <= 0f)
+            if (_attackForwardDistance <=0f || _attackForwardDuration <=0f)
                 return;
 
             try
@@ -190,7 +220,7 @@ namespace BS.GameObjects
                 Vector3 startPosition = transform.position;
                 Vector3 targetPosition = startPosition + (Vector3)(direction.normalized * _attackForwardDistance);
                 
-                float elapsedTime = 0f;
+                float elapsedTime =0f;
 
                 while (elapsedTime < _attackForwardDuration)
                 {
@@ -222,11 +252,11 @@ namespace BS.GameObjects
                 AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
                 
                 float animationLength = stateInfo.length;
-                await UniTask.Delay(TimeSpan.FromSeconds(animationLength * 0.9f), 
+                await UniTask.Delay(TimeSpan.FromSeconds(animationLength *0.9f), 
                     cancellationToken: cancellationToken, 
                     cancelImmediately: true);
 
-                _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, 0);
+                _animator.SetInteger(AnimParamConstants.ATTACK_COUNT,0);
                 _isAttacking = false;
 
                 Debug.Log("Attack State Reset");
@@ -289,8 +319,8 @@ namespace BS.GameObjects
         public override void TakeDamage(float amount)
         {
             base.TakeDamage(amount);
-            ScreenSystem.Instance.ShakeCamera(0.25f, 0.2f, 1);
-            UISystem.Instance.FlashScreen(Color.red, 0.3f);
+            ScreenSystem.Instance.ShakeCamera(0.25f,0.2f,1);
+            UISystem.Instance.FlashScreen(Color.red,0.3f);
             Debug.Log("Night Character Take Damage!");
         }
 
@@ -301,6 +331,36 @@ namespace BS.GameObjects
                 DataSystem.Instance.AddReward(rewardableObject);
                 var destScreenPos = UISystem.Instance.GetPresenter<HUDUIPresenter>().GetGoldImageScreenPos();
                 RewardableObjectSystem.Instance.PlayGainRewardEffect(rewardableObject, destScreenPos);
+            }
+        }
+
+        /// <summary>
+        /// 피격 무적 시작 (duration 동안 추가 접촉 데미지 무시)
+        /// </summary>
+        private async UniTaskVoid StartHitInvincible(float duration)
+        {
+            if (_hitInvincibleCTS != null)
+            {
+                _hitInvincibleCTS.Cancel();
+                _hitInvincibleCTS.Dispose();
+                _hitInvincibleCTS = null;
+            }
+
+            _hitInvincibleCTS = new CancellationTokenSource();
+
+            _isHit = true;
+
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: _hitInvincibleCTS.Token, cancelImmediately: true);
+            }
+            catch (OperationCanceledException)
+            {
+                // ignore
+            }
+            finally
+            {
+                _isHit = false;
             }
         }
     }

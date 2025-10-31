@@ -126,10 +126,11 @@ namespace BS.GameObjects
             if (_isAlive)
             {
                 _currentHealth = _currentHealth - amount;
+                Color floatColor = this.gameObject.CompareTag(Constrants.TAG_PLAYER) ? Color.blue : Color.red;
                 DamageFloatingSystem.Instance.GetDamageFloating
                 (
                     damageValue: amount,
-                    color: Color.red,
+                    color: floatColor,
                     startSize: 5.0f,
                     endTweenSize: 7.0f,
                     position: this.transform.position + new Vector3(0, 1.0f, 0)

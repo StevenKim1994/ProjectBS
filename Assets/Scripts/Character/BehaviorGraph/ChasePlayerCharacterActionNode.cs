@@ -21,8 +21,12 @@ public class ChasePlayerCharacterActionNode : Action
         {
             _currentEnermy.Value = enermy;
         }
+        else
+        {
+            _currentEnermy.Value = GameObject.GetComponent<AbstractEnermy>();
+        }
 
-        if(_agent.GetVariable<Transform>("Target", out var target))
+        if (_agent.GetVariable<Transform>("Target", out var target))
         {
             _target.Value = target;
         }

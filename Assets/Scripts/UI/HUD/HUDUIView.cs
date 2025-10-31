@@ -19,5 +19,13 @@ namespace BS.UI
         [SerializeField]
         private Image _goldIconImage;
         public Image GoldIconImage => _goldIconImage;
+
+        [SerializeField]
+        private Slider _hpStateSlider;
+        public Slider HPStateSlider => _hpStateSlider;
+
+        [SerializeField]
+        private Image _hpStateMinusPerformImage;
+        public Image HPStateMinusPerformImage => _hpStateMinusPerformImage;
     }
 }

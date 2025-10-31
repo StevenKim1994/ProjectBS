@@ -9,6 +9,10 @@ namespace BS.GameObjects
         public float Health => _health;
 
         [SerializeField]
+        private float _damage;
+        public float Damage => _damage;
+
+        [SerializeField]
         private float _mana;
         public float Mana => _mana;
 

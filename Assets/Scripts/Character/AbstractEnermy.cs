@@ -19,13 +19,17 @@ namespace BS.GameObjects
         protected ObjectPool<AbstractEnermy> _parentPool;
         public ObjectPool<AbstractEnermy> ParentPool => _parentPool;
 
+        protected float _currentDamage;
+        public float CurrentDamage => _currentDamage;
+
         protected override void Awake()
         {
             base.Awake();
 
             _currentHealth = Ability.Health;
+            _currentDamage = Ability.Damage;
 
-            if(_behaviorAgent == null)
+            if (_behaviorAgent == null)
             {
                 _behaviorAgent = TryGetComponent<BehaviorGraphAgent>(out var agent) ? agent : null;
             }

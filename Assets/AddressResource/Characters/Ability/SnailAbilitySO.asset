@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SnailAbilitySO
   m_EditorClassIdentifier: Assembly-CSharp::BS.GameObjects.SnailAbility
   _health: 25
+  _damage: 11
   _mana: 0
   _maxHealth: 25
   _maxMana: 0

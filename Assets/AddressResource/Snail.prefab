@@ -184,7 +184,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.005378723, y: 0.11431503}
+  m_Offset: {x: -0.0006637573, y: 0.22056961}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -194,7 +194,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.30064392, y: 0.24416351}
+  m_Size: {x: 0.5556488, y: 0.45667267}
   m_EdgeRadius: 0
 --- !u!50 &142884648112100216
 Rigidbody2D:
@@ -222,7 +222,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &1876115208345790512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +243,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 142884648112100216}
   _colider: {fileID: 8223519161197682856}
   _attachedDamageColider: {fileID: 0}
+  _spawnPoint: {fileID: 0}
   _behaviorAgent: {fileID: 2170636258439640378}
 --- !u!114 &2170636258439640378
 MonoBehaviour:

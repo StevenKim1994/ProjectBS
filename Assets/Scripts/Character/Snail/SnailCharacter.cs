@@ -27,5 +27,10 @@ namespace BS.GameObjects
         {
             base.Die();
         }
+
+        public override void Attack()
+        {
+            // DESC :: 달팽이는 공격기능이 없으므로 base호출 안함.
+        }
     }
 }
