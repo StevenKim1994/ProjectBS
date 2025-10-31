@@ -30,7 +30,8 @@ namespace BS.Common
         public const string DIE = "Die";
         public const string HIT = "Hit";
         public const string IDLE = "Idle";
-        public const string JUMP = "Jump";
+        public const string JUMP_END = "JumpEnd";
+        public const string JUMP_START = "JumpStart";
         public const string MOVE = "Move";
     }
 }

@@ -18,12 +18,28 @@ namespace BS.GameObjects
         // DESC :: 콤보 시스템 관련 변수
         private int _currentComboCount = 0;
         private float _lastAttackTime = -999f;
-        private bool _isAttacking = false; // 공격 중인지 확인
+        private bool _isAttacking = false;
         private CancellationTokenSource _attackResetCTS;
 
         [SerializeField]
-        private float _comboWindowTime = 1.0f; // 콤보 유지 시간 (초)
-        private const int MAX_COMBO_COUNT = 2; // 최대 콤보 수 (Attack1, Attack2)
+        private float _comboWindowTime = 1.0f;
+        private const int MAX_COMBO_COUNT = 2;
+
+        // DESC :: 공격 시 전진 관련 변수
+        [Header("Attack Movement Settings")]
+        [SerializeField]
+        private float _attackForwardDistance = 0.5f; // 공격 시 전진 거리
+        [SerializeField]
+        private float _attackForwardDuration = 0.15f; // 전진 시간 (애니메이션 초반에만)
+        [SerializeField]
+        private AnimationCurve _attackMovementCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f); // 전진 곡선
+
+        // DESC :: 점프 애니메이션 관련 변수
+        [Header("Jump Animation Settings")]
+        [SerializeField]
+        private float _jumpVelocityThreshold = 0.1f;
+        private bool _isJumping = false;
+        private bool _isJumpRising = false;
 
         protected override void Awake()
         {
@@ -35,9 +51,67 @@ namespace BS.GameObjects
             _animator.SetFloat(AnimParamConstants.ATTACK_SPEED, 0.5f);
         }
 
+        private void Update()
+        {
+            if (_isJumping)
+            {
+                UpdateJumpAnimation();
+            }
+        }
+
+        private void UpdateJumpAnimation()
+        {
+            float verticalVelocity = _rigidbody.linearVelocity.y;
+
+            if (verticalVelocity > _jumpVelocityThreshold)
+            {
+                if (!_isJumpRising)
+                {
+                    _isJumpRising = true;
+                    _animator.CrossFade(AnimStateConstants.JUMP_START, 0.1f);
+                    Debug.Log("Jump Rising - Playing JumpStart");
+                }
+            }
+            else if (verticalVelocity < -_jumpVelocityThreshold)
+            {
+                if (_isJumpRising)
+                {
+                    _isJumpRising = false;
+                    _animator.CrossFade(AnimStateConstants.JUMP_END, 0.1f);
+                    Debug.Log("Jump Falling - Playing JumpEnd");
+                }
+            }
+        }
+
+        public override void Jump()
+        {
+            if (!_isAlive) return;
+
+            base.Jump();
+
+            _isJumping = true;
+            _isJumpRising = true;
+
+            _animator.SetBool(AnimParamConstants.IS_JUMPING, _isJumping);
+
+            Debug.Log("Jump Started - Playing JumpStart");
+        }
+
+        protected override void OnCollisionEnter2D(Collision2D collision)
+        {
+            base.OnCollisionEnter2D(collision);
+
+            if (_isAlive && collision.gameObject.CompareTag(Constrants.TAG_GROUND))
+            {
+                _isJumping = false;
+                _isJumpRising = false;
+                _animator.SetBool(AnimParamConstants.IS_JUMPING, _isJumping);
+                Debug.Log("Landed on ground");
+            }
+        }
+
         private void OnDestroy()
         {
-            // DESC :: 오브젝트 파괴 시 CancellationToken 정리
             if (_attackResetCTS != null)
             {
                 _attackResetCTS.Cancel();
@@ -48,41 +122,32 @@ namespace BS.GameObjects
 
         public override void Attack()
         {
-            // DESC :: 공격 중일 때는 입력 무시
             if (_isAttacking) return;
 
             base.Attack();
 
-            // DESC :: 콤보 시스템 처리
             float currentTime = Time.time;
 
-            // DESC :: 마지막 공격으로부터 일정 시간이 지났으면 콤보 초기화
             if (currentTime - _lastAttackTime > _comboWindowTime)
             {
                 _currentComboCount = 0;
             }
 
-            // DESC :: 콤보 카운트 증가
             _currentComboCount++;
 
-            // DESC :: 최대 콤보 수를 넘으면 다시 1로 리셋
             if (_currentComboCount > MAX_COMBO_COUNT)
             {
                 _currentComboCount = 1;
             }
 
-            // DESC :: 애니메이터에 콤보 카운트 전달
             _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, _currentComboCount);
 
-            // DESC :: 마지막 공격 시간 업데이트
             _lastAttackTime = currentTime;
 
             Debug.Log($"Attack Combo: {_currentComboCount}");
 
-            // DESC :: 공격 애니메이션 길이만큼 대기 후 리셋
             _isAttacking = true;
             
-            // DESC :: 이전 CancellationToken이 있으면 취소
             if (_attackResetCTS != null)
             {
                 _attackResetCTS.Cancel();
@@ -92,15 +157,18 @@ namespace BS.GameObjects
             _attackResetCTS = new CancellationTokenSource();
             ResetAttackStateAsync(_attackResetCTS.Token).Forget();
 
-            // DESC :: ViewDirection 방향으로 공격 위치 설정
+            // DESC :: 공격 방향 설정
             Vector2 viewDirection = _mover.ViewDirection;
 
-            // DESC :: ViewDirection이 0인 경우 기본 방향 설정 (오른쪽)
             if (viewDirection.sqrMagnitude < 0.001f)
             {
                 viewDirection = Vector2.right;
             }
 
+            // DESC :: 공격 시 전진 효과 적용
+            ApplyAttackForwardMovement(viewDirection).Forget();
+
+            // DESC :: 공격 콜라이더 설정
             MeleeAttackColider.SetMeleeDamage(_currentAttackDamage)
                 .SetPosition(_spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _currentAttackRange))
                 .SetOwnerCharacter(this)
@@ -109,20 +177,55 @@ namespace BS.GameObjects
                 .SetActiveColider(true);
         }
 
+        /// <summary>
+        /// 공격 시 앞으로 전진하는 효과 (UniTask 사용)
+        /// </summary>
+        private async UniTaskVoid ApplyAttackForwardMovement(Vector2 direction)
+        {
+            if (_attackForwardDistance <= 0f || _attackForwardDuration <= 0f)
+                return;
+
+            try
+            {
+                Vector3 startPosition = transform.position;
+                Vector3 targetPosition = startPosition + (Vector3)(direction.normalized * _attackForwardDistance);
+                
+                float elapsedTime = 0f;
+
+                while (elapsedTime < _attackForwardDuration)
+                {
+                    elapsedTime += Time.deltaTime;
+                    float normalizedTime = Mathf.Clamp01(elapsedTime / _attackForwardDuration);
+                    
+                    // DESC :: AnimationCurve를 사용하여 부드러운 이동
+                    float curveValue = _attackMovementCurve.Evaluate(normalizedTime);
+                    Vector3 newPosition = Vector3.Lerp(startPosition, targetPosition, curveValue);
+                    
+                    transform.position = newPosition;
+
+                    await UniTask.Yield(PlayerLoopTiming.Update);
+                }
+
+                // DESC :: 최종 위치 보정
+                transform.position = targetPosition;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Attack forward movement cancelled: {e.Message}");
+            }
+        }
+
         private async UniTaskVoid ResetAttackStateAsync(CancellationToken cancellationToken)
         {
             try
             {
-                // DESC :: 현재 재생 중인 애니메이션 정보 가져오기
                 AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
                 
-                // DESC :: 애니메이션 길이만큼 대기 (약간의 여유 시간 추가)
                 float animationLength = stateInfo.length;
                 await UniTask.Delay(TimeSpan.FromSeconds(animationLength * 0.9f), 
                     cancellationToken: cancellationToken, 
                     cancelImmediately: true);
 
-                // DESC :: AttackCount를 0으로 리셋하여 Idle로 돌아갈 수 있게 함
                 _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, 0);
                 _isAttacking = false;
 
@@ -130,7 +233,6 @@ namespace BS.GameObjects
             }
             catch (OperationCanceledException)
             {
-                // DESC :: 취소된 경우 무시
                 Debug.Log("Attack Reset Cancelled");
             }
         }
@@ -139,7 +241,6 @@ namespace BS.GameObjects
         {
             base.Die();
 
-            // DESC :: 사망 시 공격 상태 리셋 취소
             if (_attackResetCTS != null)
             {
                 _attackResetCTS.Cancel();
