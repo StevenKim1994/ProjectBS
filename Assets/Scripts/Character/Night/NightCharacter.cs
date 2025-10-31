@@ -2,6 +2,9 @@
 using BS.System;
 using BS.Common;
 using BS.UI;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System;
 
 namespace BS.GameObjects
 {
@@ -15,6 +18,9 @@ namespace BS.GameObjects
         // DESC :: 콤보 시스템 관련 변수
         private int _currentComboCount = 0;
         private float _lastAttackTime = -999f;
+        private bool _isAttacking = false; // 공격 중인지 확인
+        private CancellationTokenSource _attackResetCTS;
+
         [SerializeField]
         private float _comboWindowTime = 1.0f; // 콤보 유지 시간 (초)
         private const int MAX_COMBO_COUNT = 2; // 최대 콤보 수 (Attack1, Attack2)
@@ -26,10 +32,25 @@ namespace BS.GameObjects
 
             _currentAttackRange = _castingAbility.AttackRange;
             _currentAttackDamage = _castingAbility.AttackDamage;
+            _animator.SetFloat(AnimParamConstants.ATTACK_SPEED, 0.5f);
+        }
+
+        private void OnDestroy()
+        {
+            // DESC :: 오브젝트 파괴 시 CancellationToken 정리
+            if (_attackResetCTS != null)
+            {
+                _attackResetCTS.Cancel();
+                _attackResetCTS.Dispose();
+                _attackResetCTS = null;
+            }
         }
 
         public override void Attack()
         {
+            // DESC :: 공격 중일 때는 입력 무시
+            if (_isAttacking) return;
+
             base.Attack();
 
             // DESC :: 콤보 시스템 처리
@@ -58,6 +79,19 @@ namespace BS.GameObjects
 
             Debug.Log($"Attack Combo: {_currentComboCount}");
 
+            // DESC :: 공격 애니메이션 길이만큼 대기 후 리셋
+            _isAttacking = true;
+            
+            // DESC :: 이전 CancellationToken이 있으면 취소
+            if (_attackResetCTS != null)
+            {
+                _attackResetCTS.Cancel();
+                _attackResetCTS.Dispose();
+            }
+            
+            _attackResetCTS = new CancellationTokenSource();
+            ResetAttackStateAsync(_attackResetCTS.Token).Forget();
+
             // DESC :: ViewDirection 방향으로 공격 위치 설정
             Vector2 viewDirection = _mover.ViewDirection;
 
@@ -75,9 +109,43 @@ namespace BS.GameObjects
                 .SetActiveColider(true);
         }
 
+        private async UniTaskVoid ResetAttackStateAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                // DESC :: 현재 재생 중인 애니메이션 정보 가져오기
+                AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+                
+                // DESC :: 애니메이션 길이만큼 대기 (약간의 여유 시간 추가)
+                float animationLength = stateInfo.length;
+                await UniTask.Delay(TimeSpan.FromSeconds(animationLength * 0.9f), 
+                    cancellationToken: cancellationToken, 
+                    cancelImmediately: true);
+
+                // DESC :: AttackCount를 0으로 리셋하여 Idle로 돌아갈 수 있게 함
+                _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, 0);
+                _isAttacking = false;
+
+                Debug.Log("Attack State Reset");
+            }
+            catch (OperationCanceledException)
+            {
+                // DESC :: 취소된 경우 무시
+                Debug.Log("Attack Reset Cancelled");
+            }
+        }
+
         public override void Die()
         {
             base.Die();
+
+            // DESC :: 사망 시 공격 상태 리셋 취소
+            if (_attackResetCTS != null)
+            {
+                _attackResetCTS.Cancel();
+                _attackResetCTS.Dispose();
+                _attackResetCTS = null;
+            }
 
             Debug.Log("Night Character Die!");
         }
