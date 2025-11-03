@@ -34,5 +34,13 @@ ShaderVariantCollection:
   - first: {fileID: 4800000, guid: 96246b1ead49a4c5a996fd477bc5a117, type: 3}
     second:
       variants:
+      - keywords: GRADATION_GRADIENT
+        passType: 0
+      - keywords: SAMPLING_PIXELATION TRANSITION_MELT
+        passType: 0
       - keywords: TONE_GRAYSCALE
+        passType: 0
+      - keywords: TRANSITION_MELT
+        passType: 0
+      - keywords: TRANSITION_PATTERN
         passType: 0

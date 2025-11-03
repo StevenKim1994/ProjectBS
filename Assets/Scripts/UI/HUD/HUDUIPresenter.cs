@@ -50,14 +50,20 @@ namespace BS.UI
                 _hpMinusTweener.Kill(true);
             }
 
+            _view.HPStateMinusPerformImage.gameObject.SetActive(true);
             _hpMinusTweener = _view.HPStateMinusPerformImage.DOFillAmount(1f - diffSize, HP_MINUS_DURATION)
                 .SetDelay(HP_MINUS_DELAY)
                 .SetEase(Ease.OutQuad)
-                .SetUpdate(false);
+                .SetUpdate(false)
+                .OnComplete(() =>
+                 {
+                     _view.HPStateMinusPerformImage.gameObject.SetActive(false);
+                 });
         }
 
         public override void Show()
         {
+            _view.HPStateMinusPerformImage.gameObject.SetActive(false);
             base.Show();
         }
 

@@ -16,7 +16,10 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_ABILITY_NIGHT_ABILITY_SO_ASSET = "Assets/AddressResource/Characters/Ability/NightAbilitySO.asset";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_ABILITY_SCARE_CROW_ABILITY_SO_ASSET = "Assets/AddressResource/Characters/Ability/ScareCrowAbilitySO.asset";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_ABILITY_SNAIL_ABILITY_SO_ASSET = "Assets/AddressResource/Characters/Ability/SnailAbilitySO.asset";
+ public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_ATTACK1_ANIM = "Assets/AddressResource/Characters/Attack1.anim";
+ public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_ATTACK2_ANIM = "Assets/AddressResource/Characters/Attack2.anim";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_BEHAVIOR_GRAPH_SNAIL_BEHAVIOR_GRAPH_ASSET = "Assets/AddressResource/Characters/BehaviorGraph/SnailBehaviorGraph.asset";
+ public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_DIE_ANIM = "Assets/AddressResource/Characters/Die.anim";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_NIGHT_INPUT_ASSET_INPUTACTIONS = "Assets/AddressResource/Characters/NightInputAsset.inputactions";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_NIGHT_ATTACK_ANIM = "Assets/AddressResource/Characters/ResourceAsset/Night/Attack.anim";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_NIGHT_DIE_ANIM = "Assets/AddressResource/Characters/ResourceAsset/Night/Die.anim";
@@ -34,6 +37,8 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_NIGHT_NIGHT_BORNE_RUN_GIF = "Assets/AddressResource/Characters/ResourceAsset/Night/NightBorne_run.gif";
  public const string ASSETS_ADDRESS_RESOURCE_DAMAGE_COLIDER_PREFAB = "Assets/AddressResource/DamageColider.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_FLOATING_DAMAGE_FLOATING_PREFAB = "Assets/AddressResource/Floating/DamageFloating.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_FONT_PIXEL_GAME_SDF_ASSET = "Assets/AddressResource/Font/Pixel Game SDF.asset";
+ public const string ASSETS_ADDRESS_RESOURCE_FONT_PIXEL_GAME_OTF = "Assets/AddressResource/Font/Pixel Game.otf";
  public const string ASSETS_ADDRESS_RESOURCE_GAME_SYSTEM_PREFAB = "Assets/AddressResource/GameSystem.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_IMAGE_COIN_1_PNG = "Assets/AddressResource/Image/coin_1.png";
  public const string ASSETS_ADDRESS_RESOURCE_NIGHT_PREFAB = "Assets/AddressResource/Night.prefab";
@@ -41,6 +46,7 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_PROPS_GOLD_COIN_PREFAB = "Assets/AddressResource/Props/GoldCoin.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SCARE_CROW_PREFAB = "Assets/AddressResource/ScareCrow.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SNAIL_PREFAB = "Assets/AddressResource/Snail.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_UI_GAME_OVER_PREFAB = "Assets/AddressResource/UI/GameOver.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_HUD_PREFAB = "Assets/AddressResource/UI/HUD.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_TITLE_PREFAB = "Assets/AddressResource/UI/Title.prefab";
  }

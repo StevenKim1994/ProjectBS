@@ -5,30 +5,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Coffee.UIEffects;
 using BS.System;
+using UnityEngine.EventSystems;
 
 namespace BS.UI
 {
     public class TitlePresenter : AbstractUIPresenter<TitleView>
     {
-        private CancellationTokenSource _delayCTS;
-
         protected override void PreShow()
         {
-            View.LogoCanvasGroup.alpha = 0f;
+            View.CanvasGroup.interactable = true;
+            View.BackgroundUIEffect.SetRate(0f, UIEffectTweener.CullingMask.Transition);
+            View.BackgroundUIEffectTweener.SetPause(true);
+            View.BackgroundUIEffectTweener.ResetTime(UIEffectTweener.Direction.Forward);
             base.PreShow();
         }
 
         public override void Show()
         {
             PreShow();
-            _viewShowTweener = View.LogoCanvasGroup.DOFade(1f, 1.5f)
-                .SetEase(Ease.InOutSine)
-                .SetUpdate(true)
-                .OnComplete(()=>
-                {
-                    PostShow();
-                });
+            EventSystem.current.SetSelectedGameObject(View.StartButton.gameObject);
+            PostShow();
         }
 
         protected override void PostShow()
@@ -38,19 +36,27 @@ namespace BS.UI
 
         public override void Hide()
         {
+            View.CanvasGroup.interactable = false;
             TimeSystem.Instance.TimeSpeedUp(1.0f);
-            _viewHideTweener = View.CanvasGroup.DOFade(0f, 0.5f).SetEase(View.HideEaseType).OnComplete(() =>
-            {
-                base.Hide();
-            });
+       
+            View.BackgroundUIEffectTweener.PlayForward(true);
         }
 
         protected override void BindEvents()
         {
             base.BindEvents();
+            View.BackgroundUIEffectTweener.onComplete.AddListener(() =>
+            {
+                View.gameObject.SetActive(false);
+            });
             View.StartButton.onClick.AddListener(() =>
             {
+                GameSequenceSystem.Instance.SetGameStepState(GameStepState.Playing);
                 Hide();
+            });
+            View.ExitButton.onClick.AddListener(() =>
+            {
+                Application.Quit();
             });
         }
     }

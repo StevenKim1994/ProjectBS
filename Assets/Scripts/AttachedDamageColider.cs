@@ -81,6 +81,12 @@ namespace BS.GameObjects
             return this;
         }
 
+        public AttachedDamageColider SetActive(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+            return this;
+        }
+
         private UniTask DeactiveTimer(float time, CancellationToken token)
         {
             return UniTask.Delay(TimeSpan.FromSeconds(time), cancelImmediately: true, cancellationToken: token).ContinueWith(() =>

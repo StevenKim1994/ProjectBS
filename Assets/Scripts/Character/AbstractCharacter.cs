@@ -56,6 +56,14 @@ namespace BS.GameObjects
         protected bool _isAlive = true;
         public bool IsAlive => _isAlive;
 
+        public virtual void SetAttackDamageColliderActive(bool isActive)
+        {
+            if (_attachedDamageColider != null)
+            {
+                _attachedDamageColider.SetActive(isActive);
+            }
+        }
+
         protected virtual void Awake()
         {
             Initialize();
@@ -217,13 +225,17 @@ namespace BS.GameObjects
 
         protected virtual void OnCollisionStay2D(Collision2D collision)
         {
-            Debug.Log("Stay Collision : " + collision.gameObject.name);
+            //Debug.Log("Stay Collision : " + collision.gameObject.name);
         }
 
         protected virtual void OnCollisionExit2D(Collision2D collision)
         {
-            Debug.Log("Exit Collision : " + collision.gameObject.name);
+            //Debug.Log("Exit Collision : " + collision.gameObject.name);
         }
 
+        public virtual void ResetAttackCombo()
+        {
+            _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, 0);
+        }
     }
 }

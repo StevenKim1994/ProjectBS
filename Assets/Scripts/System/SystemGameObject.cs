@@ -58,6 +58,7 @@ namespace BS.GameObjects
             _systems.Add(typeof(RewardableObjectSystem), new RewardableObjectSystem());
             _systems.Add(typeof(ProjectileSystem), new ProjectileSystem());
             _systems.Add(typeof(TimeSystem), new TimeSystem());
+            _systems.Add(typeof(GameSequenceSystem), new GameSequenceSystem());
         }
 
         public void LoadAllSystems()

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Coffee.UIEffects;
 using BS.Common;
 
 namespace BS.UI
@@ -9,16 +10,24 @@ namespace BS.UI
     public class TitleView : AbstractUIView
     {
         [SerializeField]
-        private CanvasGroup _logoCanvasGroup;
-        public CanvasGroup LogoCanvasGroup => _logoCanvasGroup;
-
-        [SerializeField]
         private TextMeshProUGUI _titleText;
         public TextMeshProUGUI TitleText => _titleText;
 
         [SerializeField]
         private Button _startButton;
         public Button StartButton => _startButton;
+
+        [SerializeField]
+        private Button _exitButton;
+        public Button ExitButton => _exitButton;
+
+        [SerializeField]
+        private UIEffect _bgUIEffect;
+        public UIEffect BackgroundUIEffect => _bgUIEffect;
+
+        [SerializeField]
+        private UIEffectTweener _bgTweener;
+        public UIEffectTweener BackgroundUIEffectTweener => _bgTweener;
 
     }
 }

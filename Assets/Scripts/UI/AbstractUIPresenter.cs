@@ -86,16 +86,24 @@ namespace BS.UI
 
         public virtual void Show()
         {
-            _viewShowTweener = DOTween.To(() => _view.CanvasGroup.alpha, x => _view.CanvasGroup.alpha = x, 1f, 0.5f)
-                .OnStart(()=>
-                {
-                   PreShow();
-                })
-                .SetEase(_view.ShowEaseType)
-                .OnComplete(() => 
-                {
-                    PostShow();
-                });
+            if (_view.CanvasGroup != null)
+            {
+                _viewShowTweener = DOTween.To(() => _view.CanvasGroup.alpha, x => _view.CanvasGroup.alpha = x, 1f, 0.5f)
+                    .OnStart(() =>
+                    {
+                        PreShow();
+                    })
+                    .SetEase(_view.ShowEaseType)
+                    .OnComplete(() =>
+                    {
+                        PostShow();
+                    });
+            }
+            else
+            {
+                PreShow();
+                PostShow();
+            }
         }
 
         protected virtual void PreShow()
@@ -121,16 +129,24 @@ namespace BS.UI
 
         public virtual void Hide()
         {
-            _viewHideTweener = DOTween.To(() => _view.CanvasGroup.alpha, x => _view.CanvasGroup.alpha = x, 0f, 0.5f)
-                .OnStart(()=>
-                {
-                   PreHide();
-                })
-                .SetEase(_view.HideEaseType)
-                .OnComplete(() => 
-                {
-                    PostHide();
-                });
+            if (_view.CanvasGroup != null)
+            {
+                _viewHideTweener = DOTween.To(() => _view.CanvasGroup.alpha, x => _view.CanvasGroup.alpha = x, 0f, 0.5f)
+                    .OnStart(() =>
+                    {
+                        PreHide();
+                    })
+                    .SetEase(_view.HideEaseType)
+                    .OnComplete(() =>
+                    {
+                        PostHide();
+                    });
+            }
+            else
+            {
+                PreHide();
+                PostHide();
+            }
         }
 
         protected virtual void PreHide()

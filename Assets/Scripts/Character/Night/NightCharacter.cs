@@ -18,8 +18,6 @@ namespace BS.GameObjects
         // DESC :: 콤보 시스템 관련 변수
         private int _currentComboCount =0;
         private float _lastAttackTime = -999f;
-        private bool _isAttacking = false;
-        private CancellationTokenSource _attackResetCTS;
 
         [SerializeField]
         private float _comboWindowTime =1.0f;
@@ -55,6 +53,20 @@ namespace BS.GameObjects
             _currentAttackRange = _castingAbility.AttackRange;
             _currentAttackDamage = _castingAbility.AttackDamage;
             _animator.SetFloat(AnimParamConstants.ATTACK_SPEED,0.5f);
+        }
+
+        public override void SetAttackDamageColliderActive(bool isActive)
+        {
+            if (isActive)
+            {
+                MeleeAttackColider.SetMeleeDamage(_currentAttackDamage)
+                .SetPosition(_spriteRenderer.transform.position + (Vector3)(_mover.ViewDirection.normalized * _currentAttackRange))
+                .SetOwnerCharacter(this)
+                .SetSize(new Vector2(_currentAttackRange, 1.0f))
+                .SetActiveTime(0.33f)
+                .SetActiveColider(true);
+            }
+            base.SetAttackDamageColliderActive(isActive);
         }
 
         private void Update()
@@ -135,13 +147,6 @@ namespace BS.GameObjects
 
         private void OnDestroy()
         {
-            if (_attackResetCTS != null)
-            {
-                _attackResetCTS.Cancel();
-                _attackResetCTS.Dispose();
-                _attackResetCTS = null;
-            }
-
             if (_hitInvincibleCTS != null)
             {
                 _hitInvincibleCTS.Cancel();
@@ -150,10 +155,15 @@ namespace BS.GameObjects
             }
         }
 
+        public override void ResetAttackCombo()
+        {
+            base.ResetAttackCombo();
+            _currentComboCount = 0;
+            _attackMovementCurve.Evaluate(0f);
+        }
+
         public override void Attack()
         {
-            if (_isAttacking) return;
-
             base.Attack();
 
             float currentTime = Time.time;
@@ -170,50 +180,33 @@ namespace BS.GameObjects
                 _currentComboCount =1;
             }
 
-            _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, _currentComboCount);
 
             _lastAttackTime = currentTime;
 
             Debug.Log($"Attack Combo: {_currentComboCount}");
 
-            _isAttacking = true;
-            
-            if (_attackResetCTS != null)
-            {
-                _attackResetCTS.Cancel();
-                _attackResetCTS.Dispose();
-            }
-            
-            _attackResetCTS = new CancellationTokenSource();
-            ResetAttackStateAsync(_attackResetCTS.Token).Forget();
-
-            // DESC :: 공격 방향 설정
-            Vector2 viewDirection = _mover.ViewDirection;
-
-            if (viewDirection.sqrMagnitude <0.001f)
-            {
-                viewDirection = Vector2.right;
-            }
-
-            // DESC :: 공격 시 전진 효과 적용
-            ApplyAttackForwardMovement(viewDirection).Forget();
-
             // DESC :: 공격 콜라이더 설정
+            Vector2 viewDirection = _mover.ViewDirection;
             MeleeAttackColider.SetMeleeDamage(_currentAttackDamage)
                 .SetPosition(_spriteRenderer.transform.position + (Vector3)(viewDirection.normalized * _currentAttackRange))
                 .SetOwnerCharacter(this)
-                .SetSize(new Vector2(_currentAttackRange,1.0f))
-                .SetActiveTime(0.33f)
-                .SetActiveColider(true);
+                .SetSize(new Vector2(_currentAttackRange, 1.0f));
+
+            _animator.SetInteger(AnimParamConstants.ATTACK_COUNT, _currentComboCount);
         }
 
+        public void ForwardAttackMovement()
+        {
+            // DESC :: 공격 시 전진 효과 적용
+            ApplyAttackForwardMovement(_mover.ViewDirection).Forget();
+        }
         /// <summary>
         /// 공격 시 앞으로 전진하는 효과 (UniTask 사용)
         /// </summary>
         private async UniTaskVoid ApplyAttackForwardMovement(Vector2 direction)
         {
-            if (_attackForwardDistance <=0f || _attackForwardDuration <=0f)
-                return;
+            //if (_attackForwardDistance <= 0f || _attackForwardDuration <=0f)
+            //    return;
 
             try
             {
@@ -245,40 +238,10 @@ namespace BS.GameObjects
             }
         }
 
-        private async UniTaskVoid ResetAttackStateAsync(CancellationToken cancellationToken)
-        {
-            try
-            {
-                AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
-                
-                float animationLength = stateInfo.length;
-                await UniTask.Delay(TimeSpan.FromSeconds(animationLength *0.9f), 
-                    cancellationToken: cancellationToken, 
-                    cancelImmediately: true);
-
-                _animator.SetInteger(AnimParamConstants.ATTACK_COUNT,0);
-                _isAttacking = false;
-
-                Debug.Log("Attack State Reset");
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.Log("Attack Reset Cancelled");
-            }
-        }
-
         public override void Die()
         {
             base.Die();
-
-            if (_attackResetCTS != null)
-            {
-                _attackResetCTS.Cancel();
-                _attackResetCTS.Dispose();
-                _attackResetCTS = null;
-            }
-
-            Debug.Log("Night Character Die!");
+            GameSequenceSystem.Instance.SetGameStepState(GameStepState.GameOver);
         }
 
         public AbstractCharacter GetCharacterType()
