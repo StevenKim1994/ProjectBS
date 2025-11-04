@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using BS.GameObjects;
 using BS.Common;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Events;
 
 namespace BS.System
 {
@@ -37,6 +38,11 @@ namespace BS.System
         private bool _downPressed;
 
         private bool _uiInputMode = false;
+
+        private UnityEvent _uiCancelEvent = new UnityEvent();
+        public UnityEvent UICancel => _uiCancelEvent;
+        private UnityEvent _uiSubmitEvent = new UnityEvent();
+        public UnityEvent UISubmit => _uiSubmitEvent;
 
         /// <summary>
         /// UI 전용 인풋모드 활성화 여부
@@ -110,7 +116,10 @@ namespace BS.System
         {
             if(context.performed)
             {
-
+                if(UIInputMode)
+                {
+                    _uiSubmitEvent.Invoke();
+                }
             }
         }
 
@@ -118,10 +127,10 @@ namespace BS.System
         {
             if(context.performed)
             {
-
-                // TODO :: 만약 UI 모드에서 벗어나야 한다면 여기서 처리
-
-
+                if (UIInputMode)
+                {
+                    _uiCancelEvent.Invoke();
+                }
             }
         }
 
@@ -258,6 +267,11 @@ namespace BS.System
             }
 
             _currentPlayableCharacter.Turn(dir);
+        }
+
+        public void SetUISelectGameObjectSelected(GameObject gameObject)
+        {
+            EventSystem.current.SetSelectedGameObject(gameObject);
         }
     }
 }

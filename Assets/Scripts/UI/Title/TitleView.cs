@@ -18,6 +18,10 @@ namespace BS.UI
         public Button StartButton => _startButton;
 
         [SerializeField]
+        private Button _inputGuideButton;
+        public Button InputGuideButton => _inputGuideButton;
+
+        [SerializeField]
         private Button _exitButton;
         public Button ExitButton => _exitButton;
 
@@ -28,6 +32,14 @@ namespace BS.UI
         [SerializeField]
         private UIEffectTweener _bgTweener;
         public UIEffectTweener BackgroundUIEffectTweener => _bgTweener;
+
+        [SerializeField]
+        private RectTransform _buttonRect;
+        public RectTransform ButtonRect => _buttonRect;
+
+        [SerializeField]
+        private RectTransform _inputGuideRect;
+        public RectTransform InputGuideRect => _inputGuideRect;
 
     }
 }
