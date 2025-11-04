@@ -38,6 +38,57 @@ namespace BS.System
         private bool _upPressed;
         private bool _downPressed;
 
+        public bool IsInput
+        {
+            get
+            {
+                return _currentInputAsset.enabled;
+            }
+
+            set
+            {
+                if(value)
+                {
+                    if(_currentInputAsset != null)
+                    {
+                        _currentInputAsset.Enable();
+                    }
+                }
+                else
+                {
+                    if(_currentInputAsset != null)
+                    {
+                        _currentInputAsset.Disable();
+                    }
+                }
+            }
+        }
+
+        public bool IsUIInput
+        {
+            get
+            {
+                return _currentUIInputAsset.enabled;
+            }
+            set
+            {
+                if(value)
+                {
+                    if(_currentUIInputAsset != null)
+                    {
+                        _currentUIInputAsset.Enable();
+                    }
+                }
+                else
+                {
+                    if(_currentUIInputAsset != null)
+                    {
+                        _currentUIInputAsset.Disable();
+                    }
+                }
+            }
+        }
+
         private UnityEvent _uiCancelEvent = new UnityEvent();
         public UnityEvent UICancel => _uiCancelEvent;
         private UnityEvent _uiSubmitEvent = new UnityEvent();

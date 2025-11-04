@@ -51,7 +51,8 @@ namespace BS.System
                 case GameStepState.Playing:
                     {
                         Time.timeScale = 1.0f;
-                        if(UISystem.Instance.IsShowing<PauseUIPresenter>())
+                        InputControlSystem.Instance.IsInput = true;
+                        if (UISystem.Instance.IsShowing<PauseUIPresenter>())
                         {
                             UISystem.Instance.Hide<PauseUIPresenter>();
                         }
@@ -61,6 +62,7 @@ namespace BS.System
 
                 case GameStepState.Paused:
                     {
+                        InputControlSystem.Instance.IsInput = false;
                         // TODO :: 모든 Enermy에 이벤트 보내기 EmermySystem.Instance.PauseAllEnermy();
                         UISystem.Instance.Show<PauseUIPresenter>();
                         Time.timeScale = 0.0f;
@@ -69,6 +71,7 @@ namespace BS.System
 
                 case GameStepState.GameOver:
                     {
+                        InputControlSystem.Instance.IsInput = false;
                         UISystem.Instance.Hide<HUDUIPresenter>();
                         UISystem.Instance.Show<GameOverUIPresenter>();
                     }

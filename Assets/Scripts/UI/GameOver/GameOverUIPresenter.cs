@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Coffee.UIEffects;
+using BS.System;
 
 namespace BS.UI
 {
@@ -22,6 +23,9 @@ namespace BS.UI
         protected override void PreShow()
         {
             base.PreShow();
+
+            InputControlSystem.Instance.SetUISelectGameObjectSelected(_view.RestartButton.gameObject);
+
             _view.GameOverText.gameObject.SetActive(false);
             _view.RestartButton.gameObject.SetActive(false);
 
