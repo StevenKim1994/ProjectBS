@@ -17,6 +17,8 @@
         public const string STR_INPUT_ACTION_UP = "Up";
         public const string STR_INPUT_ACTION_DOWN = "Down";
 
+        public const string STR_UI_CONTROL = "UIControl";
+
         public const string LAYER_ACTOR = "Actor";
         public const string TAG_GROUND= "Ground";
         public const string TAG_PLAYER= "Player";
@@ -24,5 +26,9 @@
         public const string TAG_REWARDABLE ="RewardableObject";
 
         public const string NAME_FLASHIMAGE = "FlashImage";
+
+        public const string STR_UIINPUT_ACTION_CANCEL = "Cancel";
+        public const string STR_UIINPUT_ACTION_SUBMIT = "Submit";
+
     }
 }

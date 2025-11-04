@@ -40,10 +40,8 @@ namespace BS.GameObjects
         private bool _isJumpRising = false;
         private bool _isHit = false;
 
-        // DESC :: 접촉 데미지 및 무적 관련
-        [Header("Contact Damage Settings")]
-        [SerializeField]
         private CancellationTokenSource _hitInvincibleCTS;
+        private CancellationTokenSource _attackForwardCTS;
 
         protected override void Awake()
         {
@@ -168,16 +166,16 @@ namespace BS.GameObjects
 
             float currentTime = Time.time;
 
-            if (currentTime - _lastAttackTime > _comboWindowTime)
+            if (currentTime - _lastAttackTime >= _comboWindowTime)
             {
-                _currentComboCount =0;
+                _currentComboCount = 0;
             }
 
             _currentComboCount++;
 
             if (_currentComboCount > MAX_COMBO_COUNT)
             {
-                _currentComboCount =1;
+                _currentComboCount = 0;
             }
 
 
@@ -198,6 +196,13 @@ namespace BS.GameObjects
         public void ForwardAttackMovement()
         {
             // DESC :: 공격 시 전진 효과 적용
+            if(_attackForwardCTS != null)
+            {
+                _attackForwardCTS.Cancel();
+                _attackForwardCTS.Dispose();
+                _attackForwardCTS = null;
+            }
+            _attackForwardCTS = new CancellationTokenSource();
             ApplyAttackForwardMovement(_mover.ViewDirection).Forget();
         }
         /// <summary>
@@ -226,7 +231,7 @@ namespace BS.GameObjects
                     
                     transform.position = newPosition;
 
-                    await UniTask.Yield(PlayerLoopTiming.Update);
+                    await UniTask.Yield(PlayerLoopTiming.Update, _attackForwardCTS.Token, cancelImmediately: true);
                 }
 
                 // DESC :: 최종 위치 보정

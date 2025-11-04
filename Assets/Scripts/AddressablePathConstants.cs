@@ -49,6 +49,7 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_UI_GAME_OVER_PREFAB = "Assets/AddressResource/UI/GameOver.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_HUD_PREFAB = "Assets/AddressResource/UI/HUD.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_TITLE_PREFAB = "Assets/AddressResource/UI/Title.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_UI_UIINPUT_ACTION_ASSET_INPUTACTIONS = "Assets/AddressResource/UI/UIInputActionAsset.inputactions";
  }
 
  }

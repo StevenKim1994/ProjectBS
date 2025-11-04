@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using BS.GameObjects;
 using BS.Common;
-using System;
+using UnityEngine.InputSystem.UI;
 
 namespace BS.System
 {
@@ -24,15 +26,42 @@ namespace BS.System
 
         public Transform CurrentPlayableTransform => _currentPlayableCharacter.transform;
 
+        private InputSystemUIInputModule _inputSystemUIInputModule;
         private InputActionAsset _currentInputAsset;
+        private InputActionAsset _currentUIInputAsset;
         private AbstractCharacter _currentPlayableCharacter;
-
-
 
         private bool _leftPressed;
         private bool _rightPressed;
         private bool _upPressed;
         private bool _downPressed;
+
+        private bool _uiInputMode = false;
+
+        /// <summary>
+        /// UI 전용 인풋모드 활성화 여부
+        /// </summary>
+        public bool UIInputMode
+        {
+            get => _uiInputMode;
+            set
+            {
+                _uiInputMode = value;
+                if(_currentInputAsset != null)
+                {
+                    if(_uiInputMode)
+                    {
+                        _currentInputAsset.Disable();
+                        _currentUIInputAsset.Enable();
+                    }
+                    else
+                    {
+                        _currentUIInputAsset.Disable();
+                        _currentInputAsset.Enable();
+                    }
+                }
+            }
+        }
 
         public void Load()
         {
@@ -46,12 +75,54 @@ namespace BS.System
 
         private void Initialize()
         {
-
+            _inputSystemUIInputModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
         }
 
         private void Release()
         {
 
+        }
+
+        public void SetUIInputActionAsset(InputActionAsset inputActionAsset)
+        {
+            if(_currentUIInputAsset != null)
+            {
+                _currentUIInputAsset.Disable();
+                _currentUIInputAsset = null;
+            }
+            _currentUIInputAsset = inputActionAsset;
+            _inputSystemUIInputModule.actionsAsset = _currentUIInputAsset;
+
+            var actionMap = _currentUIInputAsset.FindActionMap(Constrants.STR_UI_CONTROL);
+            actionMap.FindAction(Constrants.STR_UIINPUT_ACTION_CANCEL).performed += CancelUIInput;
+            actionMap.FindAction(Constrants.STR_UIINPUT_ACTION_SUBMIT).performed += SubmitUIInput;
+
+            if (_currentUIInputAsset != null)
+            {
+                if(_uiInputMode)
+                {
+                    _currentUIInputAsset.Enable();
+                }
+            }
+        }
+
+        private void SubmitUIInput(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+
+            }
+        }
+
+        private void CancelUIInput(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+
+                // TODO :: 만약 UI 모드에서 벗어나야 한다면 여기서 처리
+
+
+            }
         }
 
         public void SetInputActionAsset(InputActionAsset inputActionAsset)

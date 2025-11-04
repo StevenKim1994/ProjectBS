@@ -8,20 +8,29 @@ namespace BS.Animations
     public class AttackAnimBehaviorState : StateMachineBehaviour
     {
         [SerializeField] private float _damageColiderActiveStartTime = 0.2f;
-        [SerializeField] private Vector2 _damageColiderSize = new Vector2(1f, 1f);
         private AbstractCharacter _cachedCharacter;
 
-        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        public override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
         {
-            if(_cachedCharacter == null)
+            base.OnStateMachineEnter(animator, stateMachinePathHash);
+            if (_cachedCharacter == null)
             {
                 _cachedCharacter = animator.GetComponentInParent<AbstractCharacter>();
 
-                if (_cachedCharacter is NightCharacter nightCharacter)
-                {
-                    nightCharacter.ForwardAttackMovement();
-                }
             }
+        }
+
+        public override void OnStateMachineExit(Animator animator, int stateMachinePathHash)
+        {
+            base.OnStateMachineExit(animator, stateMachinePathHash);
+        }
+
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+           if (_cachedCharacter is NightCharacter nightCharacter)
+           {
+                nightCharacter.ForwardAttackMovement();
+           }
 
             base.OnStateEnter(animator, stateInfo, layerIndex);
         }

@@ -30,6 +30,13 @@ namespace BS.System
 
         }
 
+        public T GetLoadGameAsset<T>(string addressPath) 
+        {
+            var oper = Addressables.LoadAssetAsync<T>(addressPath);
+            oper.WaitForCompletion();
+            return oper.Result;
+        }
+
         public GameObject GetLoadGameObject(string addressPath) 
         {
             var oper = Addressables.LoadAssetAsync<GameObject>(addressPath);
