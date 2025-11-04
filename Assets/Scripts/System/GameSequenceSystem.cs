@@ -50,6 +50,11 @@ namespace BS.System
             {
                 case GameStepState.Playing:
                     {
+                        Time.timeScale = 1.0f;
+                        if(UISystem.Instance.IsShowing<PauseUIPresenter>())
+                        {
+                            UISystem.Instance.Hide<PauseUIPresenter>();
+                        }
                         // TODO :: 모든 Enermy에 이벤트 보내기 EmermySystem.Instance.ResumeAllEnermy();
                     }
                     break;
@@ -57,6 +62,8 @@ namespace BS.System
                 case GameStepState.Paused:
                     {
                         // TODO :: 모든 Enermy에 이벤트 보내기 EmermySystem.Instance.PauseAllEnermy();
+                        UISystem.Instance.Show<PauseUIPresenter>();
+                        Time.timeScale = 0.0f;
                     }
                     break;
 

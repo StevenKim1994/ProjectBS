@@ -1,13 +1,8 @@
-﻿using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using DG.Tweening;
 using Coffee.UIEffects;
 using BS.System;
-using Unity.VisualScripting.FullSerializer;
 
 namespace BS.UI
 {
@@ -19,6 +14,7 @@ namespace BS.UI
 
         private Vector2 _buttonDefaultPos;
         private Vector2 _inputGuideDefaultPos;
+        private UnityAction _escCallbackCache;
 
         private float OffscreenX => Mathf.Max(Screen.width, Screen.height) + 200f;
 
@@ -27,11 +23,16 @@ namespace BS.UI
             base.Init(bindView);
             _buttonDefaultPos = View.ButtonRect.anchoredPosition;
             _inputGuideDefaultPos = View.InputGuideRect.anchoredPosition;
+            _escCallbackCache = () =>
+            {
+                OnOffInputGuide(false);
+            };
         }
 
         protected override void PreShow()
         {
-            InputControlSystem.Instance.UIInputMode = true;
+            View.ButtonRect.gameObject.SetActive(true);
+            View.InputGuideRect.gameObject.SetActive(true);
             View.CanvasGroup.interactable = true;
             View.BackgroundUIEffect.SetRate(0f, UIEffectTweener.CullingMask.Transition);
             View.BackgroundUIEffectTweener.SetPause(true);
@@ -56,10 +57,7 @@ namespace BS.UI
         {
             PreShow();
             InputControlSystem.Instance.SetUISelectGameObjectSelected(View.StartButton.gameObject);
-            InputControlSystem.Instance.UICancel.AddListener(() =>
-            {
-                OnOffInputGuide(false);
-            });
+            InputControlSystem.Instance.UICancel.AddListener(_escCallbackCache);
             PostShow();
         }
 
@@ -70,13 +68,15 @@ namespace BS.UI
 
         protected override void PreHide()
         {
-            InputControlSystem.Instance.UICancel.RemoveAllListeners();
+            InputControlSystem.Instance.UICancel.RemoveListener(_escCallbackCache);
             base.PreHide();
         }
 
         public override void Hide()
         {
             View.CanvasGroup.interactable = false;
+            View.ButtonRect.gameObject.SetActive(false);
+            View.InputGuideRect.gameObject.SetActive(false);
             TimeSystem.Instance.TimeSpeedUp(1.0f);
        
             View.BackgroundUIEffectTweener.PlayForward(true);
@@ -96,7 +96,6 @@ namespace BS.UI
             });
             View.StartButton.onClick.AddListener(() =>
             {
-                InputControlSystem.Instance.UIInputMode = false;
                 GameSequenceSystem.Instance.SetGameStepState(GameStepState.Playing);
                 Hide();
             });

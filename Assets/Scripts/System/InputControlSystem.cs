@@ -6,6 +6,7 @@ using BS.GameObjects;
 using BS.Common;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Events;
+using BS.UI;
 
 namespace BS.System
 {
@@ -37,38 +38,10 @@ namespace BS.System
         private bool _upPressed;
         private bool _downPressed;
 
-        private bool _uiInputMode = false;
-
         private UnityEvent _uiCancelEvent = new UnityEvent();
         public UnityEvent UICancel => _uiCancelEvent;
         private UnityEvent _uiSubmitEvent = new UnityEvent();
         public UnityEvent UISubmit => _uiSubmitEvent;
-
-        /// <summary>
-        /// UI 전용 인풋모드 활성화 여부
-        /// </summary>
-        public bool UIInputMode
-        {
-            get => _uiInputMode;
-            set
-            {
-                _uiInputMode = value;
-                if(_currentInputAsset != null)
-                {
-                    if(_uiInputMode)
-                    {
-                        _currentInputAsset.Disable();
-                        _currentUIInputAsset.Enable();
-                    }
-                    else
-                    {
-                        _currentUIInputAsset.Disable();
-                        _currentInputAsset.Enable();
-                    }
-                }
-            }
-        }
-
         public void Load()
         {
             Initialize();
@@ -82,6 +55,23 @@ namespace BS.System
         private void Initialize()
         {
             _inputSystemUIInputModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
+            _uiCancelEvent.AddListener(PauseCancelEvent);
+        }
+
+        private void PauseCancelEvent()
+        {
+            if(GameSequenceSystem.Instance.CurrentState == GameStepState.Playing)
+            {
+                GameSequenceSystem.Instance.SetGameStepState(GameStepState.Paused);
+            }
+            else if(GameSequenceSystem.Instance.CurrentState == GameStepState.Paused)
+            {
+                GameSequenceSystem.Instance.SetGameStepState(GameStepState.Playing);
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void Release()
@@ -105,10 +95,7 @@ namespace BS.System
 
             if (_currentUIInputAsset != null)
             {
-                if(_uiInputMode)
-                {
-                    _currentUIInputAsset.Enable();
-                }
+                _currentUIInputAsset.Enable();
             }
         }
 
@@ -116,10 +103,7 @@ namespace BS.System
         {
             if(context.performed)
             {
-                if(UIInputMode)
-                {
-                    _uiSubmitEvent.Invoke();
-                }
+                _uiSubmitEvent.Invoke();
             }
         }
 
@@ -127,10 +111,7 @@ namespace BS.System
         {
             if(context.performed)
             {
-                if (UIInputMode)
-                {
-                    _uiCancelEvent.Invoke();
-                }
+                _uiCancelEvent.Invoke();
             }
         }
 
