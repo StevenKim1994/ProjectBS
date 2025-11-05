@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using Unity.Cinemachine;
 using DG.Tweening;
 using BS.GameObjects;
 using System;
@@ -25,14 +26,17 @@ namespace BS.System
 
         public Camera WorldCamera => _camera;
 
+        public CinemachineCamera CinemachineCamera => _cinemachineCamera;
+
         private PixelPerfectCamera _pixelPerfectCamera;
         private Camera _camera;
         private Sequence _cameraZoomInSeq;
-
+        private CinemachineCamera _cinemachineCamera;
         public void Load()
         {
             _pixelPerfectCamera = SystemGameObject.Instance.CurrentGameScene.PixelPerfectCamera;
             _camera = _pixelPerfectCamera.TryGetComponent<Camera>(out var cam) ? cam : null;
+            _cinemachineCamera = _pixelPerfectCamera.TryGetComponent<CinemachineCamera>(out var cinemachine) ? cinemachine : null;
         }
 
         public void Unload()
