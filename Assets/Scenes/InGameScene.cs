@@ -17,7 +17,7 @@ namespace BS
             SoundSystem.Instance.SetUIAudioSource(UISystem.Instance.MainCanvas.GetComponent<AudioSource>());
             UISystem.Instance.Show<TitlePresenter>();
 
-            ScreenSystem.Instance.CinemachineCamera.Target.TrackingTarget = InputControlSystem.Instance.CurrentPlayableTransform;
+            //ScreenSystem.Instance.CinemachineCamera.Target.TrackingTarget = InputControlSystem.Instance.CurrentPlayableTransform;
         }
     }
 }
