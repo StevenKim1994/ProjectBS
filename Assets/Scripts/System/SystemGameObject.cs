@@ -48,6 +48,7 @@ namespace BS.GameObjects
             }
 
             _systems.Add(typeof(ResourceSystem), new ResourceSystem());
+            _systems.Add(typeof(SoundSystem), new SoundSystem());
             _systems.Add(typeof(DataSystem), new DataSystem());
             _systems.Add(typeof(ScreenSystem), new ScreenSystem());
             _systems.Add(typeof(InputControlSystem), new InputControlSystem());

@@ -2,22 +2,27 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using BS.System;
 
 namespace BS.UI
 {
     public class UIButton : Button
     {
-        private UnityEvent<float> _buttonPressEvent = new UnityEvent<float>();
-        public UnityEvent<float> ButtonPressEvent => _buttonPressEvent;
-
         [SerializeField, Min(0f)]
         private float _pressEventInterval = 0f; // 초 단위. 0이면 매 프레임 전송
+
+        [SerializeField]
+        private AudioClip _buttonSelectSound;
+
+        private UnityEvent<float> _buttonPressEvent = new UnityEvent<float>();
+        public UnityEvent<float> onPress => _buttonPressEvent; // DESC :: 기본 상속받은 onClick과 같이 양식을 맞추기 위해 onPress로 명명    
 
         private bool _isPressed;
         private float _pressStartUnscaledTime;
         private float _lastInvokeUnscaledTime;
 
         public float CurrentPressDurationUnscaled => _isPressed ? Time.unscaledTime - _pressStartUnscaledTime : 0f;
+
 
         protected override void Awake()
         {
@@ -58,6 +63,10 @@ namespace BS.UI
         public override void OnSelect(BaseEventData eventData)
         {
             base.OnSelect(eventData);
+            if (_buttonSelectSound != null)
+            {
+                SoundSystem.Instance.PlayUISound(_buttonSelectSound);
+            }
         }
 
         public override void OnPointerDown(PointerEventData eventData)

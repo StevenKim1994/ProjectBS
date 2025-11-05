@@ -470,6 +470,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _pressEventInterval: 0
+  _buttonSelectSound: {fileID: 8300000, guid: 54cec5000c8c1104686c369050bf3bf2, type: 3}
 --- !u!1 &4574992779525289072
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1355,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _pressEventInterval: 0
+  _buttonSelectSound: {fileID: 8300000, guid: 54cec5000c8c1104686c369050bf3bf2, type: 3}
 --- !u!1 &6697623136847378294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,6 +1525,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _pressEventInterval: 0
+  _buttonSelectSound: {fileID: 8300000, guid: 54cec5000c8c1104686c369050bf3bf2, type: 3}
 --- !u!1 &8530451703794652173
 GameObject:
   m_ObjectHideFlags: 0
