@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: NightAbilitySO
   m_EditorClassIdentifier: Assembly-CSharp::BS.GameObject.NightAbility
   _health: 111
+  _damage: 0
   _mana: 11
   _maxHealth: 111
   _maxMana: 11
   _moveSpeed: 2.3
-  _jumpForce: 3.5
-  _attackDamage: 11
   _attackRange: 1
+  _jumpForce: 5
+  _attackDamage: 11
