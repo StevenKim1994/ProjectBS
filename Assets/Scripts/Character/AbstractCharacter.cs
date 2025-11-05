@@ -72,10 +72,20 @@ namespace BS.GameObjects
 
         public void Initialize()
         {
-            _currentHealth = Ability.Health;
-            _currentMana = Ability.Mana;
-            _currentSpeed = Ability.MoveSpeed;
-            _currentJumpForce = Ability.JumpForce;
+            if (Ability != null)
+            {
+                _currentHealth = Ability.Health;
+                _currentMana = Ability.Mana;
+                _currentSpeed = Ability.MoveSpeed;
+                _currentJumpForce = Ability.JumpForce;
+            }
+            else
+            {
+                if(this.gameObject.CompareTag(Constrants.TAG_NPC))
+                {
+                    return;
+                }
+            }
         }
 
         public virtual void Attack()

@@ -23,6 +23,7 @@
         public const string TAG_GROUND= "Ground";
         public const string TAG_PLAYER= "Player";
         public const string TAG_ENERMY= "Enermy";
+        public const string TAG_NPC = "NPC";
         public const string TAG_REWARDABLE ="RewardableObject";
 
         public const string NAME_FLASHIMAGE = "FlashImage";

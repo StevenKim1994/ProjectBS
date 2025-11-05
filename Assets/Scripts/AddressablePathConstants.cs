@@ -46,6 +46,7 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_PROJECTILE_THROWING_STAR_PREFAB = "Assets/AddressResource/Projectile/ThrowingStar.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_PROPS_GOLD_COIN_PREFAB = "Assets/AddressResource/Props/GoldCoin.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SCARE_CROW_PREFAB = "Assets/AddressResource/ScareCrow.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_SHOP_NPC_PREFAB = "Assets/AddressResource/ShopNPC.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SNAIL_PREFAB = "Assets/AddressResource/Snail.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SOUND_BUTTON_SELECT_SOUND_MP3 = "Assets/AddressResource/Sound/ButtonSelect_Sound.mp3";
  public const string ASSETS_ADDRESS_RESOURCE_SOUND_BUTTON_SUBMIT_SOUND_MP3 = "Assets/AddressResource/Sound/ButtonSubmit_Sound.mp3";
