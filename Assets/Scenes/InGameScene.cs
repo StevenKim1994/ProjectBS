@@ -11,7 +11,7 @@ namespace BS
         protected override void Start()
         {
             base.Start();
-
+            Application.targetFrameRate = 60;
             TimeSystem.Instance.TimeSpeedUp(0.0f);
 
             SoundSystem.Instance.SetUIAudioSource(UISystem.Instance.MainCanvas.GetComponent<AudioSource>());
