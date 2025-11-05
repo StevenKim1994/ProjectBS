@@ -38,7 +38,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BS.Animations.AttackAnimBehaviorState
   _damageColiderActiveStartTime: 0.2
-  _damageColiderSize: {x: 1, y: 1}
 --- !u!1102 &-8829141091264497776
 AnimatorState:
   serializedVersion: 6
@@ -408,7 +407,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BS.Animations.AttackAnimBehaviorState
   _damageColiderActiveStartTime: 0.2
-  _damageColiderSize: {x: 1, y: 1}
 --- !u!1101 &-1367822835267572447
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

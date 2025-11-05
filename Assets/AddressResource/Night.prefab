@@ -171,6 +171,33 @@ MonoBehaviour:
   _colider: {fileID: 1619999916053721294}
   _attachedDamageColider: {fileID: 8934814364403229966}
   _comboWindowTime: 1
+  _attackForwardDistance: 0.5
+  _attackForwardDuration: 0.15
+  _attackMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _jumpVelocityThreshold: 0.1
 --- !u!61 &1619999916053721294
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -290,8 +317,8 @@ Transform:
   m_GameObject: {fileID: 4777571005228727317}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.318, y: -0.002, z: 0}
-  m_LocalScale: {x: 0.2745919, y: 0.16533357, z: 1}
+  m_LocalPosition: {x: 0.318, y: 0.1119, z: 0}
+  m_LocalScale: {x: 0.2745919, y: 0.3931963, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6937561820881939233}

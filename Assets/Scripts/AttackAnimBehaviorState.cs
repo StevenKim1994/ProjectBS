@@ -10,16 +10,6 @@ namespace BS.Animations
         [SerializeField] private float _damageColiderActiveStartTime = 0.2f;
         private AbstractCharacter _cachedCharacter;
 
-        public override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
-        {
-            base.OnStateMachineEnter(animator, stateMachinePathHash);
-            if (_cachedCharacter == null)
-            {
-                _cachedCharacter = animator.GetComponentInParent<AbstractCharacter>();
-
-            }
-        }
-
         public override void OnStateMachineExit(Animator animator, int stateMachinePathHash)
         {
             base.OnStateMachineExit(animator, stateMachinePathHash);
@@ -27,10 +17,16 @@ namespace BS.Animations
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-           if (_cachedCharacter is NightCharacter nightCharacter)
-           {
+            if (_cachedCharacter == null)
+            {
+                _cachedCharacter = animator.GetComponentInParent<AbstractCharacter>();
+            }
+
+            // 매 진입 시 전진/공격 콜라이더 세팅 수행
+            if (_cachedCharacter is NightCharacter nightCharacter)
+            {
                 nightCharacter.ForwardAttackMovement();
-           }
+            }
 
             base.OnStateEnter(animator, stateInfo, layerIndex);
         }
@@ -41,10 +37,9 @@ namespace BS.Animations
 
             if (_cachedCharacter != null)
             {
-                if(stateInfo.normalizedTime >= _damageColiderActiveStartTime)
+                if (stateInfo.normalizedTime >= _damageColiderActiveStartTime)
                 {
                     _cachedCharacter.SetAttackDamageColliderActive(true);
-
                 }
                 else
                 {
@@ -60,7 +55,6 @@ namespace BS.Animations
             if (_cachedCharacter != null)
             {
                 _cachedCharacter.SetAttackDamageColliderActive(false);
-                _cachedCharacter.ResetAttackCombo();
             }
         }
     }
