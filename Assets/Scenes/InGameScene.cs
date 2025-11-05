@@ -12,8 +12,6 @@ namespace BS
         {
             base.Start();
 
-            EnermySystem.Instance.GetEnemy(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_SNAIL_PREFAB, new Vector3(4.19999981f, -4.03000021f, 0f));
-
             TimeSystem.Instance.TimeSpeedUp(0.0f);
 
             SoundSystem.Instance.SetUIAudioSource(UISystem.Instance.MainCanvas.GetComponent<AudioSource>());

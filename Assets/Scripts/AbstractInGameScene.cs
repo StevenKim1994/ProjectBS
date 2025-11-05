@@ -3,6 +3,7 @@ using UnityEngine.Rendering.Universal;
 using BS.System;
 using BS.UI;
 using BS.Common;
+using UnityEngine.Tilemaps;
 
 namespace BS.GameObjects
 {
@@ -35,6 +36,15 @@ namespace BS.GameObjects
                 }
 
                 return _mainCanvas;
+            }
+        }
+
+        [SerializeField] private Tilemap _groundTilemap;
+        public Tilemap GroundTilemap
+        {
+            get
+            {
+                return _groundTilemap;
             }
         }
 
