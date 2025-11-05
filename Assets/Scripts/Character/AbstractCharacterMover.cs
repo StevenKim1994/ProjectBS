@@ -102,16 +102,7 @@ namespace BS.GameObjects
         /// </summary>
         private void JumpWithPhysics(float force)
         {
-            // ViewDirection의 x 방향(좌우)을 사용하고, y는 점프를 위해 위쪽으로 고정
-            // ViewDirection.x: -1(왼쪽) 또는 1(오른쪽)
-            float horizontalDirection = _viewDirection.x;
-        
-            // 점프 방향: 수평 방향 + 수직 방향 조합
-            // 예: 45도 각도로 점프하려면 (horizontalDirection, 1)을 normalized
-            Vector2 jumpDirection = new Vector2(horizontalDirection, 1f).normalized;
-
-            // 수평/수직 비율 조정
-            Vector2 jumpForce = jumpDirection * force;
+            Vector2 jumpForce = Vector2.up * force;
 
             // AddForce 대신 velocity 직접 설정 (더 즉각적인 반응)
             _rigidbody2D.linearVelocity = jumpForce;
