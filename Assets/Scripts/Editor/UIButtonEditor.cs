@@ -10,6 +10,7 @@ public class UIButtonEditor : SelectableEditor
 {
     SerializedProperty _pressEventIntervalProp;
     SerializedProperty _buttonSelectSoundProp;
+    SerializedProperty _buttonSubmitSoundProp;
 
     protected override void OnEnable()
     {
@@ -17,6 +18,7 @@ public class UIButtonEditor : SelectableEditor
 
         _pressEventIntervalProp = serializedObject.FindProperty("_pressEventInterval");
         _buttonSelectSoundProp = serializedObject.FindProperty("_buttonSelectSound");
+        _buttonSubmitSoundProp = serializedObject.FindProperty("_buttonSubmitSound");
     }
 
     public override void OnInspectorGUI()
@@ -32,6 +34,8 @@ public class UIButtonEditor : SelectableEditor
             EditorGUILayout.PropertyField(_pressEventIntervalProp, new GUIContent("Press Event Interval (s)"));
         if (_buttonSelectSoundProp != null)
             EditorGUILayout.PropertyField(_buttonSelectSoundProp, new GUIContent("Button Select Sound"));
+        if( _buttonSubmitSoundProp != null)
+            EditorGUILayout.PropertyField(_buttonSubmitSoundProp, new GUIContent("Button Submit Sound"));
 
         using (new EditorGUI.DisabledScope(true))
         {

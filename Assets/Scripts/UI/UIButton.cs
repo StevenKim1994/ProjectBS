@@ -14,6 +14,9 @@ namespace BS.UI
         [SerializeField]
         private AudioClip _buttonSelectSound;
 
+        [SerializeField]
+        private AudioClip _buttonSubmitSound;
+
         private UnityEvent<float> _buttonPressEvent = new UnityEvent<float>();
         public UnityEvent<float> onPress => _buttonPressEvent; // DESC :: 기본 상속받은 onClick과 같이 양식을 맞추기 위해 onPress로 명명    
 
@@ -66,6 +69,15 @@ namespace BS.UI
             if (_buttonSelectSound != null)
             {
                 SoundSystem.Instance.PlayUISound(_buttonSelectSound);
+            }
+        }
+
+        public override void OnSubmit(BaseEventData eventData)
+        {
+            base.OnSubmit(eventData);
+            if(_buttonSubmitSound != null)
+            {
+                SoundSystem.Instance.PlayUISound(_buttonSubmitSound);
             }
         }
 
