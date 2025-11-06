@@ -7,6 +7,7 @@ using BS.Common;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Events;
 using BS.UI;
+using Unity.Cinemachine;
 
 namespace BS.System
 {

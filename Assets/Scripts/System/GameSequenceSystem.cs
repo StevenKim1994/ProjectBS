@@ -56,14 +56,12 @@ namespace BS.System
                         {
                             UISystem.Instance.Hide<PauseUIPresenter>();
                         }
-                        // TODO :: 모든 Enermy에 이벤트 보내기 EmermySystem.Instance.ResumeAllEnermy();
                     }
                     break;
 
                 case GameStepState.Paused:
                     {
                         InputControlSystem.Instance.IsInput = false;
-                        // TODO :: 모든 Enermy에 이벤트 보내기 EmermySystem.Instance.PauseAllEnermy();
                         UISystem.Instance.Show<PauseUIPresenter>();
                         Time.timeScale = 0.0f;
                     }
