@@ -14,6 +14,7 @@
         public const string STR_INPUT_ACTION_JUMP = "Jump";
         public const string STR_INPUT_ACTION_LEFT = "Left";
         public const string STR_INPUT_ACTION_RIGHT = "Right";
+        public const string STR_INPUT_ACTION_INTERACT = "Interact";
         public const string STR_INPUT_ACTION_UP = "Up";
         public const string STR_INPUT_ACTION_DOWN = "Down";
 

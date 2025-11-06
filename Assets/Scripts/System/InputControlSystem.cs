@@ -26,12 +26,10 @@ namespace BS.System
             }
         }
 
-        public Transform CurrentPlayableTransform => _currentPlayableCharacter.transform;
-
         private InputSystemUIInputModule _inputSystemUIInputModule;
         private InputActionAsset _currentInputAsset;
         private InputActionAsset _currentUIInputAsset;
-        private AbstractCharacter _currentPlayableCharacter;
+        private IPlayer _currentPlayableCharacter;
 
         private bool _leftPressed;
         private bool _rightPressed;
@@ -111,17 +109,24 @@ namespace BS.System
 
         private void PauseCancelEvent()
         {
-            if(GameSequenceSystem.Instance.CurrentState == GameStepState.Playing)
+            if (UISystem.Instance.IsAnyViewOpend())
             {
-                GameSequenceSystem.Instance.SetGameStepState(GameStepState.Paused);
-            }
-            else if(GameSequenceSystem.Instance.CurrentState == GameStepState.Paused)
-            {
-                GameSequenceSystem.Instance.SetGameStepState(GameStepState.Playing);
+                UISystem.Instance.CloseTopView();
             }
             else
             {
-                return;
+                if (GameSequenceSystem.Instance.CurrentState == GameStepState.Playing)
+                {
+                    GameSequenceSystem.Instance.SetGameStepState(GameStepState.Paused);
+                }
+                else if (GameSequenceSystem.Instance.CurrentState == GameStepState.Paused)
+                {
+                    GameSequenceSystem.Instance.SetGameStepState(GameStepState.Playing);
+                }
+                else
+                {
+                    return;
+                }
             }
         }
 
@@ -183,6 +188,7 @@ namespace BS.System
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_DEFENSE).performed += DefenseInput;
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_JUMP).performed += JumpInput;
                 actionMap.FindAction(Constrants.STR_INPUT_ACTION_THROWING).performed += ThrowingInput;
+                actionMap.FindAction(Constrants.STR_INPUT_ACTION_INTERACT).performed += InteractInput;
 
                 var actLeft = actionMap.FindAction(Constrants.STR_INPUT_ACTION_LEFT);
                 var actRight = actionMap.FindAction(Constrants.STR_INPUT_ACTION_RIGHT);
@@ -206,7 +212,7 @@ namespace BS.System
             }
         }
 
-        public void SetPlayableCharacter(AbstractCharacter character)
+        public void SetPlayableCharacter(IPlayer character)
         {
             _currentPlayableCharacter = character;
         }
@@ -216,6 +222,14 @@ namespace BS.System
             if(context.performed)
             {
                 _currentPlayableCharacter.Throwing();
+            }
+        }
+
+        private void InteractInput(InputAction.CallbackContext context)
+        {
+            if(context.performed)
+            {
+                _currentPlayableCharacter.Interact();
             }
         }
 

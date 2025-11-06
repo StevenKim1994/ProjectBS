@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using R3;
 using BS.Common;
+using BS.System;
+using System;
+using BS.UI;
+using UnityEngine.InputSystem;
 
 namespace BS.GameObjects
 {
@@ -24,6 +29,7 @@ namespace BS.GameObjects
                 _notiArrowRender.gameObject.SetActive(true);
                 _notiArrowRender.transform.localPosition = _originArrowPos;
                 _arrowTweener = _notiArrowRender.transform.DOLocalMoveY(0.3f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+                PlayerSystem.Instance.SetInteractObject(this);
             }
         }
 
@@ -36,10 +42,24 @@ namespace BS.GameObjects
         {
             base.OnTriggerExit2D(collision);
 
-            if(_notiArrowRender != null && !_isInPlayerRange)
+            if(_notiArrowRender != null)
             {
-                _notiArrowRender.gameObject.SetActive(false);
                 _arrowTweener.Kill();
+                _notiArrowRender.gameObject.SetActive(false);
+            }
+
+            PlayerSystem.Instance.SetInteractObject(null);
+            UISystem.Instance.Hide<ShopUIPresenter>();
+        }
+
+        public override void Interact()
+        {
+            base.Interact();
+
+            if (_isInPlayerRange)
+            {
+                InputControlSystem.Instance.IsInput = false;
+                UISystem.Instance.Show<ShopUIPresenter>();
             }
         }
     }

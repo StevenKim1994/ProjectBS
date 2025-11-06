@@ -6,6 +6,9 @@ namespace BS.System
     public interface ISystem
     {
 
+        /// <summary>
+        /// Load 메서드에서는 다른 시스템을 참조하지 말것!
+        /// </summary>
         public virtual void Load()
         {
 

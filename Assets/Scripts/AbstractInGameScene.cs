@@ -69,8 +69,7 @@ namespace BS.GameObjects
             if(playerObject.TryGetComponent<NightCharacter>(out var night))
             {
                 night.transform.position = SpawnPoint.position;
-                InputControlSystem.Instance.SetPlayableCharacter(night);
-                InputControlSystem.Instance.SetInputActionAsset(night.InputActionAsset);
+                PlayerSystem.Instance.SetCurrentPlayer(night);
                 InputControlSystem.Instance.SetUIInputActionAsset(ResourceSystem.Instance.GetLoadGameAsset<UnityEngine.InputSystem.InputActionAsset>(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_UI_UIINPUT_ACTION_ASSET_INPUTACTIONS));
 
                 UISystem.Instance.Show<HUDUIPresenter>();

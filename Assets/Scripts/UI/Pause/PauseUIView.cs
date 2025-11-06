@@ -4,7 +4,7 @@ using BS.Common;
 
 namespace BS.UI
 {
-    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_PAUSE_UI_PREFAB)]
+    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_PAUSE_UI_PREFAB, false)]
     public class PauseUIView : AbstractUIView
     {
         [SerializeField]

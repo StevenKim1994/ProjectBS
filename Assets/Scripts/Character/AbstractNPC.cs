@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using BS.Common;
+using BS.System;
 namespace BS.GameObjects
 {
-    public class AbstractNPC : AbstractCharacter
+    public class AbstractNPC : AbstractCharacter, IInteractable
     {
         [SerializeField]
         protected SpriteRenderer _notiArrowRender;
@@ -21,6 +22,7 @@ namespace BS.GameObjects
                 if (collision.transform.TryGetComponent<NightCharacter>(out NightCharacter player))
                 {
                     _isInPlayerRange = true;
+                    PlayerSystem.Instance.SetInteractObject(this);
                     Debug.Log("Player is in NPC range.");
                 }
             }
@@ -44,9 +46,15 @@ namespace BS.GameObjects
                 if (collision.transform.TryGetComponent<NightCharacter>(out NightCharacter player))
                 {
                     _isInPlayerRange = false;
+                    PlayerSystem.Instance.SetInteractObject(null);
                     Debug.Log("Player has left NPC range.");
                 }
             }
+        }
+
+        public virtual void Interact()
+        {
+
         }
     }
 }

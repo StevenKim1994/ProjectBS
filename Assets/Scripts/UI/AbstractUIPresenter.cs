@@ -17,6 +17,7 @@ namespace BS.UI
         IUIPresenter SetParentCanvas(Canvas mainCanvas);
 
         string GetViewPrefabPath();
+        bool IsStackable();
         void SetHiearchy(int v);
     }
 
@@ -59,6 +60,17 @@ namespace BS.UI
             }
 
             return _viewPrefabPath;
+        }
+
+        public bool IsStackable()
+        {
+            var viewType = typeof(T);
+            var custumAttribute = viewType.GetCustomAttribute<UIViewAttribute>();
+            if (custumAttribute != null)
+            {
+                return custumAttribute.IsStackable;
+            }
+            return false;
         }
 
         public bool IsInit()

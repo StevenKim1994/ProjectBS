@@ -11,8 +11,15 @@ public class UIViewAttribute : Attribute
         get => _addressablePath;
     }
 
-    public UIViewAttribute(string addressablePath)
+    private bool _isStackable;
+    public bool IsStackable
+    {
+        get => _isStackable;
+    }
+
+    public UIViewAttribute(string addressablePath, bool isStackable = true)
     {
         _addressablePath = addressablePath;
+        _isStackable = isStackable;
     }
 }

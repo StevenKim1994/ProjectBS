@@ -43,6 +43,8 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_IMAGE_COIN_1_PNG = "Assets/AddressResource/Image/coin_1.png";
  public const string ASSETS_ADDRESS_RESOURCE_NIGHT_PREFAB = "Assets/AddressResource/Night.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_PAUSE_UI_PREFAB = "Assets/AddressResource/PauseUI.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_PROJECTILE_ARROW_IMPACT_PACK_PNG = "Assets/AddressResource/Projectile/Arrow_impact_pack.png";
+ public const string ASSETS_ADDRESS_RESOURCE_PROJECTILE_ARROWS_PACK_PNG = "Assets/AddressResource/Projectile/Arrows_pack.png";
  public const string ASSETS_ADDRESS_RESOURCE_PROJECTILE_THROWING_STAR_PREFAB = "Assets/AddressResource/Projectile/ThrowingStar.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_PROPS_GOLD_COIN_PREFAB = "Assets/AddressResource/Props/GoldCoin.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SCARE_CROW_PREFAB = "Assets/AddressResource/ScareCrow.prefab";
@@ -427,8 +429,10 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_OAK_WOODS_TILESET_97_ASSET = "Assets/AddressResource/TileSet/oak_woods_tileset_97.asset";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_OAK_WOODS_TILESET_98_ASSET = "Assets/AddressResource/TileSet/oak_woods_tileset_98.asset";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_OAK_WOODS_TILESET_99_ASSET = "Assets/AddressResource/TileSet/oak_woods_tileset_99.asset";
+ public const string ASSETS_ADDRESS_RESOURCE_UI_FANTASY_UI_PNG = "Assets/AddressResource/UI/Fantasy-UI.png";
  public const string ASSETS_ADDRESS_RESOURCE_UI_GAME_OVER_PREFAB = "Assets/AddressResource/UI/GameOver.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_HUD_PREFAB = "Assets/AddressResource/UI/HUD.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_UI_SHOP_UI_PREFAB = "Assets/AddressResource/UI/ShopUI.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_TITLE_PREFAB = "Assets/AddressResource/UI/Title.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_UI_UIINPUT_ACTION_ASSET_INPUTACTIONS = "Assets/AddressResource/UI/UIInputActionAsset.inputactions";
  }

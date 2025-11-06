@@ -331,5 +331,13 @@ namespace BS.GameObjects
                 _isHit = false;
             }
         }
+
+        public void Interact()
+        {
+            if(_isAlive)
+            {
+                PlayerSystem.Instance.InteractCurrentObject();
+            }
+        }
     }
 }

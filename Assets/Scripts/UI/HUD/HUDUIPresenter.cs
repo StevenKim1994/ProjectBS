@@ -29,7 +29,7 @@ namespace BS.UI
             _view.KillCountText.SetText(string.Format(KILL_COUNT_TEXT_FORMAT, DataSystem.Instance.PlayerHighScore));
             _goldIconImageBasicSize = _view.GoldIconImage.rectTransform.sizeDelta;
 
-            var player = InputControlSystem.Instance.CurrentPlayableTransform.GetComponent<AbstractCharacter>();
+            var player = PlayerSystem.Instance.CurrentPlayer as AbstractCharacter;
             var currentHealth = player.CurrentHealth;
             _view.HPStateSlider.maxValue = player.Ability.MaxHealth;
             _view.HPStateSlider.value = currentHealth;

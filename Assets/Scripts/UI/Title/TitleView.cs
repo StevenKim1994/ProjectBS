@@ -6,7 +6,7 @@ using BS.Common;
 
 namespace BS.UI
 {
-    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_UI_TITLE_PREFAB)]
+    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_UI_TITLE_PREFAB, false)]
     public class TitleView : AbstractUIView
     {
         [SerializeField]

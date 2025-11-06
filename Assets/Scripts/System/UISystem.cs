@@ -23,6 +23,7 @@ namespace BS.System
         private Tweener _flashScreenTweener;
 
         private Dictionary<Type, List<IUIPresenter>> _presenters = new Dictionary<Type, List<IUIPresenter>>();
+        private Stack<IUIPresenter> _viewStack = new Stack<IUIPresenter>();
 
         public static UISystem Instance
         {
@@ -104,6 +105,10 @@ namespace BS.System
             presenter.SetParentCanvas(_mainCanvas);
             presenter.SetHiearchy(_mainCanvas.transform.childCount - 1);
             presenter.Show();
+            if(presenter.IsStackable())
+            {
+                _viewStack.Push(presenter);
+            }
 
             return presenter;
         }
@@ -121,12 +126,29 @@ namespace BS.System
             if(presenter != null)
             {
                 presenter.Hide();
+                if(presenter.IsStackable())
+                {
+                    _presenters.Remove(type);
+                }
             }
             else
             {
                 Debug.LogWarning("현재 열려있지 않음");
             }
             return presenter;
+        }
+
+        private void Hide(Type presenterType)
+        {
+            if (_presenters.TryGetValue(presenterType, out var result))
+            {
+                var presenter = result[0];
+                if (presenter != null)
+                {
+                    presenter.Hide();
+                    _presenters.Remove(presenterType);
+                }
+            }
         }
 
         public TPresenter GetPresenter<TPresenter>() where TPresenter : class, IUIPresenter
@@ -137,6 +159,21 @@ namespace BS.System
             {
                 presenter = result[0] as TPresenter;
             }
+            else
+            {
+                GameObject viewObject = ResourceSystem.Instance.GetLoadGameObject(presenter.GetViewPrefabPath());
+                if (viewObject != null)
+                {
+                    var clone = GameObject.Instantiate(viewObject);
+                    if (clone.TryGetComponent<AbstractUIView>(out var existingView))
+                    {
+                        presenter.Init(existingView);
+                    }
+                }
+                _presenters.Add(type, new List<IUIPresenter>() { presenter });
+                _viewStack.Push(presenter);
+            }
+            
             return presenter;
         }
 
@@ -152,6 +189,23 @@ namespace BS.System
             }
 
             return false;
+        }
+
+        public bool IsAnyViewOpend()
+        {
+            if(_viewStack.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void CloseTopView()
+        {
+            if (_viewStack.Count > 0)
+            {
+                Hide(_viewStack.Pop().GetType());
+            }
         }
     }
 }

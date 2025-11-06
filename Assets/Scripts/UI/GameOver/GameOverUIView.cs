@@ -6,7 +6,7 @@ using Coffee.UIEffects;
 
 namespace BS.UI
 {
-    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_UI_GAME_OVER_PREFAB)]
+    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_UI_GAME_OVER_PREFAB, false)]
     public class GameOverUIView : AbstractUIView
     {
         [SerializeField]

@@ -5,7 +5,7 @@ using BS.Common;
 
 namespace BS.UI
 {
-    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_UI_HUD_PREFAB)]
+    [UIView(AddressablePathConstants.DefaultLocalGroup.ASSETS_ADDRESS_RESOURCE_UI_HUD_PREFAB, false)]
     public class HUDUIView : AbstractUIView
     {
         [SerializeField]

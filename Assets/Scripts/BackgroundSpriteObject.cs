@@ -56,7 +56,7 @@ namespace BS.GameObjects
 
         private void Start()
         {
-            _targetTransform = InputControlSystem.Instance.CurrentPlayableTransform;
+            _targetTransform = PlayerSystem.Instance.CurrentPlayerTransform;
 
             if (_targetTransform != null)
             {
