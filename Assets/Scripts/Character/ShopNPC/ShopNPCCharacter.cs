@@ -28,6 +28,11 @@ namespace BS.GameObjects
             {
                 _notiArrowRender.gameObject.SetActive(true);
                 _notiArrowRender.transform.localPosition = _originArrowPos;
+                if(_arrowTweener != null && _arrowTweener.IsActive())
+                {
+                    _arrowTweener.Kill();
+                    _arrowTweener = null;
+                }
                 _arrowTweener = _notiArrowRender.transform.DOLocalMoveY(0.3f, 0.5f).SetLoops(-1, LoopType.Yoyo);
                 PlayerSystem.Instance.SetInteractObject(this);
             }

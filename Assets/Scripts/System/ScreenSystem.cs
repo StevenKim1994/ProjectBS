@@ -32,11 +32,19 @@ namespace BS.System
         private Camera _camera;
         private Sequence _cameraZoomInSeq;
         private CinemachineCamera _cinemachineCamera;
+        private CinemachineConfiner2D _cinemachineConfiner2D;
+        private CinemachinePositionComposer _cinemachinePositionComposer;
+        private CinemachineBasicMultiChannelPerlin _cinemachineNoise;
+        private Sequence _cameraShakeSeq;
+
         public void Load()
         {
             _pixelPerfectCamera = SystemGameObject.Instance.CurrentGameScene.PixelPerfectCamera;
             _camera = _pixelPerfectCamera.TryGetComponent<Camera>(out var cam) ? cam : null;
-            _cinemachineCamera = _pixelPerfectCamera.TryGetComponent<CinemachineCamera>(out var cinemachine) ? cinemachine : null;
+            _cinemachineCamera = SystemGameObject.Instance.CurrentGameScene.CinemachineCamera;
+            _cinemachineConfiner2D = _cinemachineCamera.GetComponent<CinemachineConfiner2D>();
+            _cinemachinePositionComposer = _cinemachineCamera.GetComponent<CinemachinePositionComposer>();
+            _cinemachineNoise = _cinemachineCamera.GetComponent<CinemachineBasicMultiChannelPerlin>();
         }
 
         public void Unload()
@@ -44,67 +52,49 @@ namespace BS.System
 
         }
 
-        public Vector2 GetScreenSize()
-        {
-            float width = Screen.width;
-            float height = Screen.height;
-
-            float currentAspect = width / height;
-            float targetAspect = 16f / 9f;
-
-            Vector2 screenSize;
-
-            if (currentAspect > targetAspect)
-            {
-                // 화면이 더 넓은 경우: 높이 기준으로 폭 조정
-                screenSize = new Vector2(height * targetAspect, height);
-            }
-            else
-            {
-                // 화면이 더 좁거나 같은 경우: 폭 기준으로 높이 조정
-                screenSize = new Vector2(width, width / targetAspect);
-            }
-
-            return screenSize;
-        }
-
         public void ShakeCamera(float duration, float strength, int vibrato)
         {
-            if (_camera != null)
+            if (_cameraShakeSeq != null && _cameraShakeSeq.IsActive())
             {
-                var originalPosition = _camera.transform.position;
-                _camera.transform.DOShakePosition(duration, strength, vibrato).OnComplete(() =>
-                {
-                    _camera.transform.position = originalPosition;
-                });
-            }
-        }
-
-        public void ZoomInCamera(Vector3 position, float zoomValue, float duration)
-        {
-            // TODO :: 수정필요
-            if(_cameraZoomInSeq != null && _cameraZoomInSeq.IsActive())
-            {
-                _cameraZoomInSeq.Kill(true);
-                _cameraZoomInSeq = null;
+                _cameraShakeSeq.Kill();
+                _cameraShakeSeq = null;
             }
 
-            if (_camera != null && _pixelPerfectCamera != null)
-            {
-                var originalOrthoSize = _camera.orthographicSize;
-                var targetOrthoSize = originalOrthoSize * zoomValue;
-                var originalPosition = _camera.transform.position;
+            float originalAmp = _cinemachineNoise.AmplitudeGain;
+            float originalFreq = _cinemachineNoise.FrequencyGain;
 
-                _cameraZoomInSeq = DOTween.Sequence()
-                    .Append(_camera.transform.DOMove(new Vector3(position.x, position.y, originalPosition.z), duration))
-                    .Join(DOTween.To(() => _camera.orthographicSize, x => _camera.orthographicSize = x, targetOrthoSize, duration))
-                    .SetEase(Ease.InOutQuad)
-                    .OnComplete(() =>
-                    {
-                        _camera.transform.position = originalPosition;
-                        _camera.orthographicSize = originalOrthoSize;
-                    });
-            }
+            float targetAmp = Mathf.Max(0f, strength);
+            float targetFreq = Mathf.Max(0.1f, vibrato);
+
+            _cinemachineNoise.AmplitudeGain = targetAmp;
+            _cinemachineNoise.FrequencyGain = targetFreq;
+
+            _cinemachineNoise.enabled = true;
+            _cameraShakeSeq = DOTween.Sequence();
+            _cameraShakeSeq.Append(
+                DOTween.To(
+                    () => _cinemachineNoise.AmplitudeGain,
+                    v => _cinemachineNoise.AmplitudeGain = v,
+                    0f,
+                    Mathf.Max(0.01f, duration)
+                ).SetEase(Ease.OutSine)
+            );
+            _cameraShakeSeq.Join(
+                DOTween.To(
+                    () => _cinemachineNoise.FrequencyGain,
+                    v => _cinemachineNoise.FrequencyGain = v,
+                    Mathf.Max(0.05f, originalFreq),
+                    Mathf.Max(0.01f, duration)
+                ).SetEase(Ease.OutSine)
+            );
+
+            _cameraShakeSeq.OnComplete(() =>
+            {
+                _cinemachineNoise.AmplitudeGain = originalAmp;
+                _cinemachineNoise.FrequencyGain = originalFreq;
+                _cameraShakeSeq = null;
+                _cinemachineNoise.enabled = false;
+            });
         }
     }
 }

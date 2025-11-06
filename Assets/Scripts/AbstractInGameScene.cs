@@ -4,6 +4,7 @@ using BS.System;
 using BS.UI;
 using BS.Common;
 using UnityEngine.Tilemaps;
+using Unity.Cinemachine;
 
 namespace BS.GameObjects
 {
@@ -36,6 +37,20 @@ namespace BS.GameObjects
                 }
 
                 return _mainCanvas;
+            }
+        }
+
+        [SerializeField]
+        private CinemachineCamera _cinemachineCamera;
+        public CinemachineCamera CinemachineCamera
+        {
+            get
+            {
+                if(_cinemachineCamera == null)
+                {
+                    _cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
+                }
+                return _cinemachineCamera;
             }
         }
 
