@@ -33,7 +33,7 @@ namespace BS.GameObjects
                     _arrowTweener.Kill();
                     _arrowTweener = null;
                 }
-                _arrowTweener = _notiArrowRender.transform.DOLocalMoveY(0.3f, 0.5f).SetLoops(-1, LoopType.Yoyo);
+                _arrowTweener = _notiArrowRender.transform.DOLocalMoveY(_originArrowPos.y - 0.3f, 0.5f).SetLoops(-1, LoopType.Yoyo);
                 PlayerSystem.Instance.SetInteractObject(this);
             }
         }

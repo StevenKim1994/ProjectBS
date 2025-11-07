@@ -52,6 +52,7 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_SNAIL_PREFAB = "Assets/AddressResource/Snail.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SOUND_BUTTON_SELECT_SOUND_MP3 = "Assets/AddressResource/Sound/ButtonSelect_Sound.mp3";
  public const string ASSETS_ADDRESS_RESOURCE_SOUND_BUTTON_SUBMIT_SOUND_MP3 = "Assets/AddressResource/Sound/ButtonSubmit_Sound.mp3";
+ public const string ASSETS_ADDRESS_RESOURCE_TABLE_SHOP_ITEM_LIST_XLSX = "Assets/AddressResource/Table/ShopItemList.xlsx";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_NEW_TILE_PALETTE_PREFAB = "Assets/AddressResource/TileSet/New Tile Palette.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_OAK_WOODS_TILESET_0_ASSET = "Assets/AddressResource/TileSet/oak_woods_tileset_0.asset";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_OAK_WOODS_TILESET_1_ASSET = "Assets/AddressResource/TileSet/oak_woods_tileset_1.asset";
