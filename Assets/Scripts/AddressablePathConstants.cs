@@ -21,6 +21,9 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_BEHAVIOR_GRAPH_SNAIL_BEHAVIOR_GRAPH_ASSET = "Assets/AddressResource/Characters/BehaviorGraph/SnailBehaviorGraph.asset";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_DIE_ANIM = "Assets/AddressResource/Characters/Die.anim";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_NIGHT_INPUT_ASSET_INPUTACTIONS = "Assets/AddressResource/Characters/NightInputAsset.inputactions";
+ public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_BOAR_BOAR_PREFAB = "Assets/AddressResource/Characters/ResourceAsset/Boar/Boar.prefab";
+ public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_BOAR_BOAR_ANIM_CONTROLLER_CONTROLLER = "Assets/AddressResource/Characters/ResourceAsset/Boar/BoarAnimController.controller";
+ public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_BOAR_IDLE_ANIM = "Assets/AddressResource/Characters/ResourceAsset/Boar/Idle.anim";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_NIGHT_ATTACK_ANIM = "Assets/AddressResource/Characters/ResourceAsset/Night/Attack.anim";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_NIGHT_DIE_ANIM = "Assets/AddressResource/Characters/ResourceAsset/Night/Die.anim";
  public const string ASSETS_ADDRESS_RESOURCE_CHARACTERS_RESOURCE_ASSET_NIGHT_IDLE_ANIM = "Assets/AddressResource/Characters/ResourceAsset/Night/Idle.anim";
@@ -52,7 +55,6 @@ namespace BS.Common
  public const string ASSETS_ADDRESS_RESOURCE_SNAIL_PREFAB = "Assets/AddressResource/Snail.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_SOUND_BUTTON_SELECT_SOUND_MP3 = "Assets/AddressResource/Sound/ButtonSelect_Sound.mp3";
  public const string ASSETS_ADDRESS_RESOURCE_SOUND_BUTTON_SUBMIT_SOUND_MP3 = "Assets/AddressResource/Sound/ButtonSubmit_Sound.mp3";
- public const string ASSETS_ADDRESS_RESOURCE_TABLE_SHOP_ITEM_LIST_XLSX = "Assets/AddressResource/Table/ShopItemList.xlsx";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_NEW_TILE_PALETTE_PREFAB = "Assets/AddressResource/TileSet/New Tile Palette.prefab";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_OAK_WOODS_TILESET_0_ASSET = "Assets/AddressResource/TileSet/oak_woods_tileset_0.asset";
  public const string ASSETS_ADDRESS_RESOURCE_TILE_SET_OAK_WOODS_TILESET_1_ASSET = "Assets/AddressResource/TileSet/oak_woods_tileset_1.asset";
