@@ -54,67 +54,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraph
   Graphs:
   - rid: 5020809500516156115
-  m_DebugInfo: {fileID: 0}
+  m_DebugInfo: {fileID: 5843285363336446695}
   m_WasCompileWithPlaceholderNode: 0
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 5020809500516156115
-      type: {class: BehaviorGraphModule, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        AuthoringAssetID:
-          m_Value0: 8395503584760367245
-          m_Value1: 5860828242551186088
-        m_DebugInfo: {fileID: 0}
-        BlackboardReference:
-          rid: 5020809500516156116
-        BlackboardGroupReferences: []
-        Root:
-          rid: 5020809504534298645
-        m_ActiveNodes: []
-        m_NodesToTick: []
-        m_NodesToEnd:
-          rid: 5020809500516156118
-        m_EndedNodes:
-          rid: 5020809500516156119
-        m_VersionTimestamp: 638975167203447789
-    - rid: 5020809500516156116
-      type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        m_Blackboard:
-          rid: 5020809500516156120
-        m_Source: {fileID: -2964476221898202691}
-    - rid: 5020809500516156118
-      type: {class: 'Stack`1[[Unity.Behavior.Node, Unity.Behavior]]', ns: System.Collections.Generic, asm: mscorlib}
-      data: 
-    - rid: 5020809500516156119
-      type: {class: 'HashSet`1[[Unity.Behavior.Node, Unity.Behavior]]', ns: System.Collections.Generic, asm: System.Core}
-      data: 
-    - rid: 5020809500516156120
-      type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        m_Variables:
-        - rid: 5020809500516156404
-        - rid: 5020809500516156405
-    - rid: 5020809500516156404
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        m_Value: {fileID: 0}
-    - rid: 5020809500516156405
-      type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 283876768985279142
-          m_Value1: 7740163693517921392
-        Name: Target
-        m_Value: {fileID: 0}
-    - rid: 5020809504534298645
+    - rid: 1700865516614975733
       type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -125,10 +72,10 @@ MonoBehaviour:
         m_Parent:
           rid: -2
         m_Child:
-          rid: 5020809504534298646
+          rid: 1700865516614975734
         Repeat: 1
         AllowMultipleRepeatsPerTick: 0
-    - rid: 5020809504534298646
+    - rid: 1700865516614975734
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -137,11 +84,12 @@ MonoBehaviour:
         Graph:
           rid: 5020809500516156115
         m_Parent:
-          rid: 5020809504534298645
+          rid: 1700865516614975733
         m_Children:
-        - rid: 5020809504534298647
-        - rid: 5020809504534298648
-    - rid: 5020809504534298647
+        - rid: 1700865516614975735
+        - rid: 1700865516614975736
+        m_RegisteredObservers: []
+    - rid: 1700865516614975735
       type: {class: FindPlayerCharacterActionNode, ns: , asm: Assembly-CSharp}
       data:
         ID:
@@ -150,7 +98,7 @@ MonoBehaviour:
         Graph:
           rid: 5020809500516156115
         m_Parent:
-          rid: 5020809504534298646
+          rid: 1700865516614975734
         _searchRadius:
           GUID:
             m_Value0: 0
@@ -175,7 +123,7 @@ MonoBehaviour:
             m_Value1: 0
           Name: 
           m_Value: 3
-    - rid: 5020809504534298648
+    - rid: 1700865516614975736
       type: {class: ChasePlayerCharacterActionNode, ns: , asm: Assembly-CSharp}
       data:
         ID:
@@ -184,7 +132,7 @@ MonoBehaviour:
         Graph:
           rid: 5020809500516156115
         m_Parent:
-          rid: 5020809504534298646
+          rid: 1700865516614975734
         _stopChaseDistance:
           GUID:
             m_Value0: 0
@@ -203,6 +151,47 @@ MonoBehaviour:
             m_Value1: 0
           Name: 
           m_Value: {fileID: 0}
+    - rid: 5020809500516156115
+      type: {class: BehaviorGraphModule, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        AuthoringAssetID:
+          m_Value0: 8395503584760367245
+          m_Value1: 5860828242551186088
+        m_DebugInfo: {fileID: 5843285363336446695}
+        BlackboardReference:
+          rid: 5020809500516156116
+        BlackboardGroupReferences: []
+        Root:
+          rid: 1700865516614975733
+        m_VersionTimestamp: 639061842459745434
+    - rid: 5020809500516156116
+      type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        m_Blackboard:
+          rid: 5020809500516156120
+        m_Source: {fileID: -2964476221898202691}
+    - rid: 5020809500516156120
+      type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        m_Variables:
+        - rid: 5020809500516156404
+        - rid: 5020809500516156405
+    - rid: 5020809500516156404
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 5020809500516156405
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 283876768985279142
+          m_Value1: 7740163693517921392
+        Name: Target
+        m_Value: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,8 +210,8 @@ MonoBehaviour:
   - rid: 5020809500516156122
   - rid: 5020809500516156232
   - rid: 5020809500516156387
-  m_VersionTimestamp: 638975167203447789
-  m_SerializedVersion: 1
+  m_VersionTimestamp: 639061842459745434
+  m_SerializedVersion: 2
   m_DebugInfo: {fileID: 5843285363336446695}
   m_RuntimeGraph: {fileID: -1850788443542362839}
   AssetID:
