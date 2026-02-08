@@ -1,18 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using BS.System;
 using BS.GameObjects;
+using BS.Dialogue;
 
 namespace BS.System
 {
-    public enum DialogueState
-    {
-        Idle,
-        InDialogue,
-        Paused
-    }
-
     public class DialogueSystem : ISystem
     {
         private static DialogueSystem _instance;
@@ -31,22 +24,18 @@ namespace BS.System
         private DialogueState _currentState = DialogueState.Idle;
         public DialogueState CurrentState => _currentState;
 
-        private DialogueManager _dialogueManager;
-        public DialogueManager DialogueManager => _dialogueManager;
-
         private GameStepState _previousGameState;
 
         public event Action<DialogueState> OnDialogueStateChanged;
 
         public void Load()
         {
-            _dialogueManager = new DialogueManager();
             _currentState = DialogueState.Idle;
         }
 
         public void Unload()
         {
-            _dialogueManager = null;
+            
         }
 
         /// <summary>
@@ -69,8 +58,6 @@ namespace BS.System
             OnDialogueStateChanged?.Invoke(_currentState);
 
             // 대화 데이터 로드 및 시작
-            _dialogueManager.LoadDialogueData(npcId, dialogueDataPath);
-            _dialogueManager.StartDialogue();
         }
 
         /// <summary>
@@ -81,7 +68,6 @@ namespace BS.System
             if (_currentState != DialogueState.InDialogue)
                 return;
 
-            _dialogueManager.EndDialogue();
             _currentState = DialogueState.Idle;
             OnDialogueStateChanged?.Invoke(_currentState);
 
@@ -98,13 +84,6 @@ namespace BS.System
             if (_currentState != DialogueState.InDialogue)
                 return;
 
-            _dialogueManager.ProgressToNextNode();
-
-            // 대화 종료 확인
-            if (_dialogueManager.IsDialogueFinished())
-            {
-                EndDialogue();
-            }
         }
 
         /// <summary>
@@ -114,13 +93,6 @@ namespace BS.System
         {
             if (_currentState != DialogueState.InDialogue)
                 return;
-
-            _dialogueManager.SelectChoice(choiceIndex);
-
-            if (_dialogueManager.IsDialogueFinished())
-            {
-                EndDialogue();
-            }
         }
 
         /// <summary>
@@ -128,7 +100,7 @@ namespace BS.System
         /// </summary>
         public DialogueNode GetCurrentNode()
         {
-            return _dialogueManager.CurrentNode;
+            return null; // TODO :: 수정필요
         }
 
         /// <summary>
@@ -136,7 +108,7 @@ namespace BS.System
         /// </summary>
         public List<DialogueChoice> GetCurrentChoices()
         {
-            return _dialogueManager.GetCurrentChoices();
+            return null; // TODO :: 수정필요
         }
 
         /// <summary>
